@@ -12,4 +12,4 @@ Use the following commands in VS Code:
 Manage Vendor Libraries > Install new libraries (online) > paste URL > Build Robot Code
 
 
-To limelight : http://photonvision.local:5800/ or http://10.40.69.11
+To access limelight : http://photonvision.local:5800/ or http://10.40.69.11
