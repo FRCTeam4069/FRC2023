@@ -6,10 +6,11 @@ Might need to install the vendordeps if you haven't already. Starting a list for
 3. SDS - https://raw.githubusercontent.com/SwerveDriveSpecialties/swerve-lib/master/SdsSwerveLib.json
 4. PhotonVision - https://maven.photonvision.org/repository/internal/org/photonvision/PhotonLib-json/1.0/PhotonLib-json-1.0.json
 
-( latest Versions can be found here : https://docs.wpilib.org/en/stable/docs/software/vscode-overview/3rd-party-libraries.html ) 
+(Latest versions can be found here - https://docs.wpilib.org/en/stable/docs/software/vscode-overview/3rd-party-libraries.html) 
 
 Use the following commands in VS Code:
 Manage Vendor Libraries > Install new libraries (online) > paste URL > Build Robot Code
+
 
 
 To access limelight : http://photonvision.local:5800/ or http://10.40.69.11
