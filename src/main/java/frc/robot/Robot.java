@@ -20,10 +20,10 @@ public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
   private RobotContainer m_robotContainer;
 
-  private static final String Halo = "Halo-Theme.chrp";
-  private static final String PotC = "PiratesOfTheCaribbean-Theme.chrp";
-  private static final String StarWars = "StarWars-Theme.chrp";
-  private String musicFile;
+  private static final String Halo = "Halo.chrp";
+  private static final String PotC = "PiratesOfTheCaribbean.chrp";
+  private static final String StarWars = "StarWars.chrp";
+  private static final String IWITW = "IWantItThatWay.chrp";  
   private final SendableChooser<String> Music_Chooser = new SendableChooser<>();
 
   
@@ -40,6 +40,7 @@ public class Robot extends TimedRobot {
 
     Music_Chooser.setDefaultOption("Pirates Of The Caribbean", PotC);
     Music_Chooser.addOption("Halo", Halo);
+    Music_Chooser.addOption("I Want It That Way", IWITW);
     Music_Chooser.addOption("Star Wars", StarWars);
     SmartDashboard.putData(Music_Chooser);
 
