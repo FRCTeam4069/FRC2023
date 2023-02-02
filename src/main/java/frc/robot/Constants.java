@@ -97,7 +97,6 @@ public final class Constants {
         public static final double ydeadZone = 0.05;
         public static final double tdeadZone = 0.05;
 
-
         public static final double xSpeedSlewRate = 1;
         public static final double ySpeedSlewRate = 1;
         public static final double TurnSpeedSlewRate = 3;
@@ -116,5 +115,9 @@ public final class Constants {
         public static final SimpleMotorFeedforward feedForwardController = new SimpleMotorFeedforward(Ks, Kv);
     }
 
+    public static class cameraInfo{
+
+        
+    }
 
 }

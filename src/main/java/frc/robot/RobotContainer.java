@@ -6,11 +6,14 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.Button;
 import frc.robot.commands.DefualtDriveCommand;
+import frc.robot.commands.ExampleCommand;
+import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
 
 public class RobotContainer {
 
     private final SwerveSubsystem swerveSubsystem = new SwerveSubsystem();
+    private final ExampleSubsystem exampleSubsystem = new ExampleSubsystem();
 
     public void PlayMusic(){
         Orchestra orchestra = new Orchestra();
@@ -33,7 +36,13 @@ public class RobotContainer {
                 () -> !Controller1.getAButton(),
                 () -> Controller1.getRightBumper()));
 
+        exampleSubsystem.setDefaultCommand(new ExampleCommand(
+            exampleSubsystem,
+            null,
+            null));
+
         configureButtonBindings();
+
     }
 
     private void configureButtonBindings() {

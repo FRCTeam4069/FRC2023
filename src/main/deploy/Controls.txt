@@ -1,0 +1,65 @@
+Drivebase (Ahmed + Peter):
+Inputs:
+Encoders
+Gyro
+Camera*
+Accelerometer
+Outputs:
+Driving
+Steer
+
+	Function:
+Drive To Position (Straight, splines etc.)
+Manual Field Centric
+Gridding
+Auto Balance
+Auto Align to grid
+
+	Software:
+CANSparkMax
+Pigeon
+TalonSRX
+Algorithms
+Feedforward
+PID
+
+Arm (Peter):
+	Inputs
+Encoders
+Limits
+Gyro/Accel*
+Current/Torque
+
+Outputs: 
+Extend/Retract
+Angle
+
+	Function:
+Index positions 
+Manual Job
+Endgame/Maybe using an arm to balance (?)
+
+	Libraries:
+Falcon550 (Main motor) 
+CANSparkMax (Segments)
+Pigeon IMU* 
+
+	Algorithms:
+Feedforward
+PID loop
+Set Positions
+
+
+Intake (Simon):
+	Inputs:
+Current/Torque
+Colour
+Encoder
+Limits
+	Outputs:
+Grip/Ungrip
+Intake/Outtake
+	Functions:
+Open
+Close
+Auto Grip

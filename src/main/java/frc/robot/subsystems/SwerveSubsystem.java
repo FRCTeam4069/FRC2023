@@ -1,8 +1,6 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
-import com.ctre.phoenix.sensors.Pigeon2;
-
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
@@ -54,8 +52,7 @@ public class SwerveSubsystem extends SubsystemBase{
         DrivebaseConstants.BL_STEER_ENCODER_REVERSED
     );
     
-    private Pigeon2 gyro = new Pigeon2(DrivebaseConstants.PIGEON_ID);
-
+    private Gyro gyro = new Gyro();
 
     public SwerveSubsystem(){
        new Thread(() -> {
@@ -79,12 +76,9 @@ public class SwerveSubsystem extends SubsystemBase{
         
     }
 
-    public double getHeading(){
-        return gyro.getYaw() % 360;
-    }
 
     public Rotation2d getRotation2d(){
-        return Rotation2d.fromDegrees(getHeading());
+        return Rotation2d.fromDegrees(gyro.getHeading());
     }
 
     public void stopModules(){
@@ -131,7 +125,7 @@ public class SwerveSubsystem extends SubsystemBase{
 
     @Override
     public void periodic() {
-        SmartDashboard.putNumber("Robot Heading", getHeading());
+        SmartDashboard.putNumber("Robot Heading", gyro.getHeading());
         if(Constants.PrintDebugNumbers) {printNumbers(); SmartDashboard.delete("Print Debug Number?");}
         else{ 
             SmartDashboard.putBoolean("Print Debug Number?", false);
