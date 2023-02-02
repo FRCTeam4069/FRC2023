@@ -15,9 +15,9 @@ public class RobotContainer {
     private final SwerveSubsystem swerveSubsystem = new SwerveSubsystem();
     private final ExampleSubsystem exampleSubsystem = new ExampleSubsystem();
 
-    public void PlayMusic(){
+    public void PlayMusic(String Filename){
         Orchestra orchestra = new Orchestra();
-        orchestra.loadMusic("111.chrp");
+        orchestra.loadMusic(Filename);
         orchestra.addInstrument(swerveSubsystem.getFRDriveMotor());
         orchestra.addInstrument(swerveSubsystem.getFLDriveMotor());
         orchestra.addInstrument(swerveSubsystem.getBRDriveMotor());

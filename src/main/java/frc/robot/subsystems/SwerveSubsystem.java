@@ -94,7 +94,7 @@ public class SwerveSubsystem extends SubsystemBase{
         FRSwerveModule.setDesiredState(ModuleStates[1]);;
         BLSwerveModule.setDesiredState(ModuleStates[2]);
         BRSwerveModule.setDesiredState(ModuleStates[3]);
-
+        if(Constants.PrintDebugNumbers){
         SmartDashboard.putString("Module State FL", ModuleStates[0].toString());
         SmartDashboard.putString("Module State FR", ModuleStates[1].toString());
         SmartDashboard.putString("Module State BL", ModuleStates[2].toString());
@@ -104,6 +104,7 @@ public class SwerveSubsystem extends SubsystemBase{
         SmartDashboard.putNumber("FR Voltage", FRSwerveModule.getDriveVoltage(ModuleStates[1]));
         SmartDashboard.putNumber("BL Voltage", BLSwerveModule.getDriveVoltage(ModuleStates[2]));
         SmartDashboard.putNumber("BR Voltage", BRSwerveModule.getDriveVoltage(ModuleStates[3]));
+        }
     
     }
 

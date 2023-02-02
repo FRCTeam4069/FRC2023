@@ -14,8 +14,7 @@ import edu.wpi.first.math.util.Units;
 public final class Constants {
 
     public static boolean PrintDebugNumbers = true; // prints Debug info for wheels and speeds 
-    public static boolean OffsetTuning = true; // Enable if you would like to tune the turning encoder offsets 
-    public static double speedMultiplier = 0.7;
+
     
     public static final class SparkMaxVoltage{
         public static final int DriveingMotorVoltage = 20;
@@ -117,7 +116,7 @@ public final class Constants {
 
     public static class cameraInfo{
 
-        
+
     }
 
 }
