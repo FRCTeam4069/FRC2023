@@ -24,6 +24,7 @@ public class Robot extends TimedRobot {
   private static final String PotC = "PiratesOfTheCaribbean.chrp";
   private static final String StarWars = "StarWars.chrp";
   private static final String IWITW = "IWantItThatWay.chrp";  
+  private String musicfile;
   private final SendableChooser<String> Music_Chooser = new SendableChooser<>();
 
   
@@ -107,7 +108,9 @@ public class Robot extends TimedRobot {
   public void testInit() {
     // Cancels all running commands at the start of test mode.
     CommandScheduler.getInstance().cancelAll();
-    m_robotContainer.PlayMusic(Music_Chooser.getSelected());
+    musicfile = Music_Chooser.getSelected();
+    m_robotContainer.PlayMusic(musicfile);
+    SmartDashboard.putString("Selected file :", musicfile);
   }
 
   /** This function is called periodically during test mode. */
