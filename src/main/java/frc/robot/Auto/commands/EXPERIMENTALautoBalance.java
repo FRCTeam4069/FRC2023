@@ -1,4 +1,4 @@
-package frc.robot.commands;
+package frc.robot.Auto.commands;
 
 import java.util.function.Supplier;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -25,6 +25,7 @@ public class EXPERIMENTALautoBalance extends CommandBase {
 
     @Override
     public void execute() {
+
     // what to do while this command is active
     
       /*
