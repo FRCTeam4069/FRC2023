@@ -5,10 +5,9 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.Button;
-import frc.robot.commands.ExampleCommand;
-import frc.robot.commands.controls.DefualtDriveCommand;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
+import frc.robot.subsystems.SubsystemCommands.DefualtDriveCommand;
 
 public class RobotContainer {
 
@@ -35,11 +34,6 @@ public class RobotContainer {
                 () -> -Controller1.getRightX(),
                 () -> !Controller1.getAButton(),
                 () -> Controller1.getRightBumper()));
-
-        exampleSubsystem.setDefaultCommand(new ExampleCommand(
-            exampleSubsystem,
-            null,
-            null));
 
         configureButtonBindings();
 
