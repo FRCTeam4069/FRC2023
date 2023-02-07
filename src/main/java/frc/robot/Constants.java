@@ -9,13 +9,14 @@ import com.swervedrivespecialties.swervelib.SdsModuleConfigurations;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 
 public final class Constants {
 
     public static boolean PrintDebugNumbers = true; // prints Debug info for wheels and speeds 
+    public static boolean enableSlewrateLimiter = false;
 
-    
     public static final class SparkMaxVoltage{
         public static final int DriveingMotorVoltage = 20;
         public static final int TurningMotorVoltage = 20;
@@ -69,8 +70,17 @@ public final class Constants {
             new Translation2d(-DRIVETRAIN_TRACKWIDTH_METERS / 2.0, DRIVETRAIN_WHEELBASE_METERS / 2.0),
             // Back right
             new Translation2d(-DRIVETRAIN_TRACKWIDTH_METERS / 2.0, -DRIVETRAIN_WHEELBASE_METERS / 2.0)
-    );
 
+    );
+    public static final double kMaxAngularAccelerationRadiansPerSecondSquared = Math.PI / 4;
+
+    public static final double kMaxAngularSpeedRadiansPerSecond = //
+    2*2*Math.PI / 10;
+
+    public static final TrapezoidProfile.Constraints kThetaControllerConstraints = //
+    new TrapezoidProfile.Constraints(
+            kMaxAngularSpeedRadiansPerSecond,
+            kMaxAngularAccelerationRadiansPerSecondSquared);
     }
 
     public static final class ModuleConstants{
@@ -90,7 +100,7 @@ public final class Constants {
 
         public static final double Contoller1portNum = 0;
 
-        public static final double speedMultiplier = 1.5;
+        public static final double speedMultiplier = 3;
 
         public static final double xdeadZone = 0.05;
         public static final double ydeadZone = 0.05;

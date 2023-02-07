@@ -6,6 +6,7 @@ import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Constants;
 import frc.robot.Constants.DrivebaseConstants;
 import frc.robot.Constants.InputConstants;
 import frc.robot.Constants.ModuleConstants;
@@ -43,11 +44,11 @@ public class DefualtDriveCommand extends CommandBase{
         xspeed = Math.abs(xspeed)>InputConstants.xdeadZone? xspeed : 0;
         yspeed = Math.abs(yspeed)>InputConstants.ydeadZone? yspeed : 0;
         Tspeed = Math.abs(Tspeed)>InputConstants.tdeadZone? Tspeed : 0;
-
+        if(Constants.enableSlewrateLimiter){
         xspeed = xSlewRateLimiter.calculate(xspeed) * ModuleConstants.MAX_VELOCITY_METERS_PER_SECOND;
         yspeed = ySlewRateLimiter.calculate(yspeed) *  ModuleConstants.MAX_VELOCITY_METERS_PER_SECOND;
         Tspeed = turnSlewRateLimiter.calculate(Tspeed) *  ModuleConstants.MAX_VELOCITY_METERS_PER_SECOND;
-        
+        }
         ChassisSpeeds chassisSpeeds;
 
         if (FieldOriented.get()) {

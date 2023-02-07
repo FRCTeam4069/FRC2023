@@ -1,8 +1,11 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
+
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -53,6 +56,7 @@ public class SwerveSubsystem extends SubsystemBase{
     );
     
     private Gyro gyro = new Gyro();
+    public final SwerveDriveOdometry odometry = new SwerveDriveOdometry(DrivebaseConstants.m_kinematics, getRotation2d());
 
     public SwerveSubsystem(){
        new Thread(() -> {
@@ -81,6 +85,13 @@ public class SwerveSubsystem extends SubsystemBase{
         return Rotation2d.fromDegrees(gyro.getHeading());
     }
 
+    public Pose2d getPose(){
+        return odometry.getPoseMeters();
+    }
+
+    public void resetOdometry(Pose2d pose){
+        odometry.resetPosition(pose, getRotation2d());
+    }
     public void stopModules(){
         FRSwerveModule.stop();
         FLSwerveModule.stop();
@@ -126,12 +137,20 @@ public class SwerveSubsystem extends SubsystemBase{
 
     @Override
     public void periodic() {
+        odometry.update(getRotation2d(), FLSwerveModule.getState(), FRSwerveModule.getState(), BLSwerveModule.getState(), BRSwerveModule.getState());
+
         SmartDashboard.putNumber("Robot Heading", gyro.getHeading());
+        SmartDashboard.putNumber("Robot Pitch", gyro.getPitch());
+        SmartDashboard.putNumber("Robot Roll", gyro.getRoll());
+
+        SmartDashboard.putString("odometry", odometry.getPoseMeters().toString());
+
         if(Constants.PrintDebugNumbers) {printNumbers(); SmartDashboard.delete("Print Debug Number?");}
         else{ 
             SmartDashboard.putBoolean("Print Debug Number?", false);
             Constants.PrintDebugNumbers = SmartDashboard.getBoolean("Print Debug Number?", false);
         }
+
        
 
     }

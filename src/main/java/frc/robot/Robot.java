@@ -24,8 +24,10 @@ public class Robot extends TimedRobot {
   private static final String PotC = "PiratesOfTheCaribbean.chrp";
   private static final String StarWars = "StarWars.chrp";
   private static final String IWITW = "IWantItThatWay.chrp";  
+  private static final String tetris = "tetrisTheme.chrp";  
   private String musicfile;
   private final SendableChooser<String> Music_Chooser = new SendableChooser<>();
+  
 
   
 
@@ -42,8 +44,11 @@ public class Robot extends TimedRobot {
     Music_Chooser.setDefaultOption("Pirates Of The Caribbean", PotC);
     Music_Chooser.addOption("Halo", Halo);
     Music_Chooser.addOption("I Want It That Way", IWITW);
+    Music_Chooser.addOption("Tetris Theme", tetris);
     Music_Chooser.addOption("Star Wars", StarWars);
     SmartDashboard.putData(Music_Chooser);
+
+    
 
     
   }

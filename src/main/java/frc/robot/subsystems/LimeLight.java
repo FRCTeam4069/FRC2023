@@ -9,7 +9,7 @@ public class LimeLight extends SubsystemBase{
     public PhotonCamera camera;
     
     public LimeLight(){
-        camera = new PhotonCamera("LimeLight");
+       // camera = new PhotonCamera("LimeLight");
     }
 
    
