@@ -129,4 +129,9 @@ public final class Constants {
 
     }
 
+    public static final byte INTAKE_ID = 0;
+    
+    public static final byte ARM_ID_1 = 0;
+    public static final byte ARM_ID_2 = 0;
+
 }
