@@ -18,17 +18,11 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import edu.wpi.first.wpilibj2.command.button.Button;
-<<<<<<< HEAD
 import frc.robot.Constants.DrivebaseConstants;
-import frc.robot.commands.controls.DefualtDriveCommand;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.subsystems.Gyro;
 import frc.robot.subsystems.LimeLight;
-=======
-import frc.robot.subsystems.ExampleSubsystem;
-import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.subsystems.SubsystemCommands.DefualtDriveCommand;
->>>>>>> e034e16249aa01a70cc48702dfec611906d1fdd1
 
 public class RobotContainer {
 
