@@ -1,23 +1,17 @@
 package frc.robot;
 
-import java.util.List;
-
+import java.util.HashMap;
 import com.ctre.phoenix.music.Orchestra;
+import com.pathplanner.lib.PathPlanner;
+import com.pathplanner.lib.PathPlannerTrajectory;
+import com.pathplanner.lib.PathConstraints;
+import com.pathplanner.lib.auto.PIDConstants;
+import com.pathplanner.lib.auto.SwerveAutoBuilder;
 
-import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.controller.ProfiledPIDController;
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.math.trajectory.Trajectory;
-import edu.wpi.first.math.trajectory.TrajectoryConfig;
-import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import edu.wpi.first.wpilibj2.command.button.Button;
+import frc.robot.Auto.Commands.Drivebase.EXPERIMENTALautoBalance;
 import frc.robot.Constants.DrivebaseConstants;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.subsystems.Gyro;
@@ -29,6 +23,7 @@ public class RobotContainer {
     public static final SwerveSubsystem swerveSubsystem = new SwerveSubsystem();
     public static final Gyro gyro = new Gyro();
     public static final LimeLight limelight = new LimeLight();
+    public EXPERIMENTALautoBalance aBalance = new EXPERIMENTALautoBalance(swerveSubsystem, gyro);
 
     public void PlayMusic(String Filename){
         Orchestra orchestra = new Orchestra();
@@ -50,7 +45,7 @@ public class RobotContainer {
                 () -> -Controller1.getRightX(),
                 () -> !Controller1.getAButton(),
                 () -> Controller1.getRightBumper()));
-
+        
         configureButtonBindings();
 
     }
@@ -61,42 +56,27 @@ public class RobotContainer {
     }
 
     public Command getAutonomousCommand() {
-// 1. Create trajectory settings
-TrajectoryConfig trajectoryConfig = new TrajectoryConfig(
-    1,
-    2)
-            .setKinematics(Constants.DrivebaseConstants.m_kinematics);
-// 2. Generate trajectory
-Trajectory trajectory = TrajectoryGenerator.generateTrajectory(
-    new Pose2d(0, 0, new Rotation2d(0)),
-    List.of(
-            new Translation2d(1, 0),
-            new Translation2d(0, 0)),
-    new Pose2d(1, 0, Rotation2d.fromDegrees(0)),
-    trajectoryConfig);
 
-// 3. Define PID controllers for tracking trajectory
-PIDController xController = new PIDController(.5, 0, 0);
-PIDController yController = new PIDController(.5, 0, 0);
-ProfiledPIDController thetaController = new ProfiledPIDController(
-    3, 0, 0, DrivebaseConstants.kThetaControllerConstraints);
-thetaController.enableContinuousInput(-Math.PI, Math.PI);
+PathPlannerTrajectory pathGroup = PathPlanner.loadPath("Go to Cone", new PathConstraints(1, 1));
 
-// 4. Construct command to follow trajectory
-SwerveControllerCommand swerveControllerCommand = new SwerveControllerCommand(
-    trajectory,
-    swerveSubsystem::getPose,
-    DrivebaseConstants.m_kinematics,
-    xController,
-    yController,
-    thetaController,
-    swerveSubsystem::setModuleStates,
-    swerveSubsystem);
+// This is just an example event map. It would be better to have a constant, global event map
+// in your code that will be used by all path following commands.
+HashMap<String, Command> eventMap = new HashMap<>();
 
-// 5. Add some init and wrap-up, and return everything
-return new SequentialCommandGroup(
-    new InstantCommand(() -> swerveSubsystem.resetOdometry(trajectory.getInitialPose())),
-    swerveControllerCommand,
-    new InstantCommand(() -> swerveSubsystem.stopModules()));
-    }
+// Create the AutoBuilder. This only needs to be created once when robot code starts, not every time you want to create an auto command. A good place to put this is in RobotContainer along with your subsystems.
+SwerveAutoBuilder autoBuilder = new SwerveAutoBuilder(
+    swerveSubsystem::getPose, // Pose2d supplier
+    swerveSubsystem::resetOdometry, // Pose2d consumer, used to reset odometry at the beginning of auto
+    DrivebaseConstants.m_kinematics, // SwerveDriveKinematics
+    new PIDConstants(0.5, 0.0, 0.0), // PID constants to correct for translation error (used to create the X and Y PID controllers)
+    new PIDConstants(0.5, 0.0, 0.0), // PID constants to correct for rotation error (used to create the rotation controller)
+    swerveSubsystem::setModuleStates, // Module states consumer used to output to the drive subsystem
+    eventMap,
+    false, // Should the path be automatically mirrored depending on alliance color. Optional, defaults to true
+    swerveSubsystem // The drive subsystem. Used to properly set the requirements of path following commands
+);
+
+Command fullAuto = autoBuilder.followPath(pathGroup);
+return aBalance;
+}
 }

@@ -24,8 +24,8 @@ public final class Constants {
 
     public static final class DrivebaseConstants{
 
-        public static final double DRIVETRAIN_TRACKWIDTH_METERS = Units.inchesToMeters(9.375)*2; 
-        public static final double DRIVETRAIN_WHEELBASE_METERS = Units.inchesToMeters(9.375)*2; 
+        public static final double DRIVETRAIN_TRACKWIDTH_METERS = Units.inchesToMeters(9.375*2); 
+        public static final double DRIVETRAIN_WHEELBASE_METERS = Units.inchesToMeters(9.375*2); 
     
         public static final int PIGEON_ID = 17;
 

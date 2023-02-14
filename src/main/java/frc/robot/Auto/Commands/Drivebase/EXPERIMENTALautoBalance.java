@@ -1,8 +1,17 @@
 package frc.robot.Auto.Commands.Drivebase;
 
+import java.sql.Driver;
 import java.util.function.Supplier;
+
+import javax.xml.crypto.dsig.keyinfo.RetrievalMethod;
+
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Constants.DrivebaseConstants;
+import frc.robot.subsystems.Gyro;
 import frc.robot.subsystems.SwerveSubsystem;
 
 
@@ -13,29 +22,44 @@ import frc.robot.subsystems.SwerveSubsystem;
  */
 public class EXPERIMENTALautoBalance extends CommandBase {
   private final SwerveSubsystem m_drivebase;
-  private final Supplier<Boolean> autoBalanceON;
+  private final Gyro Gyro;
+  public double xspeed;
+  public PIDController xController;
 
 
-  public EXPERIMENTALautoBalance(SwerveSubsystem drivebase, Supplier<Boolean> isActive) {
+  public EXPERIMENTALautoBalance(SwerveSubsystem drivebase, Gyro gyro) {
     this.m_drivebase = drivebase;
-    this.autoBalanceON = isActive;
+    this.Gyro = gyro;
 
     addRequirements(drivebase); // adds a requirement - if its not met then it will throw an error
   }
 
     @Override
     public void execute() {
+      SwerveModuleState[] states;
+      boolean PitchChange = false, balanced = false;
+      double currPitch = Gyro.getPitch();
 
-    // what to do while this command is active
+      while(!PitchChange){
+        states = DrivebaseConstants.m_kinematics.toSwerveModuleStates(new ChassisSpeeds(0.2, 0, 0));
+        m_drivebase.setModuleStates(states);
+
+        if(Gyro.getPitch() > currPitch+1|| Gyro.getPitch() < currPitch-1) PitchChange = true;
+
+      }
+      if(PitchChange){
+      while(!balanced){
+        xspeed = xController.calculate(Gyro.getPitch());
+        states = DrivebaseConstants.m_kinematics.toSwerveModuleStates(new ChassisSpeeds(xspeed, 0, 0));
+        m_drivebase.setModuleStates(states);
+
+        if(Math.abs(Gyro.getPitch()) < 1) balanced = true;
+
+
+      }
+    }
+
     
-      /*
-       * 1. get current angle of the robot (or what direction the ramp is located )
-       * 2. From that figure out if you need to use the pitch or roll, or need to do the math for differnt angle of "climb"
-       * 3. tell robot to go forward at a set speed until a change in pitch or roll occurs
-       * 4. using that pitch or roll change as an error value for a pid loop gett the robot to balance 
-       */
-    SmartDashboard.putBoolean("Auto Balance", autoBalanceON.get());
-
 
   }
 

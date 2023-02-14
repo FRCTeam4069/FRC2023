@@ -14,6 +14,7 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.CharacterizationData;
 import frc.robot.Constants.InputConstants;
@@ -63,13 +64,13 @@ public class Module extends SubsystemBase {
    }
 
    public double getDrivePosition(){
-      return driveMotor.getSelectedSensorPosition() * ModuleConstants.kDriveEncoderRot2Meter;
+      return driveMotor.getSelectedSensorPosition()/2048*6.75*Math.PI*Units.inchesToMeters(4);
    }
    public double getTurnignPosition(){
       return Math.toRadians(tCanCoder.getAbsolutePosition()) - (absoluteEncoderOffsetRad  * (absoluteEncoderReversed ? -1 : 1)); 
    }
    public double getDriveVelocity(){
-      return driveMotor.getSelectedSensorVelocity() * ModuleConstants.kDriveEncoderRPM2MeterPerSec;
+      return (driveMotor.getSelectedSensorVelocity()/(2048*6.75))*10*Math.PI*Units.inchesToMeters(4);
    }
    public double getTurningVelocity(){
       return Math.toRadians(tCanCoder.getVelocity()); 
