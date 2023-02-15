@@ -15,7 +15,7 @@ import edu.wpi.first.math.util.Units;
 public final class Constants {
 
     public static boolean PrintDebugNumbers = true; // prints Debug info for wheels and speeds 
-    public static boolean enableSlewrateLimiter = false;
+    public static boolean enableSlewrateLimiter = true;
 
     public static final class SparkMaxVoltage{
         public static final int DriveingMotorVoltage = 20;
@@ -99,15 +99,16 @@ public final class Constants {
     public static final class InputConstants{
 
         public static final double Contoller1portNum = 0;
-
-        public static final double speedMultiplier = 3;
+        
+        public static final double maxTurnSpeed = 3; // Meters/sec
+        public static final double maxSpeed = 5; // Meters/sec
 
         public static final double xdeadZone = 0.05;
         public static final double ydeadZone = 0.05;
         public static final double tdeadZone = 0.05;
 
-        public static final double xSpeedSlewRate = 1;
-        public static final double ySpeedSlewRate = 1;
+        public static final double xSpeedSlewRate = 5;
+        public static final double ySpeedSlewRate = 5;
         public static final double TurnSpeedSlewRate = 3;
 
     }

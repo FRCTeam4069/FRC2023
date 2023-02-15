@@ -123,5 +123,15 @@
   "maxVelocity": 3.0,
   "maxAcceleration": 2.0,
   "isReversed": null,
-  "markers": []
+  "markers": [
+    {
+      "position": 4.0,
+      "names": [
+        "Start",
+        "Pickup",
+        "Dropoff1",
+        "Pickup2"
+      ]
+    }
+  ]
 }

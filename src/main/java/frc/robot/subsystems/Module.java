@@ -6,6 +6,7 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.sensors.CANCoder;
 import com.revrobotics.CANSparkMax;
@@ -95,7 +96,7 @@ public class Module extends SubsystemBase {
       return;
     }
     state = SwerveModuleState.optimize(state, getState().angle);
-    driveMotor.set(ControlMode.PercentOutput, (CharacterizationData.feedForwardController.calculate(state.speedMetersPerSecond)  / driveMotor.getBusVoltage()) * InputConstants.speedMultiplier);//state.speedMetersPerSecond/Constants.ModuleConstants.MAX_VELOCITY_METERS_PER_SECOND);
+    driveMotor.set(TalonFXControlMode.PercentOutput, (CharacterizationData.feedForwardController.calculate(state.speedMetersPerSecond)/12));
     turnMotor.set(tPidController.calculate(getTurnignPosition(), state.angle.getRadians()));
    }
 

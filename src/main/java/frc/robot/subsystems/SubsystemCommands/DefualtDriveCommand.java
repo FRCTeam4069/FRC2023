@@ -54,10 +54,13 @@ public class DefualtDriveCommand extends CommandBase{
         if (FieldOriented.get()) {
             // Relative to field
             chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(
-                    xspeed, yspeed, Tspeed, swerveSubsystem.getRotation2d());
+                    xspeed * Constants.InputConstants.maxSpeed,
+                    yspeed * Constants.InputConstants.maxSpeed,
+                    Tspeed * Constants.InputConstants.maxTurnSpeed, 
+                    swerveSubsystem.getRotation2d());
         } else {
             // Relative to robot
-            chassisSpeeds = new ChassisSpeeds(xspeed , yspeed, Tspeed);
+            chassisSpeeds = new ChassisSpeeds(xspeed*Constants.InputConstants.maxSpeed, yspeed*Constants.InputConstants.maxSpeed, Tspeed*Constants.InputConstants.maxTurnSpeed);
         }
 
         //  Convert chassis speeds to individual module states
