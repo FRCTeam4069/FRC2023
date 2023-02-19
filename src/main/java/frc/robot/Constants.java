@@ -29,34 +29,34 @@ public final class Constants {
         public static final double DRIVETRAIN_TRACKWIDTH_METERS = Units.inchesToMeters(9.375*2); 
         public static final double DRIVETRAIN_WHEELBASE_METERS = Units.inchesToMeters(9.375*2); 
     
-        public static final int PIGEON_ID = 17;
+        public static final int PIGEON_ID = 20;
 
-        public static final int FL_DRIVE_MOTOR = 5;
-        public static final int FL_STEER_MOTOR = 1; 
+        public static final int FL_DRIVE_MOTOR = 16;
+        public static final int FL_STEER_MOTOR = 17; 
         public static final boolean FL_DRIVE_MOTOR_REVERSED = true;                        //FIXME
         public static final boolean FL_STEER_MOTOR_REVERSED = true;                        //FIXME
         public static final int FL_STEER_ENCODER = 10; 
         public static final double FL_STEER_OFFSET =  -3.149262557529221;//(-4.7139) - (-4.71699) ; //-2         //FIXME
         public static final boolean FL_STEER_ENCODER_REVERSED = true;                      //FIXME
     
-        public static final int FR_DRIVE_MOTOR = 6; 
-        public static final int FR_STEER_MOTOR = 2;
+        public static final int FR_DRIVE_MOTOR = 2; 
+        public static final int FR_STEER_MOTOR = 3;
         public static final boolean FR_DRIVE_MOTOR_REVERSED = true;                        //FIXME
         public static final boolean FR_STEER_MOTOR_REVERSED = true;                        //FIXME
         public static final int FR_STEER_ENCODER = 9; 
         public static final double FR_STEER_OFFSET = -3.149262557529221;
         public static final boolean FR_STEER_ENCODER_REVERSED = true;                      //FIXME
     
-        public static final int BL_DRIVE_MOTOR = 7; 
-        public static final int BL_STEER_MOTOR = 3; 
+        public static final int BL_DRIVE_MOTOR = 18; 
+        public static final int BL_STEER_MOTOR = 19; 
         public static final boolean BL_DRIVE_MOTOR_REVERSED = true;                        //FIXME
         public static final boolean BL_STEER_MOTOR_REVERSED = true;                        //FIXME
         public static final int BL_STEER_ENCODER = 12;
         public static final double BL_STEER_OFFSET = -3.158466442256535;
         public static final boolean BL_STEER_ENCODER_REVERSED = true;                      //FIXME
     
-        public static final int BR_DRIVE_MOTOR =8; 
-        public static final int BR_STEER_MOTOR = 4; 
+        public static final int BR_DRIVE_MOTOR = 0; 
+        public static final int BR_STEER_MOTOR = 1; 
         public static final boolean BR_DRIVE_MOTOR_REVERSED = true;                        //FIXME
         public static final boolean BR_STEER_MOTOR_REVERSED = true;                        //FIXME
         public static final int BR_STEER_ENCODER = 11;         
@@ -145,7 +145,8 @@ public final class Constants {
     }
     public static final byte INTAKE_ID = 0;
     
-    public static final byte ARM_ID_1 = 0;
-    public static final byte ARM_ID_2 = 0;
+    public static final int ARM_ID_L = 15; // left
+    public static final int ARM_ID_R = 4; // right
+    public static final int ARM_ID_E = 0; // Extend //FIXME
 
 }
