@@ -16,6 +16,7 @@ public final class Constants {
 
     public static boolean PrintDebugNumbers = true; // prints Debug info for wheels and speeds 
     public static boolean enableSlewrateLimiter = true;
+    public static boolean limelightPluggedIn = false;
 
     public static final class SparkMaxVoltage{
         public static final int DriveingMotorVoltage = 20;
@@ -99,7 +100,6 @@ public final class Constants {
     public static final class InputConstants{
 
         public static final double Contoller1portNum = 0;
-        
         public static final double maxTurnSpeed = 3; // Meters/sec
         public static final double maxSpeed = 5; // Meters/sec
 
