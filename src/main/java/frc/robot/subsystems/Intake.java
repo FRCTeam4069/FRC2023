@@ -19,7 +19,7 @@ public class Intake extends SubsystemBase{
     public final int[] requiedTorque = {10, 20}; /**not exact values**/
     public Intake(){
         intakeMotor = new CANSparkMax(Constants.IntakeConstants.INTAKE_ID, MotorType.kBrushless);
-        encoder = new Encoder(Constants.IntakeConstants.ENCODER_ID_A, Constants.IntakeConstants.ENCODER_ID_A);
+        encoder = new Encoder(Constants.IntakeConstants.ENCODER_ID_A, Constants.IntakeConstants.ENCODER_ID_B);
         limitLeft = new DigitalInput(Constants.IntakeConstants.LIMIT_SWITCH_ID_1);
         limitRight = new DigitalInput(Constants.IntakeConstants.LIMIT_SWITCH_ID_2);
 

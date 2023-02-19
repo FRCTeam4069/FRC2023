@@ -11,6 +11,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.DigitalSource;
 
 public final class Constants {
 
@@ -130,6 +131,18 @@ public final class Constants {
 
     }
 
+
+    public static class IntakeConstants{
+
+        public static final int INTAKE_ID = 0;
+        public static final DigitalSource ENCODER_ID_A = null;
+        public static final int LIMIT_SWITCH_ID_2 = 0;
+        public static final int LIMIT_SWITCH_ID_1 = 0;
+        public static final DigitalSource ENCODER_ID_B = null;
+
+        
+
+    }
     public static final byte INTAKE_ID = 0;
     
     public static final byte ARM_ID_1 = 0;
