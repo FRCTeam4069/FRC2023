@@ -7,7 +7,7 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
+import frc.robot.Constants.armAndIntakeConstants.intakeConstants;
 
 public class Intake extends SubsystemBase{
     private CANSparkMax intakeMotor;
@@ -18,10 +18,10 @@ public class Intake extends SubsystemBase{
 
     public final int[] requiedTorque = {10, 20}; /**not exact values**/
     public Intake(){
-        intakeMotor = new CANSparkMax(Constants.IntakeConstants.INTAKE_ID, MotorType.kBrushless);
-        encoder = new Encoder(Constants.IntakeConstants.ENCODER_ID_A, Constants.IntakeConstants.ENCODER_ID_B);
-        limitLeft = new DigitalInput(Constants.IntakeConstants.LIMIT_SWITCH_ID_1);
-        limitRight = new DigitalInput(Constants.IntakeConstants.LIMIT_SWITCH_ID_2);
+        intakeMotor = new CANSparkMax(intakeConstants.INTAKE_ID , MotorType.kBrushless);
+        encoder = new Encoder(intakeConstants.ENCODER_ID_A , intakeConstants.ENCODER_ID_B);
+        limitLeft = new DigitalInput(intakeConstants.LIMIT_SWITCH_ID_1);
+        limitRight = new DigitalInput(intakeConstants.LIMIT_SWITCH_ID_2);
 
         power = 0;
         torque = 0;

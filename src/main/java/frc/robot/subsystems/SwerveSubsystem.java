@@ -7,7 +7,6 @@ import com.pathplanner.lib.commands.PPSwerveControllerCommand;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
@@ -16,55 +15,55 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
-import frc.robot.Auto.Commands.Drivebase.EXPERIMENTALautoBalance;
-import frc.robot.Constants.DrivebaseConstants;
-import frc.robot.Constants.ModuleConstants;
+import frc.robot.Constants.drivebaseConstants;
+import frc.robot.Constants.drivebaseConstants.ModuleConstants;
+import frc.robot.Constants.drivebaseConstants.deviceIDs;
+import frc.robot.Constants.drivebaseConstants.kinematics;
 
 public class SwerveSubsystem extends SubsystemBase{
 
     public final Module FRSwerveModule = new Module(
-        DrivebaseConstants.FR_DRIVE_MOTOR,
-        DrivebaseConstants.FR_STEER_MOTOR,
-        DrivebaseConstants.FR_DRIVE_MOTOR_REVERSED, 
-        DrivebaseConstants.FR_STEER_MOTOR_REVERSED,
-        DrivebaseConstants.FR_STEER_ENCODER,
-        DrivebaseConstants.FR_STEER_OFFSET,
-        DrivebaseConstants.FR_STEER_ENCODER_REVERSED
+        deviceIDs.FR_DRIVE_MOTOR,
+        deviceIDs.FR_STEER_MOTOR,
+        deviceIDs.FR_DRIVE_MOTOR_REVERSED, 
+        deviceIDs.FR_STEER_MOTOR_REVERSED,
+        deviceIDs.FR_STEER_ENCODER,
+        deviceIDs.FR_STEER_OFFSET,
+        deviceIDs.FR_STEER_ENCODER_REVERSED
     );
 
     private final Module FLSwerveModule = new Module(
-        DrivebaseConstants.FL_DRIVE_MOTOR,
-        DrivebaseConstants.FL_STEER_MOTOR,
-        DrivebaseConstants.FL_DRIVE_MOTOR_REVERSED, 
-        DrivebaseConstants.FL_STEER_MOTOR_REVERSED,
-        DrivebaseConstants.FL_STEER_ENCODER,
-        DrivebaseConstants.FL_STEER_OFFSET,
-        DrivebaseConstants.FL_STEER_ENCODER_REVERSED
+        deviceIDs.FL_DRIVE_MOTOR,
+        deviceIDs.FL_STEER_MOTOR,
+        deviceIDs.FL_DRIVE_MOTOR_REVERSED, 
+        deviceIDs.FL_STEER_MOTOR_REVERSED,
+        deviceIDs.FL_STEER_ENCODER,
+        deviceIDs.FL_STEER_OFFSET,
+        deviceIDs.FL_STEER_ENCODER_REVERSED
     );
 
     private final Module BRSwerveModule = new Module(
-        DrivebaseConstants.BR_DRIVE_MOTOR,
-        DrivebaseConstants.BR_STEER_MOTOR,
-        DrivebaseConstants.BR_DRIVE_MOTOR_REVERSED, 
-        DrivebaseConstants.BR_STEER_MOTOR_REVERSED,
-        DrivebaseConstants.BR_STEER_ENCODER,
-        DrivebaseConstants.BR_STEER_OFFSET,
-        DrivebaseConstants.BR_STEER_ENCODER_REVERSED
+        deviceIDs.BR_DRIVE_MOTOR,
+        deviceIDs.BR_STEER_MOTOR,
+        deviceIDs.BR_DRIVE_MOTOR_REVERSED, 
+        deviceIDs.BR_STEER_MOTOR_REVERSED,
+        deviceIDs.BR_STEER_ENCODER,
+        deviceIDs.BR_STEER_OFFSET,
+        deviceIDs.BR_STEER_ENCODER_REVERSED
     );
 
     private final Module BLSwerveModule = new Module(
-        DrivebaseConstants.BL_DRIVE_MOTOR,
-        DrivebaseConstants.BL_STEER_MOTOR,
-        DrivebaseConstants.BL_DRIVE_MOTOR_REVERSED, 
-        DrivebaseConstants.BL_STEER_MOTOR_REVERSED,
-        DrivebaseConstants.BL_STEER_ENCODER,
-        DrivebaseConstants.BL_STEER_OFFSET,
-        DrivebaseConstants.BL_STEER_ENCODER_REVERSED
+        deviceIDs.BL_DRIVE_MOTOR,
+        deviceIDs.BL_STEER_MOTOR,
+        deviceIDs.BL_DRIVE_MOTOR_REVERSED, 
+        deviceIDs.BL_STEER_MOTOR_REVERSED,
+        deviceIDs.BL_STEER_ENCODER,
+        deviceIDs.BL_STEER_OFFSET,
+        deviceIDs.BL_STEER_ENCODER_REVERSED
     );
     
     private Gyro gyro = new Gyro();
-    public final SwerveDriveOdometry odometry = new SwerveDriveOdometry(DrivebaseConstants.m_kinematics, getRotation2d());
+    public final SwerveDriveOdometry odometry = new SwerveDriveOdometry(kinematics.m_kinematics, getRotation2d());
 
     public SwerveSubsystem(){
        new Thread(() -> {
@@ -112,7 +111,7 @@ public class SwerveSubsystem extends SubsystemBase{
         FRSwerveModule.setDesiredState(ModuleStates[1]);;
         BLSwerveModule.setDesiredState(ModuleStates[2]);
         BRSwerveModule.setDesiredState(ModuleStates[3]);
-        if(Constants.PrintDebugNumbers){
+        if(drivebaseConstants.PrintDebugNumbers){
         SmartDashboard.putString("Module State FL", ModuleStates[0].toString());
         SmartDashboard.putString("Module State FR", ModuleStates[1].toString());
         SmartDashboard.putString("Module State BL", ModuleStates[2].toString());
@@ -152,10 +151,10 @@ public class SwerveSubsystem extends SubsystemBase{
 
         SmartDashboard.putString("odometry", odometry.getPoseMeters().toString());
 
-        if(Constants.PrintDebugNumbers) {printNumbers(); SmartDashboard.delete("Print Debug Number?");}
+        if(drivebaseConstants.PrintDebugNumbers) {printNumbers(); SmartDashboard.delete("Print Debug Number?");}
         else{ 
             SmartDashboard.putBoolean("Print Debug Number?", false);
-            Constants.PrintDebugNumbers = SmartDashboard.getBoolean("Print Debug Number?", false);
+            drivebaseConstants.PrintDebugNumbers = SmartDashboard.getBoolean("Print Debug Number?", false);
         }
 
        
@@ -186,7 +185,7 @@ public class SwerveSubsystem extends SubsystemBase{
              new PPSwerveControllerCommand(
                  traj, 
                  this::getPose, // Pose supplier
-                 DrivebaseConstants.m_kinematics, // SwerveDriveKinematics
+                 kinematics.m_kinematics, // SwerveDriveKinematics
                  new PIDController(0, 0, 0), // X controller. Tune these values for your robot. Leaving them 0 will only use feedforwards.
                  new PIDController(0, 0, 0), // Y controller (usually the same values as X controller)
                  new PIDController(0, 0, 0), // Rotation controller. Tune these values for your robot. Leaving them 0 will only use feedforwards.

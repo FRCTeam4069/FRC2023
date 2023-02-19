@@ -1,4 +1,4 @@
-package frc.robot.subsystems.SubsystemCommands;
+package frc.robot.Auto.Commands.drivebaseCommands;
 
 import java.util.function.Supplier;
 
@@ -6,9 +6,9 @@ import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.Constants;
-import frc.robot.Constants.DrivebaseConstants;
-import frc.robot.Constants.InputConstants;
+import frc.robot.Constants.IO;
+import frc.robot.Constants.drivebaseConstants;
+import frc.robot.Constants.drivebaseConstants.kinematics;
 import frc.robot.subsystems.SwerveSubsystem;
 
 public class DefualtDriveCommand extends CommandBase{
@@ -28,9 +28,9 @@ public class DefualtDriveCommand extends CommandBase{
         this.TSpd = TSpd;
         this.HalfSpeed = HalfSpeed;
         this.FieldOriented = FieldOriented;
-        this.xSlewRateLimiter = new SlewRateLimiter(InputConstants.xSpeedSlewRate);
-        this.ySlewRateLimiter = new SlewRateLimiter(InputConstants.ySpeedSlewRate);
-        this.turnSlewRateLimiter = new SlewRateLimiter(InputConstants.TurnSpeedSlewRate);
+        this.xSlewRateLimiter = new SlewRateLimiter(IO.xSpeedSlewRate);
+        this.ySlewRateLimiter = new SlewRateLimiter(IO.ySpeedSlewRate);
+        this.turnSlewRateLimiter = new SlewRateLimiter(IO.TurnSpeedSlewRate);
         addRequirements(swerveSubsystem);
     }
 
@@ -40,11 +40,11 @@ public class DefualtDriveCommand extends CommandBase{
         double yspeed = HalfSpeed.get() ? ySpd.get()/6 : ySpd.get();
         double Tspeed = HalfSpeed.get() ? TSpd.get()/4 : TSpd.get();
 
-        xspeed = Math.abs(xspeed)>InputConstants.xdeadZone? xspeed : 0;
-        yspeed = Math.abs(yspeed)>InputConstants.ydeadZone? yspeed : 0;
-        Tspeed = Math.abs(Tspeed)>InputConstants.tdeadZone? Tspeed : 0;
+        xspeed = Math.abs(xspeed)>IO.xdeadZone? xspeed : 0;
+        yspeed = Math.abs(yspeed)>IO.ydeadZone? yspeed : 0;
+        Tspeed = Math.abs(Tspeed)>IO.tdeadZone? Tspeed : 0;
         
-        if(Constants.enableSlewrateLimiter){
+        if(drivebaseConstants.enableSlewrateLimiter){
         xspeed = xSlewRateLimiter.calculate(xspeed);
         yspeed = ySlewRateLimiter.calculate(yspeed);
         Tspeed =    turnSlewRateLimiter.calculate(Tspeed);
@@ -54,17 +54,17 @@ public class DefualtDriveCommand extends CommandBase{
         if (FieldOriented.get()) {
             // Relative to field
             chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(
-                    xspeed * Constants.InputConstants.maxSpeed,
-                    yspeed * Constants.InputConstants.maxSpeed,
-                    Tspeed * Constants.InputConstants.maxTurnSpeed, 
+                    xspeed * IO.maxSpeed,
+                    yspeed * IO.maxSpeed,
+                    Tspeed * IO.maxTurnSpeed, 
                     swerveSubsystem.getRotation2d());
         } else {
             // Relative to robot
-            chassisSpeeds = new ChassisSpeeds(xspeed*Constants.InputConstants.maxSpeed, yspeed*Constants.InputConstants.maxSpeed, Tspeed*Constants.InputConstants.maxTurnSpeed);
+            chassisSpeeds = new ChassisSpeeds(xspeed*IO.maxSpeed, yspeed*IO.maxSpeed, Tspeed*IO.maxTurnSpeed);
         }
 
         //  Convert chassis speeds to individual module states
-            SwerveModuleState[] moduleStates = DrivebaseConstants.m_kinematics.toSwerveModuleStates(chassisSpeeds);
+            SwerveModuleState[] moduleStates = kinematics.m_kinematics.toSwerveModuleStates(chassisSpeeds);
 
         //  Output each module states to wheels
             swerveSubsystem.setModuleStates(moduleStates);

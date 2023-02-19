@@ -18,7 +18,7 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
  */
 public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
-  public RobotContainer m_robotContainer;
+  public static RobotContainer m_robotContainer;
 
   private static final String Halo = "Halo.chrp";
   private static final String PotC = "PiratesOfTheCaribbean.chrp";
@@ -121,4 +121,6 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during test mode. */
   @Override
   public void testPeriodic() {}
+
+  
 }

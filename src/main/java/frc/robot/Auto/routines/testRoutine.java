@@ -2,12 +2,10 @@ package frc.robot.Auto.routines;
 
 import com.pathplanner.lib.PathConstraints;
 import com.pathplanner.lib.PathPlanner;
-import com.pathplanner.lib.PathPlannerTrajectory;
-
 import frc.robot.Robot;
 import frc.robot.RobotContainer;
 import frc.robot.Auto.Scheduler;
-import frc.robot.Auto.Commands.Drivebase.followTrajectoryCommand;
+import frc.robot.Auto.Commands.drivebaseCommands.followTrajectoryCommand;
 
 /**
  * Interface for autonomous routines.
@@ -19,7 +17,7 @@ public class testRoutine implements AutoRoutine {
 
     
     public testRoutine(Robot robot){
-        Robot = robot.m_robotContainer;
+        Robot = frc.robot.Robot.m_robotContainer;
         scheduler = new Scheduler(robot);
     }
 

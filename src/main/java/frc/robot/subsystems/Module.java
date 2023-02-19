@@ -17,9 +17,8 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants.CharacterizationData;
-import frc.robot.Constants.InputConstants;
-import frc.robot.Constants.ModuleConstants;
+import frc.robot.Constants.drivebaseConstants.CharacterizationData;
+import frc.robot.Constants.drivebaseConstants.ModuleConstants;
 
 public class Module extends SubsystemBase {
   private final TalonFX driveMotor;
