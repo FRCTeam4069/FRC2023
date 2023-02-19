@@ -10,6 +10,7 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.RobotContainer;
 import frc.robot.Constants.DrivebaseConstants;
 import frc.robot.subsystems.Gyro;
 import frc.robot.subsystems.SwerveSubsystem;
@@ -23,8 +24,12 @@ import frc.robot.subsystems.SwerveSubsystem;
 public class EXPERIMENTALautoBalance extends CommandBase {
   private final SwerveSubsystem m_drivebase;
   private final Gyro Gyro;
-  public double xspeed;
-  public PIDController xController;
+  public double thetaSpeed, xspeed;
+  public PIDController xController = new PIDController( 0.05, 0,0);
+  public PIDController rotController = new PIDController( 0.05, 0,0);
+  public boolean balanced;
+  private double pitchThreshold = 1;
+  
 
 
   public EXPERIMENTALautoBalance(SwerveSubsystem drivebase, Gyro gyro) {
@@ -37,11 +42,12 @@ public class EXPERIMENTALautoBalance extends CommandBase {
     @Override
     public void execute() {
       SwerveModuleState[] states;
-      boolean PitchChange = false, balanced = false;
+      boolean PitchChange = false;
+      balanced = false;
       double currPitch = Gyro.getPitch();
 
       while(!PitchChange){
-        states = DrivebaseConstants.m_kinematics.toSwerveModuleStates(new ChassisSpeeds(0.2, 0, 0));
+        states = DrivebaseConstants.m_kinematics.toSwerveModuleStates(new ChassisSpeeds(2, 0, 0));
         m_drivebase.setModuleStates(states);
 
         if(Gyro.getPitch() > currPitch+1|| Gyro.getPitch() < currPitch-1) PitchChange = true;
@@ -50,10 +56,13 @@ public class EXPERIMENTALautoBalance extends CommandBase {
       if(PitchChange){
       while(!balanced){
         xspeed = xController.calculate(Gyro.getPitch());
-        states = DrivebaseConstants.m_kinematics.toSwerveModuleStates(new ChassisSpeeds(xspeed, 0, 0));
+        Gyro.resetGyro();
+        thetaSpeed = Gyro.getYaw() * 0.1;
+        states = DrivebaseConstants.m_kinematics.toSwerveModuleStates(new ChassisSpeeds(xspeed, 0, thetaSpeed));
         m_drivebase.setModuleStates(states);
 
-        if(Math.abs(Gyro.getPitch()) < 1) balanced = true;
+        if(Math.abs(Gyro.getPitch()) < pitchThreshold) balanced = true; 
+        SmartDashboard.putBoolean("Balanced", balanced);
 
 
       }
@@ -71,7 +80,9 @@ public class EXPERIMENTALautoBalance extends CommandBase {
 
     @Override
     public boolean isFinished() {
-        return false;
+      if(balanced == true) return true;  
+    
+      return false;
     }
 }
 

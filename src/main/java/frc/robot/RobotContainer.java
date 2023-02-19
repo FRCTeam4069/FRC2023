@@ -77,6 +77,6 @@ SwerveAutoBuilder autoBuilder = new SwerveAutoBuilder(
 );
 
 Command fullAuto = autoBuilder.followPath(pathGroup);
-return fullAuto;
+return aBalance;
 }
 }
