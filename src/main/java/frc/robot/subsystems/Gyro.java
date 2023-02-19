@@ -3,18 +3,19 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.sensors.Pigeon2;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
+import frc.robot.Constants.drivebaseConstants.deviceIDs;
 
 public class Gyro extends SubsystemBase{
     
     public Pigeon2 gyro;
     
     public Gyro(){
-        gyro = new Pigeon2(Constants.DrivebaseConstants.PIGEON_ID);
+        gyro = new Pigeon2(deviceIDs.PIGEON_ID);
     }
 
     public void resetGyro(){
         gyro.setYaw(0);
+
     }
 
     /**
