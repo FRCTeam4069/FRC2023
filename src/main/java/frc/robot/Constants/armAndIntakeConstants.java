@@ -20,6 +20,7 @@ public class armAndIntakeConstants{
         public static final double kS = 0;
         public static final double kP = 0;
         public static final double kD = 0;
+        public static double kI;
 
     }
 

@@ -6,15 +6,18 @@
           "open": true
         }
       },
+      "SPARK MAX [1]": {
+        "header": {
+          "open": true
+        }
+      },
       "SPARK MAX [3]": {
         "header": {
           "open": true
         }
       },
-      "SPARK MAX [4]": {
-        "header": {
-          "open": true
-        }
+      "window": {
+        "visible": false
       }
     }
   },
@@ -34,6 +37,10 @@
       "/LiveWindow/Ungrouped/PIDController[6]": "PIDController",
       "/LiveWindow/Ungrouped/Scheduler": "Scheduler",
       "/LiveWindow/armSubsystem": "Subsystem",
+      "/Shuffleboard/Swerve/BL Module": "Subsystem",
+      "/Shuffleboard/Swerve/BR Module": "Subsystem",
+      "/Shuffleboard/Swerve/FL Module": "Subsystem",
+      "/Shuffleboard/Swerve/FR Module": "Subsystem",
       "/SmartDashboard/SendableChooser[0]": "String Chooser"
     }
   },

@@ -2,10 +2,7 @@ package frc.robot.Auto.Commands.armCommands;
 
 import java.util.function.Supplier;
 
-import javax.lang.model.element.NestingKind;
-
 import edu.wpi.first.math.filter.SlewRateLimiter;
-import edu.wpi.first.util.datalog.DoubleLogEntry;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants.armAndIntakeConstants.armConstants;

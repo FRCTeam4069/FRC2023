@@ -27,6 +27,7 @@ public class Module extends SubsystemBase {
   private final CANCoder tCanCoder;
   private final boolean absoluteEncoderReversed;
   private final double absoluteEncoderOffsetRad;
+  private double output;
 
 
   /***
@@ -95,12 +96,13 @@ public class Module extends SubsystemBase {
       return;
     }
     state = SwerveModuleState.optimize(state, getState().angle);
+    this.output = CharacterizationData.feedForwardController.calculate(state.speedMetersPerSecond)/12;
     driveMotor.set(TalonFXControlMode.PercentOutput, (CharacterizationData.feedForwardController.calculate(state.speedMetersPerSecond)/12));
     turnMotor.set(tPidController.calculate(getTurnignPosition(), state.angle.getRadians()));
    }
 
-  public double getDriveVoltage(SwerveModuleState state){
-   return CharacterizationData.feedForwardController.calculate(state.speedMetersPerSecond) / 12;
+  public double getDriveVoltage(){
+   return this.output;
   }
 
 

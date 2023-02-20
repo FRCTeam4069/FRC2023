@@ -15,7 +15,6 @@ import edu.wpi.first.math.util.Units;
 public class drivebaseConstants {
 
 
-    public static boolean PrintDebugNumbers = true; // prints Debug info for wheels and speeds 
     public static boolean enableSlewrateLimiter = true;
     public static boolean limelightPluggedIn = false;
 

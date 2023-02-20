@@ -1,5 +1,7 @@
 package frc.robot.subsystems;
 
+import java.util.Map;
+
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.pathplanner.lib.PathPlannerTrajectory;
 import com.pathplanner.lib.commands.PPSwerveControllerCommand;
@@ -10,17 +12,32 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants.IO;
 import frc.robot.Constants.drivebaseConstants;
 import frc.robot.Constants.drivebaseConstants.ModuleConstants;
 import frc.robot.Constants.drivebaseConstants.deviceIDs;
 import frc.robot.Constants.drivebaseConstants.kinematics;
 
 public class SwerveSubsystem extends SubsystemBase{
+
+    private ShuffleboardTab tab = Shuffleboard.getTab("Swerve");
+    private ShuffleboardLayout FrontLeft = tab.getLayout("Front Left", BuiltInLayouts.kList).withPosition(0, 0).withSize(2, 3);
+    private ShuffleboardLayout FrontRight = tab.getLayout("Front Right", BuiltInLayouts.kList).withPosition(2, 0).withPosition(2, 3);
+    private ShuffleboardLayout BackLeft = tab.getLayout("Back Left", BuiltInLayouts.kList).withPosition(5, 0).withPosition(2, 3);
+    private ShuffleboardLayout BackRight = tab.getLayout("Back Right", BuiltInLayouts.kList).withPosition(7, 0).withPosition(2, 3);
+
+    
 
     public final Module FRSwerveModule = new Module(
         deviceIDs.FR_DRIVE_MOTOR,
@@ -60,8 +77,32 @@ public class SwerveSubsystem extends SubsystemBase{
         deviceIDs.BL_STEER_ENCODER,
         deviceIDs.BL_STEER_OFFSET,
         deviceIDs.BL_STEER_ENCODER_REVERSED
+
+        
     );
+
+    private NetworkTableEntry FLVO = FrontLeft.add("Voltage", FLSwerveModule.getDriveVoltage()).withWidget(BuiltInWidgets.kVoltageView).withProperties(Map.of("min", -1, "max", 1)).getEntry();
+    private NetworkTableEntry FLVE = FrontLeft.add("Velocity", FLSwerveModule.getDriveVelocity()).getEntry();
+    private NetworkTableEntry FLTP = FrontLeft.add("Turning Pose", FLSwerveModule.getTurnignPosition()).getEntry();
+    private NetworkTableEntry FLTV = FrontLeft.add("Turning Velocity", FLSwerveModule.getTurningVelocity()).getEntry();
     
+    private NetworkTableEntry FRVO = FrontRight.add("Voltage", FRSwerveModule.getDriveVoltage()).withWidget(BuiltInWidgets.kVoltageView).withProperties(Map.of("min", -1, "max", 1)).getEntry();
+    private NetworkTableEntry FRVE = FrontRight.add("Velocity", FRSwerveModule.getDriveVelocity()).getEntry();
+    private NetworkTableEntry FRTP = FrontRight.add("Turning Pose", FRSwerveModule.getTurnignPosition()).getEntry();
+    private NetworkTableEntry FRTV = FrontRight.add("Turning Velocity", FRSwerveModule.getTurningVelocity()).getEntry();
+
+    private NetworkTableEntry BRVO = BackRight.add("Voltage", BRSwerveModule.getDriveVoltage()).withWidget(BuiltInWidgets.kVoltageView).withProperties(Map.of("min", -1, "max", 1)).getEntry();
+    private NetworkTableEntry BRVE = BackRight.add("Velocity", BRSwerveModule.getDriveVelocity()).getEntry();
+    private NetworkTableEntry BRTP = BackRight.add("Turning Pose", BRSwerveModule.getTurnignPosition()).getEntry();
+    private NetworkTableEntry BRTV = BackRight.add("Turning Velocity", BRSwerveModule.getTurningVelocity()).getEntry();
+    
+    private NetworkTableEntry BLVO = BackLeft.add("Voltage", BLSwerveModule.getDriveVoltage()).withWidget(BuiltInWidgets.kVoltageView).withProperties(Map.of("min", -1, "max", 1)).getEntry();
+    private NetworkTableEntry BLVE = BackLeft.add("Velocity", BLSwerveModule.getDriveVelocity()).getEntry();
+    private NetworkTableEntry BLTP = BackLeft.add("Turning Pose", BLSwerveModule.getTurnignPosition()).getEntry();
+    private NetworkTableEntry BLTV = BackLeft.add("Turning Velocity", BLSwerveModule.getTurningVelocity()).getEntry();
+
+    
+
     private Gyro gyro = new Gyro();
     public final SwerveDriveOdometry odometry = new SwerveDriveOdometry(kinematics.m_kinematics, getRotation2d());
 
@@ -73,7 +114,9 @@ public class SwerveSubsystem extends SubsystemBase{
         } catch(Exception e){
         } 
     }).start();
-        
+    
+  
+    Shuffleboard.update();
     
     }
     public void resetGyro(){
@@ -111,35 +154,29 @@ public class SwerveSubsystem extends SubsystemBase{
         FRSwerveModule.setDesiredState(ModuleStates[1]);;
         BLSwerveModule.setDesiredState(ModuleStates[2]);
         BRSwerveModule.setDesiredState(ModuleStates[3]);
-        if(drivebaseConstants.PrintDebugNumbers){
-        SmartDashboard.putString("Module State FL", ModuleStates[0].toString());
-        SmartDashboard.putString("Module State FR", ModuleStates[1].toString());
-        SmartDashboard.putString("Module State BL", ModuleStates[2].toString());
-        SmartDashboard.putString("Module State BR", ModuleStates[3].toString());
-
-        SmartDashboard.putNumber("FL Voltage", FLSwerveModule.getDriveVoltage(ModuleStates[0]));
-        SmartDashboard.putNumber("FR Voltage", FRSwerveModule.getDriveVoltage(ModuleStates[1]));
-        SmartDashboard.putNumber("BL Voltage", BLSwerveModule.getDriveVoltage(ModuleStates[2]));
-        SmartDashboard.putNumber("BR Voltage", BRSwerveModule.getDriveVoltage(ModuleStates[3]));
-        }
     
     }
 
+    
     public void printNumbers(){
-        SmartDashboard.putNumber("FL Rad", FLSwerveModule.getAbsoluteEncoderRad());
-        SmartDashboard.putNumber("FR Rad", FRSwerveModule.getAbsoluteEncoderRad());
-        SmartDashboard.putNumber("BL Rad", BLSwerveModule.getAbsoluteEncoderRad());
-        SmartDashboard.putNumber("BR Rad", BRSwerveModule.getAbsoluteEncoderRad());
-
-        SmartDashboard.putNumber("FL TRad", FLSwerveModule.getTurnignPosition());
-        SmartDashboard.putNumber("FR TRad", FRSwerveModule.getTurnignPosition());
-        SmartDashboard.putNumber("BL TRad", BLSwerveModule.getTurnignPosition());
-        SmartDashboard.putNumber("BR TRad", BRSwerveModule.getTurnignPosition());
-
+        FLVO.setDouble(FLSwerveModule.getDriveVoltage());
+        FLVE.setDouble(FLSwerveModule.getDriveVelocity());
+        FLTP.setDouble(FLSwerveModule.getTurnignPosition());
+        FLTV.setDouble(FLSwerveModule.getTurningVelocity());
+        FRVO.setDouble(FRSwerveModule.getDriveVoltage());
+        FRVE.setDouble(FRSwerveModule.getDriveVelocity());
+        FRTP.setDouble(FRSwerveModule.getTurnignPosition());
+        FRTV.setDouble(FRSwerveModule.getTurningVelocity());
+        BRVO.setDouble(BRSwerveModule.getDriveVoltage());
+        BRVE.setDouble(BRSwerveModule.getDriveVelocity());
+        BRTP.setDouble(BRSwerveModule.getTurnignPosition());
+        BRTV.setDouble(BRSwerveModule.getTurningVelocity());
+        BLVO.setDouble(BLSwerveModule.getDriveVoltage());
+        BLVE.setDouble(BLSwerveModule.getDriveVelocity());
+        BLTP.setDouble(BLSwerveModule.getTurnignPosition());
+        BLTV.setDouble(BLSwerveModule.getTurningVelocity());
         }
 
-
-    
 
     @Override
     public void periodic() {
@@ -151,10 +188,11 @@ public class SwerveSubsystem extends SubsystemBase{
 
         SmartDashboard.putString("odometry", odometry.getPoseMeters().toString());
 
-        if(drivebaseConstants.PrintDebugNumbers) {printNumbers(); SmartDashboard.delete("Print Debug Number?");}
+
+        if(IO.PrintDebugNumbers) {printNumbers(); SmartDashboard.delete("Print Debug Number?");}
         else{ 
-            SmartDashboard.putBoolean("Print Debug Number?", false);
-            drivebaseConstants.PrintDebugNumbers = SmartDashboard.getBoolean("Print Debug Number?", false);
+            SmartDashboard.putBoolean("Print Debug Number ", false);
+            IO.PrintDebugNumbers = SmartDashboard.getBoolean("Print Debug Number?", false);
         }
 
        
