@@ -4,8 +4,10 @@
 
 package frc.robot.Constants;
 
+import com.ctre.phoenix.sensors.Pigeon2;
 import com.swervedrivespecialties.swervelib.SdsModuleConfigurations;
 
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
@@ -71,9 +73,14 @@ public class drivebaseConstants {
         public static final double Kd = 0;
 
         public static final SimpleMotorFeedforward feedForwardController = new SimpleMotorFeedforward(Ks, Kv);
+
+        public static final PIDController autoXController = new PIDController(0.5, 0, 0);
+        public static final PIDController autoYController = new PIDController(0.5, 0, 0);
+        public static final PIDController autoThetaController = new PIDController(1, 0, 0);
     }
 
     public static final class deviceIDs{
+
 
         public static final int PIGEON_ID = 20;
 
