@@ -16,7 +16,10 @@ public class LimeLight extends SubsystemBase{
     public LimeLight(){
         //camera = new PhotonCamera("LimeLight");
     }
-
+    /**
+     * Using PhotonVision to get the estimated pose of the Robot
+     * @return Pose2d of the robot
+    */
     public Pose2d poseEstimation(){
         return new Pose2d(0,0, new Rotation2d(0));
 
@@ -24,7 +27,7 @@ public class LimeLight extends SubsystemBase{
 
     /**
      * Get the Distance from the Limelight to the Refelctive tape on the Poles
-     * @return
+     * @return Double of the distance from the Limelight to the Refelctive tape on the Pole
      */
     public double refecltiveTapeDist(){
         return 0;
@@ -32,23 +35,23 @@ public class LimeLight extends SubsystemBase{
 
     /**
      * Get the Angle from the Limelight to the Refelctive tape on the Poles
-     * @return
+     * @return Duoble of the angle from the Limelight to the Refelctive tape on the P
      */
     public double refecltiveTapeAngle(){
         return 0;
     }
 
     /**
-     * Get the Distance from the Limelight to the Refelctive tape on the Poles
-     * @return
+     * Get the Distance from the Limelight to the April tags
+     * @return DOuble of the distance from the Limelight to the April Tags
      */
     public double apriltagDist(){
         return 0;
     }
     
     /**
-     * Get the Angle from the Limelight to the Refelctive tape on the Poles
-     * @return
+     * Get the Angle from the Limelight to the April tags
+     * @return double of the angle from the Limelight to the April Tags
      */
     public double apriltagAngle(){
         return 0;

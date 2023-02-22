@@ -1,6 +1,9 @@
 package frc.robot;
 
 import com.ctre.phoenix.music.Orchestra;
+import com.pathplanner.lib.PathConstraints;
+import com.pathplanner.lib.PathPlanner;
+
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.Button;
@@ -8,6 +11,8 @@ import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.Auto.Commands.armCommands.DefaultArmCommand;
 import frc.robot.Auto.Commands.drivebaseCommands.DefualtDriveCommand;
 import frc.robot.Auto.Commands.drivebaseCommands.autoBalance;
+import frc.robot.Auto.Commands.drivebaseCommands.followTrajectoryCommand;
+import frc.robot.Auto.routines.testRoutine;
 import frc.robot.subsystems.armSubsystem;
 import frc.robot.subsystems.Gyro;
 import frc.robot.subsystems.LimeLight;
@@ -19,6 +24,8 @@ public class RobotContainer {
     public Gyro gyro = new Gyro();
     public LimeLight limelight = new LimeLight();
     public autoBalance aBalance = new autoBalance(swerveSubsystem, gyro);
+    public followTrajectoryCommand fTrajectoryCommand;
+    
 
     public void PlayMusic(String Filename){
         Orchestra orchestra = new Orchestra();
@@ -33,6 +40,7 @@ public class RobotContainer {
     private final XboxController Controller1 = new XboxController(0);
 
        public RobotContainer() {
+        fTrajectoryCommand = new followTrajectoryCommand(swerveSubsystem, PathPlanner.loadPath("Go to Cone", new PathConstraints(0.5, 1)) , true);
         swerveSubsystem.setDefaultCommand(new DefualtDriveCommand(
                 swerveSubsystem,
                 () -> Controller1.getLeftX(),
@@ -59,6 +67,6 @@ public class RobotContainer {
     }
 
     public Command getAutonomousCommand() {
-    return aBalance;
+    return fTrajectoryCommand;
     }
 }

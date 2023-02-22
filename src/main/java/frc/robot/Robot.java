@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.Auto.routines.testRoutine;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -18,8 +19,8 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
  */
 public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
-  public static RobotContainer m_robotContainer;
-
+  public RobotContainer m_robotContainer;
+  public testRoutine testRoutine;
   private static final String Halo = "Halo.chrp";
   private static final String PotC = "PiratesOfTheCaribbean.chrp";
   private static final String StarWars = "StarWars.chrp";
@@ -49,7 +50,7 @@ public class Robot extends TimedRobot {
     SmartDashboard.putData(Music_Chooser);
 
     
-
+    testRoutine = new testRoutine(this);
     
   }
 
@@ -81,12 +82,13 @@ public class Robot extends TimedRobot {
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
   @Override
   public void autonomousInit() {
+    
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
 
     // schedule the autonomous command (example)
     if (m_autonomousCommand != null) {
       m_autonomousCommand.schedule();
-    }
+    } 
   }
 
   /** This function is called periodically during autonomous. */
@@ -121,6 +123,10 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during test mode. */
   @Override
   public void testPeriodic() {}
+
+  public Robot getRobot() {
+    return this;
+  }
 
   
 }

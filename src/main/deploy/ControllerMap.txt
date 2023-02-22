@@ -1,0 +1,14 @@
+-- Controller 1 
+Swerve 
+
+-- Controller 2
+
+** Potentially get controller with paddles **
+
+Right Bumper in 
+Left Bumper out
+
+Triggers - Open and close Intake 
+Joysticks - Articulate and Telescope Arm
+
+A & Y to cycle through arm positions?

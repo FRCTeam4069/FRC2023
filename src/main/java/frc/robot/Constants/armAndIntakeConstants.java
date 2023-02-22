@@ -9,8 +9,8 @@ public class armAndIntakeConstants{
         public static final int ARM_ID_L = 15; // Left
         public static final int ARM_ID_R = 4; // Right
         public static final int ARM_ID_E = 0; // Extend //FIXME
-        public static final boolean rightMotorInvert = false; //FIXME
-        public static final boolean leftMotorInvert = false; //FIXME
+        public static final boolean rightMotorInvert = false; 
+        public static final boolean leftMotorInvert = true; 
 
         public static final boolean enableSlewrateLimiter = true;
         public static final double speedLimiter = 1;

@@ -17,7 +17,7 @@ public class testRoutine implements AutoRoutine {
 
     
     public testRoutine(Robot robot){
-        Robot = frc.robot.Robot.m_robotContainer;
+        Robot = robot.m_robotContainer;
         scheduler = new Scheduler(robot);
     }
 
