@@ -15,8 +15,6 @@ import edu.wpi.first.math.util.Units;
 public class drivebaseConstants {
 
 
-    public static boolean enableSlewrateLimiter = true;
-    public static boolean limelightPluggedIn = false;
 
     public static final class SparkMaxVoltage{
         public static final int DriveingMotorVoltage = 20;
