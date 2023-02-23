@@ -47,12 +47,15 @@ public class RobotContainer {
                 () -> -Controller1.getLeftY(),
                 () -> -Controller1.getRightX(),
                 () -> !Controller1.getAButton(),
-                () -> Controller1.getRightBumper()));
+                () -> Controller1.getXButton()));
                 
         arm.setDefaultCommand(new DefaultArmCommand(
             arm, 
             () -> Controller1.getRightTriggerAxis(),
-            () -> Controller1.getLeftTriggerAxis()));
+            () -> Controller1.getLeftTriggerAxis(),
+            () -> Controller1.getRightBumper(),
+            () -> Controller1.getLeftBumper()
+            ));
         
         
         configureButtonBindings();

@@ -32,7 +32,7 @@ public class armSubsystem extends SubsystemBase {
         ArticulateR.getEncoder().setPositionConversionFactor((1/182) * (1/Math.PI) * 180);
 
         setMotorPosition(0, 0);
-        //Extend = new CANSparkMax(armConstants.ARM_ID_E, MotorType.kBrushless);
+        Extend = new CANSparkMax(armConstants.ARM_ID_E, MotorType.kBrushless);
         
         /* Articulate motor gear ratios */
         // 1 : 20 
@@ -40,12 +40,12 @@ public class armSubsystem extends SubsystemBase {
         // 15 : 42 
         // 360 : 65520
         // 1 : 182
-        /*                               */
+        /*            */
 
 
         ArticulateR.setInverted(armConstants.rightMotorInvert);
         ArticulateL.setInverted(armConstants.leftMotorInvert);
-        //Extend.setInverted(false);
+        Extend.setInverted(armConstants.telescopeMotorInvert);
         
         tab.add("Left Motor Voltage", ArticulateL.get());
         tab.add("Left Motor Pose", ArticulateR.getEncoder().getPosition());
@@ -67,7 +67,7 @@ public class armSubsystem extends SubsystemBase {
     }
 
     public void manualExtend(double speed){
-
+        Extend.set(speed);
     }
 
     public void stop(){
