@@ -11,7 +11,7 @@ public class armAndIntakeConstants{
         public static final int ARM_ID_E = 5; // Extend //FIXME
         public static final boolean rightMotorInvert = false; 
         public static final boolean leftMotorInvert = true; 
-        public static final boolean telescopeMotorInvert = false;
+        public static final boolean telescopeMotorInvert = false; 
 
         public static final boolean enableSlewrateLimiter = true;
         public static final double speedLimiter = 1;
@@ -21,6 +21,25 @@ public class armAndIntakeConstants{
         public static final double kS = 0;
         public static final double kP = 0;
         public static final double kD = 0;
+
+        /* Articulate motor gears */
+        // In  : Out
+        // 20  : 1    - motor
+        // 24  : 78   - gear
+        // 15  : 42   - Sprocket
+        /*  Overall ratios:
+         * -> 20   : 1
+         * -> 3.25 : 1
+         * -> 2.8  : 1
+         * -> 182  : 1
+         * 
+         * Encoders conversion:
+         * -> 42 : 1        - 42 counts / motor rev
+         * -> 182 : 1       - 182 motor rev / arm rev
+         * -> 1 : 360       - arm rev / 360 degrees
+         * 360 / ( 182 * 42 )
+         * 
+        */
 
     }
 

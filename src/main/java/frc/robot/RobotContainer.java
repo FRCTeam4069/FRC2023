@@ -38,6 +38,7 @@ public class RobotContainer {
     }
 
     private final XboxController Controller1 = new XboxController(0);
+    private final XboxController Controller2 = new XboxController(1);
 
        public RobotContainer() {
         fTrajectoryCommand = new followTrajectoryCommand(swerveSubsystem, PathPlanner.loadPath("Go to Cone", new PathConstraints(0.5, 1)) , true);
@@ -51,11 +52,8 @@ public class RobotContainer {
                 
         arm.setDefaultCommand(new DefaultArmCommand(
             arm, 
-            () -> Controller1.getRightTriggerAxis(),
-            () -> Controller1.getLeftTriggerAxis(),
-            () -> Controller1.getRightBumper(),
-            () -> Controller1.getLeftBumper()
-            ));
+            () -> Controller2.getRightY(),
+            () -> Controller2.getLeftY()));
         
         
         configureButtonBindings();

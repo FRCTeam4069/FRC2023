@@ -28,9 +28,9 @@ public class armSubsystem extends SubsystemBase {
         ArticulateL = new CANSparkMax(armConstants.ARM_ID_L, MotorType.kBrushless);
 
         
-        ArticulateL.getEncoder().setPositionConversionFactor(1/182 * 360 * 2);
-        ArticulateR.getEncoder().setPositionConversionFactor((1/182) * (1/Math.PI) * 180);
-
+        ArticulateL.getEncoder().setPositionConversionFactor(2);//(1/182) * (ArticulateL.getEncoder().getCountsPerRevolution()));
+        ArticulateR.getEncoder().setPositionConversionFactor(2);//(1/182) * (ArticulateL.getEncoder().getCountsPerRevolution()));
+        
         setMotorPosition(0, 0);
         Extend = new CANSparkMax(armConstants.ARM_ID_E, MotorType.kBrushless);
         
