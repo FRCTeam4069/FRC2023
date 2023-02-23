@@ -28,10 +28,10 @@ public class DefaultArmCommand extends CommandBase{
         double speed = positivespeed.get()-negitiveSpeed.get();
 
         if(armConstants.enableSlewrateLimiter){
-             arm.ManualJob( speedLimiter.calculate(speed) );            
+             arm.manualArticulate( speedLimiter.calculate(speed) );            
         }
         else{
-            arm.ManualJob(speed);
+            arm.manualArticulate(speed);
         }
 
         SmartDashboard.putNumber("Arm Speed", speed );

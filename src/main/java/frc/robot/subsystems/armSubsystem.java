@@ -57,13 +57,17 @@ public class armSubsystem extends SubsystemBase {
     public void moveToPos(double pose){
         SimpleMotorFeedforward ArmFeedforward = new SimpleMotorFeedforward(armConstants.kS, armConstants.kV, armConstants.kA);
         //FIXME Need to characterize Arm
-        
-        ManualJob(ArmPID.calculate(AvgPose() - pose));
+
+        manualArticulate(ArmPID.calculate(AvgPose() - pose));
     }
 
-    public void ManualJob(double speed){
+    public void manualArticulate(double speed){
         ArticulateL.set(speed);
         ArticulateR.set(speed);
+    }
+
+    public void manualExtend(double speed){
+
     }
 
     public void stop(){

@@ -72,7 +72,7 @@ public class drivebaseConstants {
         public static final double Kp = 2.6902;
         public static final double Kd = 0;
 
-        public static final SimpleMotorFeedforward feedForwardController = new SimpleMotorFeedforward(Ks, Kv);
+        public static final SimpleMotorFeedforward feedForwardController = new SimpleMotorFeedforward(Ks, Kv, Ka);
 
         public static final PIDController autoXController = new PIDController(0.5, 0, 0);
         public static final PIDController autoYController = new PIDController(0.5, 0, 0);
