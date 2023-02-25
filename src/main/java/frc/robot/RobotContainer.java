@@ -12,7 +12,6 @@ import frc.robot.Auto.Commands.armCommands.DefaultArmCommand;
 import frc.robot.Auto.Commands.drivebaseCommands.DefualtDriveCommand;
 import frc.robot.Auto.Commands.drivebaseCommands.autoBalance;
 import frc.robot.Auto.Commands.drivebaseCommands.followTrajectoryCommand;
-import frc.robot.Auto.routines.testRoutine;
 import frc.robot.subsystems.armSubsystem;
 import frc.robot.subsystems.Gyro;
 import frc.robot.subsystems.LimeLight;
@@ -53,7 +52,9 @@ public class RobotContainer {
         arm.setDefaultCommand(new DefaultArmCommand(
             arm, 
             () -> Controller2.getRightY(),
-            () -> Controller2.getLeftY()));
+            () -> Controller2.getLeftY(),
+            () -> Controller2.getLeftBumper(),
+            () -> Controller2.getRightBumper()));
         
         
         configureButtonBindings();
@@ -63,7 +64,8 @@ public class RobotContainer {
     private void configureButtonBindings() {
         new Button(Controller1::getAButton).whenPressed(() -> swerveSubsystem.resetGyro());
         new Button(Controller1::getBButton).whenActive(() -> swerveSubsystem.zeroAllWhels());
-
+        new Button(Controller2::getStartButton).whenPressed(() -> arm.setMotorPosition(0, 0));
+        new Button(Controller2::getXButton).whenPressed(() -> arm.setHome());
 
     }
 

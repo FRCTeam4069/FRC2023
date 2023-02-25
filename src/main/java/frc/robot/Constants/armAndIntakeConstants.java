@@ -40,6 +40,26 @@ public class armAndIntakeConstants{
          * 360 / ( 182 * 42 )
          * 
         */
+        
+        /* Extender Motor
+         * 4 to 1 
+         * 18 to 42 
+         * 
+         * Overall 
+         * 72 : 42 
+         * 72/42 : 1
+         * 1.7148571 * 42 encoder counts/ motor rev
+         * 72 ticks per 0.5in out/in
+         * 
+         *  
+         * 168 counts per rev 
+         * 18 to 42 gear 
+         * 2 1/3 : 1
+         * 392.00004 : 1 
+         * 
+         * 392 counts per 0.5in in/out
+         *
+         */
 
     }
 

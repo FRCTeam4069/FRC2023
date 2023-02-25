@@ -11,32 +11,40 @@ import frc.robot.subsystems.armSubsystem;
 public class DefaultArmCommand extends CommandBase{
     private final armSubsystem arm;
     private final Supplier<Double> articulateSpeed,extendSpeed ; 
+    private final Supplier<Boolean> Pose1, holdPose;
     private final SlewRateLimiter speedLimiter;
 
-    public DefaultArmCommand(armSubsystem arm, Supplier<Double> articulateSpeed, Supplier<Double> extendSpeed){
+    public DefaultArmCommand(armSubsystem arm, Supplier<Double> articulateSpeed, Supplier<Double> extendSpeed, Supplier<Boolean> Pose1, Supplier<Boolean> holdPose){
  
         this.arm = arm;
         this.articulateSpeed = articulateSpeed;
         this.extendSpeed = extendSpeed;
         this.speedLimiter = new SlewRateLimiter(armConstants.speedLimiter);
-       
+        this.Pose1 = Pose1;
+        this.holdPose = holdPose;
 
         addRequirements(arm);
     }
 
     @Override
     public void execute(){
+
+        while(Pose1.get()){ 
+            arm.moveToPos(0);
+        }
+        while(holdPose.get()){
+            arm.moveToPos(-10);
+        }
             arm.manualExtend(-extendSpeed.get());
         if(armConstants.enableSlewrateLimiter){
              arm.manualArticulate( speedLimiter.calculate(articulateSpeed.get()) );            
         }
-
         else{
             arm.manualArticulate(articulateSpeed.get());
         }
 
         SmartDashboard.putNumber("Arm Rotation Speed", articulateSpeed.get() );
-        SmartDashboard.putNumber("Telescope Speed", extendSpeed.get() );
+        SmartDashboard.putNumber("Telescope Speed", extendSpeed.get());
 
        
 

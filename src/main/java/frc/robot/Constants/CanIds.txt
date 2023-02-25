@@ -1,0 +1,26 @@
+Swerve: 
+    Front Left 
+        Rotation Motor   : 17
+        Rotation CanCoder: 10
+        Drive Motor      : 16
+    Front Right 
+        Rotation Motor   : 3
+        Rotation CanCoder: 9
+        Drive Motor      : 2
+    Back Left 
+        Rotation Motor   : 19
+        Rotation CanCoder: 12 
+        Drive Motor      : 18
+    Back Right  
+        Rotation Motor   : 1
+        Rotation CanCoder: 11 
+        Drive Motor      : 0
+    Pigeon               : 20
+
+
+Arm :
+    Right Motor  : 15
+    Left Motor   : 4
+    Extend Motor : 5
+    Wrist Motor  : **
+    Claw Motor   : **
