@@ -65,11 +65,8 @@ public class armAndIntakeConstants{
 
     public static class intakeConstants{
 
-        public static final int INTAKE_ID = 0;
-        public static final int ENCODER_ID_A = 0;
-        public static final int ENCODER_ID_B = 0;
-        public static final int LIMIT_SWITCH_ID_2 = 0;
-        public static final int LIMIT_SWITCH_ID_1 = 0;
+        public static final int INTAKE_ID = 13;
+        public static final int WRIST_ID = 12;
 
     }
     

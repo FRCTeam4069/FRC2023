@@ -36,9 +36,9 @@ public class armSubsystem extends SubsystemBase {
         
     }
 
-    public void moveToPos(double pose) {  
-        double speed = MathUtil.clamp( (AvgPose() - Math.abs(pose))*0.1, -0.5, 0.5);
-        manualArticulate(Math.copySign(speed, pose));
+    public void moveToPos(double pose, double maxSpeed) {  
+        double speed = MathUtil.clamp( (pose - AvgPose())*0.1, -maxSpeed, maxSpeed);
+        manualArticulate(speed);
     }
 
     public void manualArticulate(double speed){
@@ -86,10 +86,16 @@ public class armSubsystem extends SubsystemBase {
 
     /** 
      * Extend to position and velocity
-     * @param Position Position to extend to (cm)
-     * @param Speed 0 to 1
+     * @param Position Position to extend to (in)
+     * @param maxSpeed 0 to 1
      */
-    public void extentToPosition(double Position, double velocity){}
+    public void extentToPosition(double Position, double maxSpeed){
+        if(maxSpeed < 0){ throw new IllegalArgumentException("maxSpeed must be 0 to 1"); }
+
+        double speed = MathUtil.clamp( (Position - ExtendedPose())*0.1, -maxSpeed, maxSpeed);
+        manualExtend(speed);
+
+    }
     
     /**
      * Set the home position for the extending motor

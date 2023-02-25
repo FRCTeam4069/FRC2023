@@ -3,20 +3,14 @@
 // the WPILib BSD license file in the root directory of this project.
 
 package frc.robot.Constants;
-
-import com.ctre.phoenix.sensors.Pigeon2;
 import com.swervedrivespecialties.swervelib.SdsModuleConfigurations;
-
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
-import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 
 public class drivebaseConstants {
-
-
 
     public static final class SparkMaxVoltage{
         public static final int DriveingMotorVoltage = 20;
@@ -37,17 +31,7 @@ public class drivebaseConstants {
             new Translation2d(-DRIVETRAIN_TRACKWIDTH_METERS / 2.0, DRIVETRAIN_WHEELBASE_METERS / 2.0),
             // Back right
             new Translation2d(-DRIVETRAIN_TRACKWIDTH_METERS / 2.0, -DRIVETRAIN_WHEELBASE_METERS / 2.0)
-
-    );
-    public static final double kMaxAngularAccelerationRadiansPerSecondSquared = Math.PI / 4;
-
-    public static final double kMaxAngularSpeedRadiansPerSecond = //
-    2*2*Math.PI / 10;
-
-    public static final TrapezoidProfile.Constraints kThetaControllerConstraints = //
-    new TrapezoidProfile.Constraints(
-            kMaxAngularSpeedRadiansPerSecond,
-            kMaxAngularAccelerationRadiansPerSecondSquared);
+        );   
     }
 
     public static final class ModuleConstants{

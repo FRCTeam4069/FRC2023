@@ -30,10 +30,10 @@ public class DefaultArmCommand extends CommandBase{
     public void execute(){
 
         while(Pose1.get()){ 
-            arm.moveToPos(0);
+            arm.moveToPos(0, 0.5);
         }
         while(holdPose.get()){
-            arm.moveToPos(-10);
+            arm.moveToPos(-45, 0.5);
         }
             arm.manualExtend(-extendSpeed.get());
         if(armConstants.enableSlewrateLimiter){
