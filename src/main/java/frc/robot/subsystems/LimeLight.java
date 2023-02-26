@@ -9,17 +9,25 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class LimeLight extends SubsystemBase{
     
-    public PhotonCamera camera;
-    public PhotonPoseEstimator estimator;
+    private PhotonCamera camera;
+    private PhotonPoseEstimator estimator;
+    private boolean targetFound;
   
     
     public LimeLight(){
-        //camera = new PhotonCamera("LimeLight");
+        camera = new PhotonCamera("LimeLight");
+        targetFound = false;
+        
     }
     /**
      * Using PhotonVision to get the estimated pose of the Robot
      * @return Pose2d of the robot
     */
+
+    public void runCamera(){
+        
+    }
+
     public Pose2d poseEstimation(){
         return new Pose2d(0,0, new Rotation2d(0));
 
