@@ -1,10 +1,15 @@
 package frc.robot.subsystems;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonPoseEstimator;
+import org.photonvision.targeting.PhotonTrackedTarget;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class LimeLight extends SubsystemBase{
@@ -12,12 +17,13 @@ public class LimeLight extends SubsystemBase{
     private PhotonCamera camera;
     private PhotonPoseEstimator estimator;
     private boolean targetFound;
-  
+    
+    
+
     
     public LimeLight(){
         camera = new PhotonCamera("LimeLight");
         targetFound = false;
-        
     }
     /**
      * Using PhotonVision to get the estimated pose of the Robot
@@ -25,11 +31,21 @@ public class LimeLight extends SubsystemBase{
     */
 
     public void runCamera(){
+        var results = camera.getLatestResult();
+        targetFound = results.hasTargets();
+        List<PhotonTrackedTarget> targets = results.getTargets();
+
+        PhotonTrackedTarget target = results.getBestTarget();
+        int targetID = target.getFiducialId();
+        double poseAmbiguity = target.getPoseAmbiguity();
+        Transform3d bestCameraToTarget = target.getBestCameraToTarget();
+
+        poseEstimation(bestCameraToTarget);
         
     }
 
-    public Pose2d poseEstimation(){
-        return new Pose2d(0,0, new Rotation2d(0));
+    public Transform3d poseEstimation(Transform3d cameraToTarget){
+        return cameraToTarget;
 
     }
 

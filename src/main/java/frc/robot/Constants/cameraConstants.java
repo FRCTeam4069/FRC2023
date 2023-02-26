@@ -11,4 +11,6 @@ public class cameraConstants{
     public static final double CAMERA_FPS = 30;
     public static final double CAMERA_PITCH = 0;
 
+    public  static final double CAMERA_OFFSET_FROM_CENTER = 0;
+
 }
