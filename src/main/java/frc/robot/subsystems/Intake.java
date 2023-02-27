@@ -16,17 +16,27 @@ public class Intake extends SubsystemBase{
  
 
     public Intake(){
+    
+
         intake= new CANSparkMax(intakeConstants.INTAKE_ID , MotorType.kBrushless);
         wrist= new CANSparkMax(intakeConstants.WRIST_ID , MotorType.kBrushless);
 
+
+        intake.setSmartCurrentLimit(30);
+        wrist.setSmartCurrentLimit(40);
         wristEncoder = wrist.getEncoder();
         intakeEncoder = intake.getEncoder();
 
         wrist.getOutputCurrent();
         /*
-         * (90 - Armangle) % 90 -> lock wirst to be parallel to ground 
+         * (180 - Armangle) % 90 -> lock wirst to be parallel to ground 
          * ((-Armangle - 90) %90) -> lock wirst to be prependicular to ground 
          */
+
+         /*
+          * 3 : 1, 60 : 24
+          * 7.5 : 1 
+          */
 
 
     }

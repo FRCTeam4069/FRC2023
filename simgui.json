@@ -26,6 +26,7 @@
       "/FMSInfo": "FMSInfo",
       "/LiveWindow/ExampleSubsystem": "Subsystem",
       "/LiveWindow/Gyro": "Subsystem",
+      "/LiveWindow/Intake": "Subsystem",
       "/LiveWindow/LimeLight": "Subsystem",
       "/LiveWindow/Module": "Subsystem",
       "/LiveWindow/SwerveSubsystem": "Subsystem",

@@ -1,16 +1,20 @@
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.led.ColorFlowAnimation.Direction;
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMax.SoftLimitDirection;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.IO;
+import frc.robot.Constants.armAndIntakeConstants;
 import frc.robot.Constants.armAndIntakeConstants.armConstants;;
 
 public class armSubsystem extends SubsystemBase {
     public CANSparkMax ArticulateR, ArticulateL, Extend;
+    public double joystickValues;
     
 
     
@@ -27,17 +31,39 @@ public class armSubsystem extends SubsystemBase {
         Extend.getEncoder().setPositionConversionFactor((1/392) * 0.5);
 
         setMotorPosition(0, 0);
+
+        ArticulateL.setSoftLimit(SoftLimitDirection.kForward, armConstants.softlimits);
+        ArticulateL.setSoftLimit(SoftLimitDirection.kReverse, -armConstants.softlimits);
+        ArticulateR.setSoftLimit(SoftLimitDirection.kForward, armConstants.softlimits);
+        ArticulateR.setSoftLimit(SoftLimitDirection.kReverse, -armConstants.softlimits);
         
+        ArticulateL.enableSoftLimit(SoftLimitDirection.kForward, true);
+        ArticulateL.enableSoftLimit(SoftLimitDirection.kReverse, true);
+        ArticulateR.enableSoftLimit(SoftLimitDirection.kForward, true);
+        ArticulateR.enableSoftLimit(SoftLimitDirection.kReverse, true);
+
         
         ArticulateR.setInverted(armConstants.rightMotorInvert);
         ArticulateL.setInverted(armConstants.leftMotorInvert);
+
         Extend.setInverted(armConstants.telescopeMotorInvert);
         
         
     }
 
     public void moveToPos(double pose, double maxSpeed) {  
-        double speed = MathUtil.clamp( (pose - AvgPose())*0.1, -maxSpeed, maxSpeed);
+        if(maxSpeed < 0){ throw new IllegalArgumentException("maxSpeed must be 0 to 1"); }
+        
+        
+        double speed = 
+        MathUtil.clamp( 
+            (
+              (pose - AvgPose())*armConstants.proportionalGain 
+            + (AvgPose()*armConstants.GravGain) 
+            + (ExtendedPose()*armConstants.extendGain*getSide()) ),
+            
+            -maxSpeed, maxSpeed);
+        
         manualArticulate(speed);
     }
 
@@ -84,6 +110,17 @@ public class armSubsystem extends SubsystemBase {
         ArticulateR.getEncoder().setPosition(Right);
     }
 
+    /**
+     * @return +ve or -ve 1 depeneding on which side the arm is on
+     */
+    public double getSide(){
+        return Math.copySign(1, AvgPose());
+    }
+
+    public void joystickValues(double joystick){
+        joystickValues += joystick;
+    }
+
     /** 
      * Extend to position and velocity
      * @param Position Position to extend to (in)
@@ -115,7 +152,7 @@ public class armSubsystem extends SubsystemBase {
             SmartDashboard.putNumber("Number of Ticks Extend", Extend.getEncoder().getCountsPerRevolution());
             SmartDashboard.putNumber("Number of Ticks Ar", ArticulateL.getEncoder().getCountsPerRevolution());
             SmartDashboard.putNumber("Number of Ticks Al", ArticulateR.getEncoder().getCountsPerRevolution());
-
+            SmartDashboard.putNumber("Joystick Positions", joystickValues);
         }
     }
     

@@ -88,7 +88,7 @@ public class drivebaseConstants {
         public static final int BL_STEER_MOTOR = 19; 
         public static final boolean BL_DRIVE_MOTOR_REVERSED = true;                        
         public static final boolean BL_STEER_MOTOR_REVERSED = true;                        
-        public static final int BL_STEER_ENCODER = 12;
+        public static final int BL_STEER_ENCODER = 6;
         public static final double BL_STEER_OFFSET = -3.158466442256535;
         public static final boolean BL_STEER_ENCODER_REVERSED = true;                     
     

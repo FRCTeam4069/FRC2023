@@ -9,7 +9,7 @@ Swerve:
         Drive Motor      : 2
     Back Left 
         Rotation Motor   : 19
-        Rotation CanCoder: 12 
+        Rotation CanCoder: 6 
         Drive Motor      : 18
     Back Right  
         Rotation Motor   : 1
@@ -22,5 +22,5 @@ Arm :
     Right Motor  : 15
     Left Motor   : 4
     Extend Motor : 5
-    Wrist Motor  : **
-    Claw Motor   : **
+    Wrist Motor  : 12
+    Claw Motor   : 13

@@ -16,11 +16,16 @@ public class armAndIntakeConstants{
         public static final boolean enableSlewrateLimiter = true;
         public static final double speedLimiter = 1;
 
-        public static final double kA = 0;
-        public static final double kV = 0;
-        public static final double kS = 0;
-        public static final double kP = 0;
-        public static final double kD = 0;
+        //for Arm move to position
+        public static final double proportionalGain = 0.01;
+        public static final double GravGain = -0.0001; // set to 0 to disable 
+        public static final double extendGain = -0.001; // set to 0 to disable
+
+        public static final float softlimits = 130;
+
+        // formula for arm stay to stay at pose
+        // speed = input + armlength * kP + armAgle * kP 
+    
 
         /* Articulate motor gears */
         // In  : Out
@@ -41,7 +46,8 @@ public class armAndIntakeConstants{
          * 
         */
         
-        /* Extender Motor
+        /*
+         * Extender Motor
          * 4 to 1 
          * 18 to 42 
          * 
@@ -67,6 +73,11 @@ public class armAndIntakeConstants{
 
         public static final int INTAKE_ID = 13;
         public static final int WRIST_ID = 12;
+
+        /*
+         * degrees/tick
+         * 
+         */
 
     }
     

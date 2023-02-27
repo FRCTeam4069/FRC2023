@@ -12,14 +12,17 @@ import frc.robot.Auto.Commands.armCommands.DefaultArmCommand;
 import frc.robot.Auto.Commands.drivebaseCommands.DefualtDriveCommand;
 import frc.robot.Auto.Commands.drivebaseCommands.autoBalance;
 import frc.robot.Auto.Commands.drivebaseCommands.followTrajectoryCommand;
+import frc.robot.Auto.Commands.intakeCommands.DefaultIntakeCommand;
 import frc.robot.subsystems.armSubsystem;
 import frc.robot.subsystems.Gyro;
+import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.LimeLight;
 
 public class RobotContainer {
 
     public SwerveSubsystem swerveSubsystem = new SwerveSubsystem();
     public armSubsystem arm = new armSubsystem();
+    public Intake intake = new Intake();
     public Gyro gyro = new Gyro();
     public LimeLight limelight = new LimeLight();
     public autoBalance aBalance = new autoBalance(swerveSubsystem, gyro);
@@ -54,8 +57,15 @@ public class RobotContainer {
             () -> Controller2.getRightY(),
             () -> Controller2.getLeftY(),
             () -> Controller2.getLeftBumper(),
-            () -> Controller2.getRightBumper()));
-        
+            () -> Controller2.getRightBumper(),
+            () -> Controller2.getStartButton()));
+
+        intake.setDefaultCommand( new DefaultIntakeCommand(
+            intake,
+            () -> Controller2.getRightTriggerAxis(),
+            () -> Controller2.getLeftTriggerAxis(),
+            () -> Controller2.getXButton(),
+            () -> Controller2.getBButton()));        
         
         configureButtonBindings();
 
@@ -64,7 +74,6 @@ public class RobotContainer {
     private void configureButtonBindings() {
         new Button(Controller1::getAButton).whenPressed(() -> swerveSubsystem.resetGyro());
         new Button(Controller1::getBButton).whenActive(() -> swerveSubsystem.zeroAllWhels());
-        new Button(Controller2::getStartButton).whenPressed(() -> arm.setMotorPosition(0, 0));
         new Button(Controller2::getXButton).whenPressed(() -> arm.setHome());
 
     }
