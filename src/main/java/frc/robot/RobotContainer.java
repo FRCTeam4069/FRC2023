@@ -5,7 +5,9 @@ import com.pathplanner.lib.PathConstraints;
 import com.pathplanner.lib.PathPlanner;
 
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.Auto.Commands.armCommands.DefaultArmCommand;
@@ -14,21 +16,20 @@ import frc.robot.Auto.Commands.drivebaseCommands.autoBalance;
 import frc.robot.Auto.Commands.drivebaseCommands.followTrajectoryCommand;
 import frc.robot.Auto.Commands.intakeCommands.DefaultIntakeCommand;
 import frc.robot.subsystems.armSubsystem;
-import frc.robot.subsystems.subsystemCommands.resetGyro;
+import frc.robot.subsystems.AutonSelect;
 import frc.robot.subsystems.Gyro;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.LimeLight;
 
 public class RobotContainer {
 
-    public SwerveSubsystem swerveSubsystem = new SwerveSubsystem();
-    public armSubsystem arm = new armSubsystem();
-    public Intake intake = new Intake();
-    public Gyro gyro = new Gyro();
-
-    public resetGyro resetGyro = new resetGyro(swerveSubsystem);
-    public LimeLight limelight = new LimeLight();
-    public autoBalance aBalance = new autoBalance(swerveSubsystem, gyro);
+    public static final SwerveSubsystem swerveSubsystem = new SwerveSubsystem();
+    public static final armSubsystem arm = new armSubsystem();
+    public static final Intake intake = new Intake();
+    public static final Gyro gyro = new Gyro();
+    public static final LimeLight limelight = new LimeLight();
+    public static final autoBalance aBalance = new autoBalance(swerveSubsystem, gyro);
+    public static final AutonSelect autoSelecter = new AutonSelect();
     public followTrajectoryCommand fTrajectoryCommand;
     
 
@@ -77,11 +78,19 @@ public class RobotContainer {
     }
 
     private void configureButtonBindings() {
-         new Trigger(Controller1::getAButton).whileTrue(resetGyro);
+         new Trigger(Controller1::getAButton).whileTrue(swerveSubsystem.resetGyroCommmand());
         
     }
 
     public Command getAutonomousCommand() {
-    return aBalance;
+        int autoIndex = autoSelecter.getSelected();
+        switch(autoIndex){
+            case 0 :
+            return aBalance;
+            default: 
+            SmartDashboard.putString("Auto Selected:", "INVALID");
+            return new InstantCommand(); 
+            
+        }
     }
 }

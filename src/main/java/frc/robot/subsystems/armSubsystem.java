@@ -1,5 +1,7 @@
 package frc.robot.subsystems;
 
+import org.opencv.core.Mat;
+
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMax.SoftLimitDirection;
@@ -50,7 +52,9 @@ public class armSubsystem extends SubsystemBase {
         
     }
 
-    public void moveToPos(double pose, double maxSpeed) {  
+    public boolean moveToPos(double pose, double maxSpeed) {  
+        if(Math.abs(pose) > 140) {return false;}
+        else{
         if(maxSpeed < 0){ throw new IllegalArgumentException("maxSpeed must be 0 to 1"); }
         
         
@@ -63,6 +67,10 @@ public class armSubsystem extends SubsystemBase {
             -maxSpeed, maxSpeed);
         
         manualArticulate(speed);
+
+        return true;
+        }
+
     }
 
     public void manualArticulate(double speed){

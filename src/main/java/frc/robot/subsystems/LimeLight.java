@@ -30,7 +30,7 @@ public class LimeLight extends SubsystemBase{
      * @return Pose2d of the robot
     */
 
-    /*public void runCamera(){
+    public void runCamera(){
         var results = camera.getLatestResult();
         targetFound = results.hasTargets();
         List<PhotonTrackedTarget> targets = results.getTargets();
@@ -39,7 +39,7 @@ public class LimeLight extends SubsystemBase{
         int targetID = target.getFiducialId();
         double poseAmbiguity = target.getPoseAmbiguity();
         
-    }*/
+    }
 
 
 

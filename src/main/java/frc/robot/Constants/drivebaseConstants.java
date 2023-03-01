@@ -73,7 +73,7 @@ public class drivebaseConstants {
         public static final boolean FL_DRIVE_MOTOR_REVERSED = true;                        
         public static final boolean FL_STEER_MOTOR_REVERSED = true;                       
         public static final int FL_STEER_ENCODER = 10; 
-        public static final double FL_STEER_OFFSET =  -3.149262557529221;   
+        public static final double FL_STEER_OFFSET =  -3.149262557529221 - (Math.PI/4);   
         public static final boolean FL_STEER_ENCODER_REVERSED = true;                      
     
         public static final int FR_DRIVE_MOTOR = 2; 
@@ -81,7 +81,7 @@ public class drivebaseConstants {
         public static final boolean FR_DRIVE_MOTOR_REVERSED = true;                        
         public static final boolean FR_STEER_MOTOR_REVERSED = true;                        
         public static final int FR_STEER_ENCODER = 9; 
-        public static final double FR_STEER_OFFSET = -3.149262557529221;
+        public static final double FR_STEER_OFFSET = -3.149262557529221  - (Math.PI/4);
         public static final boolean FR_STEER_ENCODER_REVERSED = true;                      
     
         public static final int BL_DRIVE_MOTOR = 18; 
@@ -89,7 +89,7 @@ public class drivebaseConstants {
         public static final boolean BL_DRIVE_MOTOR_REVERSED = true;                        
         public static final boolean BL_STEER_MOTOR_REVERSED = true;                        
         public static final int BL_STEER_ENCODER = 6;
-        public static final double BL_STEER_OFFSET = -3.158466442256535;
+        public static final double BL_STEER_OFFSET = -3.158466442256535  - (Math.PI/4);
         public static final boolean BL_STEER_ENCODER_REVERSED = true;                     
     
         public static final int BR_DRIVE_MOTOR = 0; 
@@ -97,7 +97,7 @@ public class drivebaseConstants {
         public static final boolean BR_DRIVE_MOTOR_REVERSED = true;                        
         public static final boolean BR_STEER_MOTOR_REVERSED = true;                       
         public static final int BR_STEER_ENCODER = 11;         
-        public static final double BR_STEER_OFFSET = -1.107534128853433;
+        public static final double BR_STEER_OFFSET = -1.107534128853433  - (Math.PI/4);
         public static final boolean BR_STEER_ENCODER_REVERSED = true;                      
     }
 }
