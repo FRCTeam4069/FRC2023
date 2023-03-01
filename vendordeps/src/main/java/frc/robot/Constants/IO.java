@@ -12,8 +12,8 @@ public final class IO{
     public static final double ydeadZone = 0.05;
     public static final double tdeadZone = 0.05;
 
-    public static final double xSpeedSlewRate = 5;
-    public static final double ySpeedSlewRate = 5;
+    public static final double xSpeedSlewRate = 3;
+    public static final double ySpeedSlewRate = 3;
     public static final double TurnSpeedSlewRate = 3;
 
 }

@@ -18,8 +18,7 @@ public class armAndIntakeConstants{
 
         //for Arm move to position
         public static final double proportionalGain = 0.01;
-        public static final double GravGain = -0.0001; // set to 0 to disable 
-        public static final double extendGain = -0.001; // set to 0 to disable
+        public static final double GravGain = -0.00001; // set to 0 to disable 
 
         public static final float softlimits = 130;
 

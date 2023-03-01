@@ -1,7 +1,7 @@
 package frc.robot.subsystems;
 
-import com.ctre.phoenix.led.ColorFlowAnimation.Direction;
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMax.SoftLimitDirection;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
@@ -9,11 +9,11 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.IO;
-import frc.robot.Constants.armAndIntakeConstants;
 import frc.robot.Constants.armAndIntakeConstants.armConstants;;
 
 public class armSubsystem extends SubsystemBase {
     public CANSparkMax ArticulateR, ArticulateL, Extend;
+    public RelativeEncoder leftEncoder, rightEncoder, extendEncoder;
     public double joystickValues;
     
 
@@ -25,12 +25,11 @@ public class armSubsystem extends SubsystemBase {
         ArticulateL = new CANSparkMax(armConstants.ARM_ID_L, MotorType.kBrushless);
         Extend = new CANSparkMax(armConstants.ARM_ID_E, MotorType.kBrushless);
 
-        
-        ArticulateL.getEncoder().setPositionConversionFactor(2);//(1/182) * (ArticulateL.getEncoder().getCountsPerRevolution()));
-        ArticulateR.getEncoder().setPositionConversionFactor(2);//(1/182) * (ArticulateL.getEncoder().getCountsPerRevolution()));
+        ArticulateL.getEncoder().setPositionConversionFactor(2);
+        ArticulateR.getEncoder().setPositionConversionFactor(2);
         Extend.getEncoder().setPositionConversionFactor((1/392) * 0.5);
 
-        setMotorPosition(0, 0);
+        setZero();
 
         ArticulateL.setSoftLimit(SoftLimitDirection.kForward, armConstants.softlimits);
         ArticulateL.setSoftLimit(SoftLimitDirection.kReverse, -armConstants.softlimits);
@@ -59,8 +58,7 @@ public class armSubsystem extends SubsystemBase {
         MathUtil.clamp( 
             (
               (pose - AvgPose())*armConstants.proportionalGain 
-            + (AvgPose()*armConstants.GravGain) 
-            + (ExtendedPose()*armConstants.extendGain*getSide()) ),
+            + (ExtendedPose()*AvgPose()*armConstants.GravGain*getSide()) ),
             
             -maxSpeed, maxSpeed);
         
@@ -108,6 +106,13 @@ public class armSubsystem extends SubsystemBase {
     public void setMotorPosition(double Right, double Left){
         ArticulateL.getEncoder().setPosition(Left);
         ArticulateR.getEncoder().setPosition(Right);
+    }
+
+    public void setZero(){
+        setMotorPosition(0, 0);
+        joystickValues =0;
+        Extend.getEncoder().setPosition(0);
+
     }
 
     /**

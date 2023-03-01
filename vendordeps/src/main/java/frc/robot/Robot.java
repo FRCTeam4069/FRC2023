@@ -50,7 +50,6 @@ public class Robot extends TimedRobot {
     SmartDashboard.putData(Music_Chooser);
 
     
-    testRoutine = new testRoutine(this);
     
   }
 
@@ -93,7 +92,8 @@ public class Robot extends TimedRobot {
 
   /** This function is called periodically during autonomous. */
   @Override
-  public void autonomousPeriodic() {}
+  public void autonomousPeriodic() {
+  }
 
   @Override
   public void teleopInit() {
@@ -104,12 +104,17 @@ public class Robot extends TimedRobot {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
+    CommandScheduler.getInstance().cancelAll();
+
     
   }
 
   /** This function is called periodically during operator control. */
   @Override
-  public void teleopPeriodic() {}
+  public void teleopPeriodic() {
+
+
+  }
 
   @Override
   public void testInit() {
