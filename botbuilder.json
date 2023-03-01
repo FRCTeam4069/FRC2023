@@ -1,0 +1,63 @@
+{
+    "subsystemPackage": "{BASE_PACKAGE}/subsystems",
+    "commandPackage": "{BASE_PACKAGE}/Auto",
+    "instantCommandPackage": "{BASE_PACKAGE}/Auto/Commands",
+    "autoCommandPackage": "{BASE_PACKAGE}/Auto/Routines",
+    "instantAutoCommandPackage": "{BASE_PACKAGE}/Auto/Commands",
+    "baseClassName": "Robot",
+    "srcFolder": "src/main/java",
+    "buildFolder": "build/classes/java/main",
+    "testFolder": "src/main",
+    "suppressMocksWarning": false,
+    "hardware": {
+        "motorControllers": [
+            {
+                "name": "TalonSRX",
+                "prettyName": "Talon SRX",
+                "descriptor": "com/ctre/phoenix/motorcontrol/can/TalonSRX",
+                "mock": "ca/gregk/frcmocks/ctre/MockTalonSRX"
+            },
+            {
+                "name": "VictorSPX",
+                "prettyName": "Victor SPX",
+                "descriptor": "com/ctre/phoenix/motorcontrol/can/VictorSPX",
+                "mock": "ca/gregk/frcmocks/ctre/MockVictorSPX"
+            },
+            {
+                "name": "TalonFX",
+                "prettyName": "Talon FX",
+                "descriptor": "com/ctre/phoenix/motorcontrol/can/TalonFX",
+                "mock": "ca/gregk/frcmocks/ctre/MockTalonFX"
+            },
+            {
+                "name": "CANSparkMax",
+                "prettyName": "SparkMax (CAN)",
+                "descriptor": "com/revrobotics/CANSparkMax",
+                "mock": "ca/gregk/frcmocks/rev/MockCANSparkMax"
+            }
+        ],
+        "pneumatics": [
+            {
+                "name": "Solenoid",
+                "prettyName": "Solenoid",
+                "descriptor": "edu/wpi/first/wpilibj/Solenoid",
+                "mock": "ca/gregk/frcmocks/wpilib/MockSolenoid"
+            },
+            {
+                "name": "DoubleSolenoid",
+                "prettyName": "Double Solenoid",
+                "descriptor": "edu/wpi/first/wpilibj/DoubleSolenoid",
+                "mock": "ca/gregk/frcmocks/wpilib/MockDoubleSolenoid"
+            }
+        ],
+        "sensors": [
+            {
+                "name": "ADXRS450_Gyro",
+                "prettyName": "ADXRS450 Gyro",
+                "descriptor": "edu/wpi/first/wpilibj/ADXRS450_Gyro",
+                "mock": "ca/gregk/frcmocks/wpilib/MockADXRS450_Gyro"
+            }
+        ],
+        "other": []
+    }
+}
