@@ -72,6 +72,7 @@ public class armAndIntakeConstants{
 
         public static final int INTAKE_ID = 13;
         public static final int WRIST_ID = 12;
+        public static final double wristkP = 0.1;
 
         /*
          * degrees/tick
