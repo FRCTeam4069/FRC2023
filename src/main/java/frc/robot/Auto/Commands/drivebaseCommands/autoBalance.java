@@ -32,8 +32,7 @@ public class autoBalance extends CommandBase {
 
     addRequirements(drivebase); // adds a requirement - if its not met then it will throw an error
   }
-  /*28 :1
-  18 : 60*/
+ 
     @Override
     public void execute() {
       SwerveModuleState[] states;
