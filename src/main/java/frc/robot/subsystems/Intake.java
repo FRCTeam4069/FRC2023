@@ -34,13 +34,13 @@ public class Intake extends SubsystemBase{
          *  1/2940 
          */
 
-         wristEncoder.setPositionConversionFactor(47/70);
+         wristEncoder.setPositionConversionFactor(1/42);
 
 
     }
 
     public void wristToPose(double position){
-        setWrist((position - getWristPose()*47) * intakeConstants.wristkP);
+        setWrist((position - getWristPose()) * intakeConstants.wristkP);
     }
     /**
      *

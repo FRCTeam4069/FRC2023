@@ -2,7 +2,6 @@ package frc.robot.Auto.Commands.intakeCommands;
 
 import java.util.function.Supplier;
 
-import javax.swing.text.StyleContext.SmallAttributeSet;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
@@ -37,8 +36,8 @@ public class DefaultIntakeCommand extends CommandBase{
 
     @Override
     public void initialize(){
-        intake.setWristPose(90);
-        wristPose = 0;
+        intake.setWristPose(-1);
+        wristPose = -1;
     }
     @Override
     public void execute(){

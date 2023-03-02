@@ -47,7 +47,6 @@ public class RobotContainer {
     private final XboxController Controller2 = new XboxController(1);
 
        public RobotContainer() {
-        fTrajectoryCommand = new followTrajectoryCommand(swerveSubsystem, PathPlanner.loadPath("Go to Cone", new PathConstraints(0.5, 1)) , true);
         swerveSubsystem.setDefaultCommand(new DefualtDriveCommand(
                 swerveSubsystem,
                 () -> Controller1.getLeftX(),

@@ -161,12 +161,13 @@ public class armSubsystem extends SubsystemBase {
         if(IO.PrintDebugNumbers){
             SmartDashboard.putNumber("Right Pose", rightMotorPosition());
             SmartDashboard.putNumber("Left Pose", leftMotorPosition());
-            SmartDashboard.putNumber("Lead Screw Rotations: ", ExtendedPose());
             SmartDashboard.putNumber("Number of Ticks Extend", Extend.getEncoder().getCountsPerRevolution());
             SmartDashboard.putNumber("Number of Ticks Ar", ArticulateL.getEncoder().getCountsPerRevolution());
             SmartDashboard.putNumber("Number of Ticks Al", ArticulateR.getEncoder().getCountsPerRevolution());
             SmartDashboard.putNumber("Joystick Positions", joystickValues);
         }
+        SmartDashboard.putNumber("Lead Screw Rotations: ", ExtendedPose());
+
     }
     
 }
