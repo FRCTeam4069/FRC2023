@@ -46,7 +46,7 @@ public class autoBalance extends CommandBase {
         if(Gyro.getRoll() > currRoll+2 || Gyro.getRoll() > currRoll-2) rollChange = true;
       }
       if(!balanced && rollChange){
-        xspeed = Gyro.getRoll()-currRoll * 0.05;
+        xspeed = (Gyro.getRoll()-currRoll) * 0.05;
         MathUtil.clamp(xspeed, -2, 2);
         states = kinematics.m_kinematics.toSwerveModuleStates(new ChassisSpeeds(xspeed,0 , 0));
         m_drivebase.setModuleStates(states);
