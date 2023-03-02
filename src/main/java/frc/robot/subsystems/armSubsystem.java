@@ -42,6 +42,12 @@ public class armSubsystem extends SubsystemBase {
         ArticulateL.enableSoftLimit(SoftLimitDirection.kReverse, true);
         ArticulateR.enableSoftLimit(SoftLimitDirection.kForward, true);
         ArticulateR.enableSoftLimit(SoftLimitDirection.kReverse, true);
+            
+
+        Extend.setSoftLimit(SoftLimitDirection.kReverse, 0);
+        Extend.setSoftLimit(SoftLimitDirection.kForward, 138);
+        Extend.enableSoftLimit(SoftLimitDirection.kForward, true);
+        Extend.enableSoftLimit(SoftLimitDirection.kReverse, true);
 
         
         ArticulateR.setInverted(armConstants.rightMotorInvert);

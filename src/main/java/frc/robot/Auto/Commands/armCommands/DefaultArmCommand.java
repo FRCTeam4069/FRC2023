@@ -32,6 +32,7 @@ public class DefaultArmCommand extends CommandBase {
     @Override
     public void initialize() {
         arm.setMotorPosition(position, position); // make sure the arm doesnt go crazy
+
     }
 
     public int GetSide() {
