@@ -73,12 +73,15 @@ public class SwerveSubsystem extends SubsystemBase{
 
 
     public static final Gyro gyro = new Gyro(deviceIDs.PIGEON_ID);
-    public final SwerveDriveOdometry odometry = new SwerveDriveOdometry(kinematics.m_kinematics, getRotation2d(), new SwerveModulePosition[]{
-        FRSwerveModule.getPosition(),
-        FLSwerveModule.getPosition(),
-        BRSwerveModule.getPosition(),
-        BLSwerveModule.getPosition(),
-    });
+    public final SwerveDriveOdometry odometry = new SwerveDriveOdometry(kinematics.m_kinematics, getRotation2d(), getModulePositions());
+    public SwerveModulePosition[] getModulePositions(){
+        return new SwerveModulePosition[]{
+            FRSwerveModule.getPosition(),
+            FLSwerveModule.getPosition(),
+            BRSwerveModule.getPosition(),
+            BLSwerveModule.getPosition(),
+        };
+    }
     public SwerveSubsystem(){
        new Thread(() -> {
         try{
@@ -115,14 +118,15 @@ public class SwerveSubsystem extends SubsystemBase{
     public Pose2d getPose(){
         return odometry.getPoseMeters();
     }
+   
 
-    public void resetOdometry(Pose2d pose){
+    public void resetOdometry(){
         odometry.resetPosition(getRotation2d(),new SwerveModulePosition[]{
             FRSwerveModule.getPosition(),
             FLSwerveModule.getPosition(),
             BRSwerveModule.getPosition(),
             BLSwerveModule.getPosition(),
-        } ,  pose);
+        } ,  new Pose2d(0,0, new Rotation2d(gyro.getHeading())));
     }
     public void stopModules(){
         FRSwerveModule.stop();
@@ -157,7 +161,7 @@ public class SwerveSubsystem extends SubsystemBase{
             BLSwerveModule.getPosition()});
 
         SmartDashboard.putString("odometry", odometry.getPoseMeters().toString());
-
+            System.out.println("GYROLL" +  gyro.getRoll());
 
 
        
@@ -177,27 +181,6 @@ public class SwerveSubsystem extends SubsystemBase{
         return BLSwerveModule.getDriveMotor();
     }
 
-    public Command followTrajectoryCommand(PathPlannerTrajectory traj, boolean isFirstPath) {
-        return new SequentialCommandGroup(
-             new InstantCommand(() -> {
-               // Reset odometry for the first path you run during auto
-               if(isFirstPath){
-                   this.resetOdometry(traj.getInitialHolonomicPose());
-               }
-             }),
-             new PPSwerveControllerCommand(
-                 traj, 
-                 this::getPose, // Pose supplier
-                 kinematics.m_kinematics, // SwerveDriveKinematics
-                 CharacterizationData.autoXController, // X controller. Tune these values for your robot. Leaving them 0 will only use feedforwards.
-                 CharacterizationData.autoYController, // Y controller (usually the same values as X controller)
-                 CharacterizationData.autoThetaController, // Rotation controller. Tune these values for your robot. Leaving them 0 will only use feedforwards.
-                 this::setModuleStates, // Module states consumer
-                 true, // Should the path be automatically mirrored depending on alliance color. Optional, defaults to true
-                 this // Requires this drive subsystem
-             )
-         );
-     }
      
 
 }

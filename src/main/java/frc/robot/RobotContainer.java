@@ -47,7 +47,6 @@ public class RobotContainer {
     private final XboxController Controller2 = new XboxController(1);
 
        public RobotContainer() {
-        fTrajectoryCommand = new followTrajectoryCommand(swerveSubsystem, PathPlanner.loadPath("Go to Cone", new PathConstraints(0.5, 1)) , true);
         swerveSubsystem.setDefaultCommand(new DefualtDriveCommand(
                 swerveSubsystem,
                 () -> Controller1.getLeftX(),
@@ -86,13 +85,16 @@ public class RobotContainer {
 
     public Command getAutonomousCommand() {
         int autoIndex = autoSelecter.getSelected();
-        switch(autoIndex){
-            case 0 :
-            return aBalance;
-            default: 
-            SmartDashboard.putString("Auto Selected:", "INVALID");
-            return new InstantCommand(); 
+        // switch(autoIndex){
+        //     case 0 :
+        //     return aBalance;
+        //     case 1: 
+        //     return testRoutine;
+        //     default: 
+        //     SmartDashboard.putString("Auto Selected:", "INVALID");
+        //     return new InstantCommand(); 
             
-        }
+        // }
+        return aBalance;
     }
 }

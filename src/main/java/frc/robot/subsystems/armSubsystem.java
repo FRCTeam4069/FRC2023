@@ -42,6 +42,12 @@ public class armSubsystem extends SubsystemBase {
         ArticulateL.enableSoftLimit(SoftLimitDirection.kReverse, true);
         ArticulateR.enableSoftLimit(SoftLimitDirection.kForward, true);
         ArticulateR.enableSoftLimit(SoftLimitDirection.kReverse, true);
+            
+
+        Extend.setSoftLimit(SoftLimitDirection.kReverse, 0);
+        Extend.setSoftLimit(SoftLimitDirection.kForward, 138);
+        Extend.enableSoftLimit(SoftLimitDirection.kForward, true);
+        Extend.enableSoftLimit(SoftLimitDirection.kReverse, true);
 
         
         ArticulateR.setInverted(armConstants.rightMotorInvert);
@@ -161,12 +167,13 @@ public class armSubsystem extends SubsystemBase {
         if(IO.PrintDebugNumbers){
             SmartDashboard.putNumber("Right Pose", rightMotorPosition());
             SmartDashboard.putNumber("Left Pose", leftMotorPosition());
-            SmartDashboard.putNumber("Lead Screw Rotations: ", ExtendedPose());
             SmartDashboard.putNumber("Number of Ticks Extend", Extend.getEncoder().getCountsPerRevolution());
             SmartDashboard.putNumber("Number of Ticks Ar", ArticulateL.getEncoder().getCountsPerRevolution());
             SmartDashboard.putNumber("Number of Ticks Al", ArticulateR.getEncoder().getCountsPerRevolution());
             SmartDashboard.putNumber("Joystick Positions", joystickValues);
         }
+        SmartDashboard.putNumber("Lead Screw Rotations: ", ExtendedPose());
+
     }
     
 }
