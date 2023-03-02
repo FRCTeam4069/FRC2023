@@ -157,7 +157,7 @@ public class SwerveSubsystem extends SubsystemBase{
             BLSwerveModule.getPosition()});
 
         SmartDashboard.putString("odometry", odometry.getPoseMeters().toString());
-
+            System.out.println("GYROLL" +  gyro.getRoll());
 
 
        

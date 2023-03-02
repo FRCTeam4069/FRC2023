@@ -86,13 +86,16 @@ public class RobotContainer {
 
     public Command getAutonomousCommand() {
         int autoIndex = autoSelecter.getSelected();
-        switch(autoIndex){
-            case 0 :
-            return aBalance;
-            default: 
-            SmartDashboard.putString("Auto Selected:", "INVALID");
-            return new InstantCommand(); 
+        // switch(autoIndex){
+        //     case 0 :
+        //     return aBalance;
+        //     case 1: 
+        //     return testRoutine;
+        //     default: 
+        //     SmartDashboard.putString("Auto Selected:", "INVALID");
+        //     return new InstantCommand(); 
             
-        }
+        // }
+        return aBalance;
     }
 }
