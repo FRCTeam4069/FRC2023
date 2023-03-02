@@ -42,15 +42,15 @@ public class DefaultIntakeCommand extends CommandBase{
     @Override
     public void execute(){
         
-        if(intake.controlType == 2){
-              intake.wristToPose(90 - armAngle.get());
-        }
-        if(intake.controlType == 3){
-            intake.wristToPose(armAngle.get());
-        }else{
+        // if(intake.controlType == 2){
+        //       intake.wristToPose(90 - armAngle.get());
+        // }
+        // if(intake.controlType == 3){
+        //     intake.wristToPose(armAngle.get());
+        // }else{
             intake.setWrist(wristUp.get() - wristDown.get());
             SmartDashboard.putNumber("intake Speed", wristUp.get() - wristDown.get());
-        }
+        // }
 
         
         if(intakeOpen.get() && intakeClose.get()){

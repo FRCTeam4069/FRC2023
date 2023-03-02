@@ -29,7 +29,7 @@ public class armSubsystem extends SubsystemBase {
 
         ArticulateL.getEncoder().setPositionConversionFactor(2);
         ArticulateR.getEncoder().setPositionConversionFactor(2);
-        Extend.getEncoder().setPositionConversionFactor((1/392) * 0.5);
+        Extend.getEncoder().setPositionConversionFactor((4/392) * 0.5);
 
         setZero();
 
