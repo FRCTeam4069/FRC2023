@@ -34,13 +34,13 @@ public class Intake extends SubsystemBase{
          *  1/2940 
          */
 
-         wristEncoder.setPositionConversionFactor(1/2940);
+         wristEncoder.setPositionConversionFactor(47/70);
 
 
     }
 
     public void wristToPose(double position){
-        setWrist((position - getWristPose()) * intakeConstants.wristkP);
+        setWrist((position - getWristPose()*47) * intakeConstants.wristkP);
     }
     /**
      *
@@ -124,9 +124,8 @@ public class Intake extends SubsystemBase{
     @Override
     public void periodic() {
         // This method will be called once per scheduler run
-        if(IO.PrintDebugNumbers){
-            SmartDashboard.putNumber("wrist Pose", getWristPose());
-        }
+        SmartDashboard.putNumber("wrist Pose", getWristPose());
+        
     }
 
 }

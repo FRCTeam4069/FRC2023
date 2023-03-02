@@ -104,8 +104,6 @@ public class Robot extends TimedRobot {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
-    // kill auton commands
-    m_autonomousCommand.end(true);
     
   }
 

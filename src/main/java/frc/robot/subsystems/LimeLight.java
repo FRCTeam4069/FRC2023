@@ -13,12 +13,12 @@ import org.photonvision.targeting.PhotonTrackedTarget;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class LimeLight extends SubsystemBase{
-    
+   /*  
     private PhotonCamera camera;
     private PhotonPoseEstimator estimator;
     private boolean targetFound;
     
-    
+    */
 
     
     public LimeLight(){
@@ -29,7 +29,7 @@ public class LimeLight extends SubsystemBase{
      * Using PhotonVision to get the estimated pose of the Robot
      * @return Pose2d of the robot
     */
-
+    /*
     public void runCamera(){
         var results = camera.getLatestResult();
         targetFound = results.hasTargets();
@@ -40,6 +40,7 @@ public class LimeLight extends SubsystemBase{
         double poseAmbiguity = target.getPoseAmbiguity();
         
     }
+    */
 
 
 

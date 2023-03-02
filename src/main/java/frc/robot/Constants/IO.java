@@ -1,11 +1,11 @@
 package frc.robot.Constants;
 
 public final class IO{
-    public static boolean PrintDebugNumbers = true; // prints Debug info for wheels and speeds 
+    public static boolean PrintDebugNumbers = false; // prints Debug info for wheels and speeds 
     public static boolean enableSlewrateLimiter = true;
 
     public static final double Contoller1portNum = 0;
-    public static final double maxTurnSpeed = 3; // Meters/sec
+    public static final double maxTurnSpeed = 5; // Meters/sec
     public static final double maxSpeed = 5; // Meters/sec
 
     public static final double xdeadZone = 0.05;

@@ -1,11 +1,12 @@
 package frc.robot.Auto.Commands.drivebaseCommands;
 
-import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.RobotContainer;
 import frc.robot.Constants.drivebaseConstants.kinematics;
 import frc.robot.subsystems.Gyro;
 import frc.robot.subsystems.SwerveSubsystem;
@@ -17,52 +18,43 @@ import frc.robot.subsystems.SwerveSubsystem;
  * edu.wpi.first.wpilibj2.command.RunCommand}.
  */
 public class autoBalance extends CommandBase {
-  private final SwerveSubsystem m_drivebase;
-  private final Gyro Gyro;
-  public double thetaSpeed, xspeed;
-  public boolean balanced;
+  private final SwerveSubsystem m_drivebase = RobotContainer.swerveSubsystem;
+  private final Gyro Gyro = RobotContainer.swerveSubsystem.getGyro();
+  public double thetaSpeed, xspeed, currtime, currRoll;
+  public boolean balanced,rollChange;
   public Timer timer; 
-  private double pitchThreshold = 1;
+  private double rollThreshold = 1;
   
 
 
-  public autoBalance(SwerveSubsystem drivebase, Gyro gyro) {
-    this.m_drivebase = drivebase;
-    this.Gyro = gyro;
-
-    addRequirements(drivebase); // adds a requirement - if its not met then it will throw an error
+  public autoBalance() {
+    addRequirements(RobotContainer.swerveSubsystem); // adds a requirement - if its not met then it will throw an error
   }
- 
+    @Override
+    public void initialize(){
+      currRoll = Gyro.getRoll();
+      balanced = false;
+      rollChange = false;
+    }
     @Override
     public void execute() {
       SwerveModuleState[] states;
-      boolean PitchChange = false;
-      balanced = false;
-      double currPitch = Gyro.getPitch();
-      double currtime;
 
-      while(!PitchChange){
+      if(!rollChange){
         states = kinematics.m_kinematics.toSwerveModuleStates(new ChassisSpeeds(-2, 0, 0));
         m_drivebase.setModuleStates(states);
-
-        if(Gyro.getPitch() > currPitch+2|| Gyro.getPitch() < currPitch-2) PitchChange = true;
-
+        if(Gyro.getRoll() > currRoll+2 || Gyro.getRoll() > currRoll-2) rollChange = true;
       }
-      if(PitchChange){
-      while(!balanced){
-        xspeed = Gyro.getPitch() * 0.1;
-        Gyro.resetGyro();
-        thetaSpeed = Gyro.getYaw() * 0.1;
-        states = kinematics.m_kinematics.toSwerveModuleStates(new ChassisSpeeds(-xspeed, 0, thetaSpeed));
+      if(!balanced && rollChange){
+        xspeed = Gyro.getRoll()-currRoll * 0.05;
+        MathUtil.clamp(xspeed, -2, 2);
+        states = kinematics.m_kinematics.toSwerveModuleStates(new ChassisSpeeds(xspeed,0 , 0));
         m_drivebase.setModuleStates(states);
 
-        if(Math.abs(Gyro.getPitch()) < pitchThreshold){ currtime = Timer.getFPGATimestamp(); SmartDashboard.putNumber("CurrTime", currtime);}
+        if(Math.abs(Gyro.getRoll()) < rollThreshold){ currtime = Timer.getFPGATimestamp(); SmartDashboard.putNumber("CurrTime", currtime);}
         else{ currtime = 0;}
         if(currtime > 100){ balanced = true; }
         SmartDashboard.putBoolean("Balanced", balanced);
-
-
-      }
     }
 
     

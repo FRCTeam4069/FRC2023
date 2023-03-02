@@ -10,6 +10,7 @@ import frc.robot.Auto.Scheduler;
 import frc.robot.Auto.Commands.armCommands.DefaultArmCommand;
 import frc.robot.Auto.Commands.armCommands.extendToPose;
 import frc.robot.Auto.Commands.armCommands.moveToPose;
+import frc.robot.Auto.Commands.drivebaseCommands.autoBalance;
 import frc.robot.Auto.Commands.drivebaseCommands.followTrajectoryCommand;
 
 /**
@@ -20,8 +21,8 @@ public class testRoutine extends SequentialCommandGroup {
     
     public testRoutine(){
         addCommands(
-        new moveToPose(12),
-        new followTrajectoryCommand(null, null, isFinished()));
+        new moveToPose(20).andThen(new autoBalance())
+        );
 
     }
 

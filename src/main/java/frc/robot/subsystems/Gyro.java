@@ -1,16 +1,17 @@
 package frc.robot.subsystems;
 
+
 import com.ctre.phoenix.sensors.Pigeon2;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants.drivebaseConstants.deviceIDs;
 
 public class Gyro extends SubsystemBase{
     
     public Pigeon2 gyro;
     
-    public Gyro(){
-        gyro = new Pigeon2(deviceIDs.PIGEON_ID);
+    public Gyro(int id){
+        gyro = new Pigeon2(id);
     }
 
     public void resetGyro(){
@@ -46,4 +47,11 @@ public class Gyro extends SubsystemBase{
     }
     //Refer to CTRE docs for Piegon 2 to understand Pitch, and Roll
 
+    @Override
+    public void periodic(){
+        SmartDashboard.putNumber("GYRO PITCH", getPitch());
+        SmartDashboard.putNumber("GYRO YAW", getYaw());
+        SmartDashboard.putNumber("GYRO ROLL", getRoll());
+        SmartDashboard.putNumber("GYRO HEADING", getHeading());
+    }
 }

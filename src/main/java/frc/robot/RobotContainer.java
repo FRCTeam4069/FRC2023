@@ -15,9 +15,9 @@ import frc.robot.Auto.Commands.drivebaseCommands.DefualtDriveCommand;
 import frc.robot.Auto.Commands.drivebaseCommands.autoBalance;
 import frc.robot.Auto.Commands.drivebaseCommands.followTrajectoryCommand;
 import frc.robot.Auto.Commands.intakeCommands.DefaultIntakeCommand;
+import frc.robot.Auto.routines.testRoutine;
 import frc.robot.subsystems.armSubsystem;
 import frc.robot.subsystems.AutonSelect;
-import frc.robot.subsystems.Gyro;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.LimeLight;
 
@@ -26,9 +26,9 @@ public class RobotContainer {
     public static final SwerveSubsystem swerveSubsystem = new SwerveSubsystem();
     public static final armSubsystem arm = new armSubsystem();
     public static final Intake intake = new Intake();
-    public static final Gyro gyro = new Gyro();
     public static final LimeLight limelight = new LimeLight();
-    public static final autoBalance aBalance = new autoBalance(swerveSubsystem, gyro);
+    public static final autoBalance aBalance = new autoBalance();
+    public static final testRoutine testRoutine = new testRoutine();
     public static final AutonSelect autoSelecter = new AutonSelect();
     public followTrajectoryCommand fTrajectoryCommand;
     
@@ -64,7 +64,7 @@ public class RobotContainer {
             () -> Controller2.getRightBumper(),
             () -> Controller2.getAButton(),
             () -> Controller2.getStartButton(),
-            () -> gyro.getHeading()));
+            () -> swerveSubsystem.getGyro().getHeading()));
 
         intake.setDefaultCommand( new DefaultIntakeCommand(
             intake,

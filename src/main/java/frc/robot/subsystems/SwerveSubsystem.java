@@ -18,6 +18,8 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.RobotContainer;
+import frc.robot.Constants.drivebaseConstants;
 import frc.robot.Constants.drivebaseConstants.CharacterizationData;
 import frc.robot.Constants.drivebaseConstants.ModuleConstants;
 import frc.robot.Constants.drivebaseConstants.deviceIDs;
@@ -70,7 +72,7 @@ public class SwerveSubsystem extends SubsystemBase{
 
 
 
-    private Gyro gyro = new Gyro();
+    public static final Gyro gyro = new Gyro(deviceIDs.PIGEON_ID);
     public final SwerveDriveOdometry odometry = new SwerveDriveOdometry(kinematics.m_kinematics, getRotation2d(), new SwerveModulePosition[]{
         FRSwerveModule.getPosition(),
         FLSwerveModule.getPosition(),
@@ -91,9 +93,11 @@ public class SwerveSubsystem extends SubsystemBase{
     
     }
     public void resetGyro(){
-        gyro.setYaw(0);
+        gyro.setYaw(90);
     }
-
+    public Gyro getGyro(){
+        return gyro;
+    }
 
     public void zeroAllWhels(){
         FRSwerveModule.setDesiredState(new SwerveModuleState(0,new Rotation2d(0)));
@@ -151,10 +155,6 @@ public class SwerveSubsystem extends SubsystemBase{
             FLSwerveModule.getPosition(),
             BRSwerveModule.getPosition(),
             BLSwerveModule.getPosition()});
-
-        SmartDashboard.putNumber("Robot Heading", gyro.getHeading());
-        SmartDashboard.putNumber("Robot Pitch", gyro.getPitch());
-        SmartDashboard.putNumber("Robot Roll", gyro.getRoll());
 
         SmartDashboard.putString("odometry", odometry.getPoseMeters().toString());
 
