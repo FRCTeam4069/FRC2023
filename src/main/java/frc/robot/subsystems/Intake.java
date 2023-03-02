@@ -21,8 +21,8 @@ public class Intake extends SubsystemBase {
         intake = new CANSparkMax(intakeConstants.INTAKE_ID, MotorType.kBrushless);
         wrist = new CANSparkMax(intakeConstants.WRIST_ID, MotorType.kBrushless);
 
-        intake.setSmartCurrentLimit(30);
-        wrist.setSmartCurrentLimit(40);
+        intake.setSmartCurrentLimit(25);
+        wrist.setSmartCurrentLimit(30);
         wristEncoder = wrist.getEncoder();
         intakeEncoder = intake.getEncoder();
 

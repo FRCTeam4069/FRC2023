@@ -80,6 +80,8 @@ public class RobotContainer {
     private void configureButtonBindings() {
          new Trigger(Controller1::getAButton).whileTrue(swerveSubsystem.resetGyroCommmand());
          new Trigger(Controller2::getYButton).whileTrue(intake.setMode(2));
+         new Trigger(Controller2::getLeftStickButton).whileTrue(arm.flaseLimit());
+         new Trigger(Controller2::getYButton).whileTrue(arm.trueLimit());
         
     }
 
