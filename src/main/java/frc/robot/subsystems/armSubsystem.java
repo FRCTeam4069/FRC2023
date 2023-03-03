@@ -1,7 +1,5 @@
 package frc.robot.subsystems;
 
-import org.opencv.core.Mat;
-
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMax.SoftLimitDirection;
@@ -20,8 +18,8 @@ import frc.robot.Constants.armAndIntakeConstants.armConstants;;
 public class armSubsystem extends SubsystemBase {
     public CANSparkMax ArticulateR, ArticulateL, Extend;
     public RelativeEncoder leftEncoder, rightEncoder, extendEncoder;
-    public double joystickValues;
     public boolean enableLimit;
+    public double extendPose = 0, articulatePose = 0;
 
     public armSubsystem() {
         enableLimit = true;
@@ -34,7 +32,6 @@ public class armSubsystem extends SubsystemBase {
         Extend.getEncoder().setPositionConversionFactor((1/392) * 0.5);
 
         setZero();
-
         ArticulateL.setSoftLimit(SoftLimitDirection.kForward, armConstants.softlimits);
         ArticulateL.setSoftLimit(SoftLimitDirection.kReverse, -armConstants.softlimits);
         ArticulateR.setSoftLimit(SoftLimitDirection.kForward, armConstants.softlimits);
@@ -46,7 +43,7 @@ public class armSubsystem extends SubsystemBase {
         ArticulateR.enableSoftLimit(SoftLimitDirection.kReverse, true);
 
         Extend.setSoftLimit(SoftLimitDirection.kReverse, 0);
-        Extend.setSoftLimit(SoftLimitDirection.kForward, 120);
+        Extend.setSoftLimit(SoftLimitDirection.kForward, 130);
         Extend.enableSoftLimit(SoftLimitDirection.kForward, enableLimit);
         Extend.enableSoftLimit(SoftLimitDirection.kReverse, enableLimit);
 
@@ -86,18 +83,27 @@ public class armSubsystem extends SubsystemBase {
     public void manualExtend(double speed) {
         Extend.set(speed);
     }
+    
+
+    public void setArmPose(double pose){
+        this.articulatePose = pose;
+    }  
+    public void setExtendPose(double pose){
+        this.extendPose = pose;
+    }
+
+    public boolean isAtPoseAT(double Pose, double threshold){
+        return (Math.abs(Pose - AvgPose()) < threshold);
+
+    }
+
+    public boolean isAtPoseE(double Pose, double threshold){
+        return (Math.abs(Pose - extendPose) < threshold);
+    }
 
     public void stop() {
         ArticulateL.stopMotor();
         ArticulateR.stopMotor();
-    }
-
-    public double rightMotorSpeed() {
-        return ArticulateR.getEncoder().getVelocity();
-    }
-
-    public double leftMotorSpeed() {
-        return ArticulateL.getEncoder().getVelocity();
     }
 
     public double rightMotorPosition() {
@@ -109,9 +115,8 @@ public class armSubsystem extends SubsystemBase {
     }
 
     public double AvgPose() {
-        return (leftMotorPosition() + rightMotorPosition()) / 2;
+        return ( (ArticulateR.getEncoder().getPosition() + ArticulateL.getEncoder().getPosition()) / 2);
     }
-
     public double ExtendedPose() {
         return Extend.getEncoder().getPosition();
     }
@@ -123,9 +128,7 @@ public class armSubsystem extends SubsystemBase {
 
     public void setZero() {
         setMotorPosition(0, 0);
-        joystickValues = 0;
         Extend.getEncoder().setPosition(0);
-
     }
 
     /**
@@ -135,10 +138,7 @@ public class armSubsystem extends SubsystemBase {
         return Math.copySign(1, AvgPose());
     }
 
-    public void joystickValues(double joystick) {
-        joystickValues += joystick;
-    }
-
+    
     /**
      * Extend to position and velocity
      * 
@@ -163,9 +163,8 @@ public class armSubsystem extends SubsystemBase {
 
      public CommandBase trueLimit(){
         return this.runOnce(() -> enableLimit = true);
-
-
      }
+
     /**
      * Set the home position for the extending motor
      */
@@ -177,14 +176,18 @@ public class armSubsystem extends SubsystemBase {
     public void periodic() {
         Extend.enableSoftLimit(SoftLimitDirection.kForward, enableLimit);
         Extend.enableSoftLimit(SoftLimitDirection.kReverse, enableLimit);
-
+       
+        MathUtil.clamp(extendPose, 0, 140);
+        MathUtil.clamp(articulatePose, -130, 130);
+        
+        moveToPos(articulatePose, 1);
+        
         if (IO.PrintDebugNumbers) {
             SmartDashboard.putNumber("Right Pose", rightMotorPosition());
             SmartDashboard.putNumber("Left Pose", leftMotorPosition());
             SmartDashboard.putNumber("Number of Ticks Extend", Extend.getEncoder().getCountsPerRevolution());
             SmartDashboard.putNumber("Number of Ticks Ar", ArticulateL.getEncoder().getCountsPerRevolution());
             SmartDashboard.putNumber("Number of Ticks Al", ArticulateR.getEncoder().getCountsPerRevolution());
-            SmartDashboard.putNumber("Joystick Positions", joystickValues);
         }
         SmartDashboard.putNumber("Lead Screw Rotations: ", ExtendedPose());
 

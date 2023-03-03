@@ -37,6 +37,7 @@ public class autoBalance extends CommandBase {
     balanced = false;
     rollChange = false;
     SmartDashboard.putBoolean("rollChange", rollChange);
+    
   }
 
   @Override

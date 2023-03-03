@@ -1,16 +1,13 @@
 package frc.robot;
 
 import com.ctre.phoenix.music.Orchestra;
-import com.pathplanner.lib.PathConstraints;
-import com.pathplanner.lib.PathPlanner;
-
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.Auto.Commands.armCommands.DefaultArmCommand;
+import frc.robot.Auto.Commands.armCommands.moveToPose;
 import frc.robot.Auto.Commands.drivebaseCommands.DefualtDriveCommand;
 import frc.robot.Auto.Commands.drivebaseCommands.autoBalance;
 import frc.robot.Auto.Commands.drivebaseCommands.followTrajectoryCommand;
@@ -56,14 +53,8 @@ public class RobotContainer {
                 () -> Controller1.getXButton()));
                 
         arm.setDefaultCommand(new DefaultArmCommand(
-            arm, 
             () -> Controller2.getRightY(),
-            () -> Controller2.getLeftY(),
-            () -> Controller2.getLeftBumper(),
-            () -> Controller2.getRightBumper(),
-            () -> Controller2.getAButton(),
-            () -> Controller2.getStartButton(),
-            () -> swerveSubsystem.getGyro().getHeading()));
+            () -> Controller2.getLeftY()));
 
         intake.setDefaultCommand( new DefaultIntakeCommand(
             intake,
@@ -81,7 +72,9 @@ public class RobotContainer {
          new Trigger(Controller1::getAButton).whileTrue(swerveSubsystem.resetGyroCommmand());
          new Trigger(Controller2::getYButton).whileTrue(intake.setMode(2));
          new Trigger(Controller2::getLeftStickButton).whileTrue(arm.flaseLimit());
-         new Trigger(Controller2::getYButton).whileTrue(arm.trueLimit());
+         new Trigger(Controller2::getRightStickButton).whileTrue(arm.trueLimit());
+         new Trigger(Controller2::getLeftBumper).onTrue(new moveToPose(0,1));
+         
         
     }
 
@@ -97,6 +90,6 @@ public class RobotContainer {
         //     return new InstantCommand(); 
             
         // }
-        return aBalance;
+        return testRoutine;
     }
 }

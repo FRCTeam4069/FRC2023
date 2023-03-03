@@ -1,31 +1,22 @@
 package frc.robot.Auto.Commands.armCommands;
 
-import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.RobotContainer;
-import frc.robot.Constants.armAndIntakeConstants.armConstants;
 import frc.robot.subsystems.armSubsystem;
 
 public class moveToPose extends CommandBase {
-    private double targetPose, error;
+    private final double targetPose, threshold;
     private static final armSubsystem arm = RobotContainer.arm;
 
-    public moveToPose(double position) {
+    public moveToPose(double position, double threshold) {
+        this.targetPose = position;
+        this.threshold = threshold;
         addRequirements(RobotContainer.arm);
     }
 
     @Override
     public void execute() {
-        error = targetPose - arm.AvgPose();
-        double speed =
-
-                MathUtil.clamp(targetPose, -130, 130);
-        MathUtil.clamp(
-                ((error) * armConstants.proportionalGain
-                        + (arm.ExtendedPose() * arm.AvgPose() * armConstants.GravGain * arm.getSide())),
-                -1, 1);
-
-        arm.manualArticulate(speed);
+        arm.setArmPose(targetPose);
 
     }
 
@@ -36,7 +27,7 @@ public class moveToPose extends CommandBase {
 
     @Override
     public boolean isFinished() {
-        return false;
+        return arm.isAtPoseAT(targetPose, threshold);
     }
 
 }
