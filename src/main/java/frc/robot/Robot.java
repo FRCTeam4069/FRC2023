@@ -9,7 +9,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import frc.robot.Auto.routines.testRoutine;
+import frc.robot.Auto.routines.Middle_Path_0cones;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -20,7 +20,7 @@ import frc.robot.Auto.routines.testRoutine;
 public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
   public RobotContainer m_robotContainer;
-  public testRoutine testRoutine;
+  public Middle_Path_0cones testRoutine;
   private static final String Halo = "Halo.chrp";
   private static final String PotC = "PiratesOfTheCaribbean.chrp";
   private static final String StarWars = "StarWars.chrp";

@@ -100,5 +100,19 @@ public class drivebaseConstants {
         public static final double BR_STEER_OFFSET = -1.107534128853433;// (Math.PI/2);
         public static final boolean BR_STEER_ENCODER_REVERSED = true;                      
     }
+
+    public static final class cameraConstants{
+
+        public static final String URL = "http://photonvision.local:5800/"; 
+        public static final double CAMERA_PORT = Units.inchesToMeters(0);
+        ;
+        public static final double CAMERA_WIDTH = Units.inchesToMeters(0);
+        public static final double CAMERA_HEIGHT = Units.inchesToMeters(0);
+        public static final double CAMERA_FPS = 30;
+        public static final double CAMERA_PITCH = 0;
+    
+        public  static final double CAMERA_OFFSET_FROM_CENTER = 0;
+    
+    }
 }
 
