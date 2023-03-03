@@ -139,7 +139,12 @@ public class SwerveSubsystem extends SubsystemBase{
     
     }
 
-    
+    public double setSide(){
+        if((Math.abs(gyro.getHeading())-90) > 90){
+            return -1;
+        }else{
+        return 1;}
+    }
    
 
 
@@ -154,8 +159,6 @@ public class SwerveSubsystem extends SubsystemBase{
         SmartDashboard.putString("odometry", odometry.getPoseMeters().toString());
             System.out.println("GYROLL" +  gyro.getRoll());
 
-
-       
 
     }
 

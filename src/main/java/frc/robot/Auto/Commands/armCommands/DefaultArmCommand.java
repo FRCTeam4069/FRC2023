@@ -23,8 +23,8 @@ public class DefaultArmCommand extends CommandBase {
     @Override
     public void execute() {
 
-        arm.manualExtend(extendSpeed.get());
-        arm.setArmPose(arm.articulatePose + MathUtil.applyDeadband(articulateSpeed.get()*2, 0.05) );
+        arm.manualExtend(MathUtil.applyDeadband( extendSpeed.get(), 0.08));
+        arm.setArmPose(arm.articulatePose + MathUtil.applyDeadband(articulateSpeed.get()*2, 0.08) );
     }
 
     @Override

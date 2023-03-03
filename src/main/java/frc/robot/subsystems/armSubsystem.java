@@ -125,6 +125,7 @@ public class armSubsystem extends SubsystemBase {
     public void setZero() {
         setMotorPosition(0, 0);
         Extend.getEncoder().setPosition(0);
+        articulatePose = 0;
     }
 
     /**

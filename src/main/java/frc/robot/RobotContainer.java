@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.Auto.Commands.armCommands.DefaultArmCommand;
+import frc.robot.Auto.Commands.armCommands.FieldOrientedMTP;
 import frc.robot.Auto.Commands.armCommands.moveToPose;
 import frc.robot.Auto.Commands.drivebaseCommands.DefualtDriveCommand;
 import frc.robot.Auto.Commands.drivebaseCommands.autoBalance;
@@ -32,9 +33,8 @@ public class RobotContainer {
     public static final testRoutine testRoutine = new testRoutine();
     public static final AutonSelect autoSelecter = new AutonSelect();
     public followTrajectoryCommand fTrajectoryCommand;
-    
 
-    public void PlayMusic(String Filename){
+    public void PlayMusic(String Filename) {
         Orchestra orchestra = new Orchestra();
         orchestra.loadMusic(Filename);
         orchestra.addInstrument(swerveSubsystem.getFRDriveMotor());
@@ -47,53 +47,52 @@ public class RobotContainer {
     private final XboxController Controller1 = new XboxController(0);
     private final XboxController Controller2 = new XboxController(1);
 
-       public RobotContainer() {
+    public RobotContainer() {
         swerveSubsystem.setDefaultCommand(new DefualtDriveCommand(
                 swerveSubsystem,
                 () -> Controller1.getLeftX(),
                 () -> -Controller1.getLeftY(),
                 () -> -Controller1.getRightX(),
                 () -> !Controller1.getAButton(),
-                () -> Controller1.getXButton()));
-                
-        arm.setDefaultCommand(new DefaultArmCommand(
-            () -> Controller2.getRightY(),
-            () -> Controller2.getLeftY()));
+                () -> Controller1.getRightBumper()));
 
-        intake.setDefaultCommand( new DefaultIntakeCommand(
-            intake,
-            () -> Controller2.getRightTriggerAxis(),
-            () -> Controller2.getLeftTriggerAxis(),
-            () -> Controller2.getXButton(),
-            () -> Controller2.getBButton(),
-            () -> arm.AvgPose()));        
-        
+        arm.setDefaultCommand(new DefaultArmCommand(
+                () -> Controller2.getRightY(),
+                () -> Controller2.getLeftY()));
+
+        intake.setDefaultCommand(new DefaultIntakeCommand(
+                intake,
+                () -> Controller2.getRightTriggerAxis(),
+                () -> Controller2.getLeftTriggerAxis(),
+                () -> Controller2.getXButton(),
+                () -> Controller2.getBButton(),
+                () -> arm.AvgPose()));
+
         configureButtonBindings();
 
     }
 
     private void configureButtonBindings() {
-         new Trigger(Controller1::getAButton).whileTrue(swerveSubsystem.resetGyroCommmand());
-         new Trigger(Controller2::getStartButton).whileTrue(arm.runOnce(()-> arm.setZero()));
-         new Trigger(Controller2::getLeftStickButton).whileTrue(arm.flaseLimit());
-         new Trigger(Controller2::getRightStickButton).whileTrue(arm.trueLimit());
-         new Trigger(Controller2::getLeftBumper).whileTrue(new moveToPose(55,-1));
-         new Trigger(Controller2::getRightBumper).whileTrue(new moveToPose(-55,-1));
-         
-        
+        new Trigger(Controller1::getAButton).whileTrue(swerveSubsystem.resetGyroCommmand());
+        new Trigger(Controller2::getStartButton).whileTrue(arm.runOnce(() -> arm.setZero()));
+        new Trigger(Controller2::getLeftStickButton).whileTrue(arm.flaseLimit());
+        new Trigger(Controller2::getRightStickButton).whileTrue(arm.trueLimit());
+        new Trigger(Controller2::getLeftBumper).whileTrue(new FieldOrientedMTP(55, -1, () -> swerveSubsystem.setSide()));
+        new Trigger(Controller2::getRightBumper).whileTrue(new FieldOrientedMTP(-55, -1, ()-> swerveSubsystem.setSide()));
+
     }
 
     public Command getAutonomousCommand() {
         int autoIndex = autoSelecter.getSelected();
-        switch(autoIndex){
-            case 0 :
-            return aBalance;
-            case 5: 
-            return new testRoutine();
+        switch (autoIndex) {
+            case 0:
+                return aBalance;
+            case 5:
+                return new testRoutine();
             default:
-            SmartDashboard.putString("Auto Selected:", "INVALID");
-            return new InstantCommand(); 
-            
+                SmartDashboard.putString("Auto Selected:", "INVALID");
+                return new InstantCommand();
+
         }
     }
 }

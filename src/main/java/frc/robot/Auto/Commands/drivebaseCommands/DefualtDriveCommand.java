@@ -2,6 +2,7 @@ package frc.robot.Auto.Commands.drivebaseCommands;
 
 import java.util.function.Supplier;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
@@ -38,10 +39,9 @@ public class DefualtDriveCommand extends CommandBase{
         double xspeed = HalfSpeed.get() ? xSpd.get()/6 : xSpd.get();
         double yspeed = HalfSpeed.get() ? ySpd.get()/6 : ySpd.get();
         double Tspeed = HalfSpeed.get() ? TSpd.get()/4 : TSpd.get();
-
-        xspeed = Math.abs(xspeed)>IO.xdeadZone? xspeed : 0;
-        yspeed = Math.abs(yspeed)>IO.ydeadZone? yspeed : 0;
-        Tspeed = Math.abs(Tspeed)>IO.tdeadZone? Tspeed : 0;
+        xspeed = MathUtil.applyDeadband(xspeed, IO.xdeadZone);
+        yspeed = MathUtil.applyDeadband(yspeed, IO.ydeadZone);
+        Tspeed = MathUtil.applyDeadband(Tspeed, IO.tdeadZone);
         
         if(IO.enableSlewrateLimiter){
         xspeed = xSlewRateLimiter.calculate(xspeed);
