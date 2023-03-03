@@ -16,3 +16,5 @@ Manage Vendor Libraries > Install new libraries (online) > paste URL > Build Rob
 
 To access limelight : http://photonvision.local:5800/ or http://10.40.69.11
 
+# Pushing Code
+** please make a branch of the code if you wish to push it to the github
