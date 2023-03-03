@@ -15,12 +15,14 @@ import frc.robot.Auto.Commands.drivebaseCommands.autoBalance;
 import frc.robot.Auto.Commands.drivebaseCommands.followTrajectoryCommand;
 import frc.robot.Auto.Commands.drivebaseCommands.leaveCommunity;
 import frc.robot.Auto.Commands.intakeCommands.DefaultIntakeCommand;
-import frc.robot.Auto.routines.testRoutine;
+import frc.robot.Auto.routines.Middle_Path_0cones;
 import frc.robot.Constants.drivebaseConstants.deviceIDs;
 import frc.robot.subsystems.armSubsystem;
 import frc.robot.subsystems.AutonSelect;
+import frc.robot.subsystems.Debugger;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.LimeLight;
+import frc.robot.subsystems.Gyro;
 
 public class RobotContainer {
 
@@ -28,9 +30,13 @@ public class RobotContainer {
     public static final armSubsystem arm = new armSubsystem();
     public static final Intake intake = new Intake();
     public static final LimeLight limelight = new LimeLight();
+    public static final Gyro gyro = new Gyro(deviceIDs.PIGEON_ID);
+
+    
     public static final autoBalance aBalance = new autoBalance();
-    public static final testRoutine testRoutine = new testRoutine();
+    public static final Middle_Path_0cones testRoutine = new Middle_Path_0cones();
     public static final AutonSelect autoSelecter = new AutonSelect();
+    public static final Debugger db = new Debugger();
     public followTrajectoryCommand fTrajectoryCommand;
     
 
@@ -65,8 +71,7 @@ public class RobotContainer {
             () -> Controller2.getRightTriggerAxis(),
             () -> Controller2.getLeftTriggerAxis(),
             () -> Controller2.getXButton(),
-            () -> Controller2.getBButton(),
-            () -> arm.AvgPose()));        
+            () -> Controller2.getBButton()));        
         
         configureButtonBindings();
 
@@ -87,9 +92,9 @@ public class RobotContainer {
         int autoIndex = autoSelecter.getSelected();
         switch(autoIndex){
             case 0 :
-            return aBalance;
+            return new Middle_Path_0cones();
             case 5: 
-            return new testRoutine();
+            return new leaveCommunity();
             default:
             SmartDashboard.putString("Auto Selected:", "INVALID");
             return new InstantCommand(); 
