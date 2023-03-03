@@ -6,6 +6,8 @@ import com.revrobotics.CANSparkMax.SoftLimitDirection;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
@@ -13,13 +15,12 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.IO;
 import frc.robot.Constants.armAndIntakeConstants.armConstants;;
 
-
-
 public class armSubsystem extends SubsystemBase {
     public CANSparkMax ArticulateR, ArticulateL, Extend;
     public RelativeEncoder leftEncoder, rightEncoder, extendEncoder;
     public boolean enableLimit;
     public double extendPose = 0, articulatePose = 0;
+    private ShuffleboardTab tab;
 
     public armSubsystem() {
         enableLimit = true;
@@ -31,7 +32,7 @@ public class armSubsystem extends SubsystemBase {
 
         ArticulateL.getEncoder().setPositionConversionFactor(2);
         ArticulateR.getEncoder().setPositionConversionFactor(2);
-        Extend.getEncoder().setPositionConversionFactor((1/392) * 0.5);
+        Extend.getEncoder().setPositionConversionFactor((1 / 392) * 0.5);
 
         setZero();
         ArticulateL.setSoftLimit(SoftLimitDirection.kForward, armConstants.softlimits);
@@ -54,20 +55,47 @@ public class armSubsystem extends SubsystemBase {
 
         Extend.setInverted(armConstants.telescopeMotorInvert);
 
+        tab =  Shuffleboard.getTab("Debug");
+
     }
 
-    public boolean moveToPos(double pose) {
+    @Override
+    public void periodic() {
+        Extend.enableSoftLimit(SoftLimitDirection.kForward, enableLimit);
+        Extend.enableSoftLimit(SoftLimitDirection.kReverse, enableLimit);
 
-            double speed = MathUtil.clamp(
-                    ((pose - AvgPose()) * armConstants.proportionalGain
-                            + (ExtendedPose() * getSide() * armConstants.GravGain)),
+        MathUtil.clamp(extendPose, 0, 140);
+        MathUtil.clamp(articulatePose, -130, 130);
 
-                    -1, 1);
+        moveToPose(articulatePose);
+        extendToPose(extendPose, 0.5);
+        if(IO.PrintIntakeData == true && IO.DISABLE_ALL_SMARTDASH_DATA == false){
+            tab.add("Right Pose", rightMotorPosition());
+            tab.add("Left Pose", leftMotorPosition());
+            tab.add("Number of Ticks Extend", Extend.getEncoder().getCountsPerRevolution());
+            tab.add("Number of Ticks Ar", ArticulateL.getEncoder().getCountsPerRevolution());
+            tab.add("Number of Ticks Al", ArticulateR.getEncoder().getCountsPerRevolution());
+            tab.add("Lead Screw Rotations: ", ExtendedPose());
+        }
+    }
 
-            manualArticulate(speed);
+    private boolean moveToPose(double pose) {
 
-            return true;
-        
+        double speed = MathUtil.clamp(
+                ((pose - AvgPose()) * armConstants.proportionalGain
+                        + (ExtendedPose() * getSide() * armConstants.GravGain)),
+
+                -1, 1);
+
+        manualArticulate(speed);
+
+        return true;
+
+    }
+
+    public void extendToPose(double Position, double maxSpeed) {
+        double speed = MathUtil.clamp((Position - ExtendedPose()) * 0.2, -maxSpeed, maxSpeed);
+        manualExtend(speed);
 
     }
 
@@ -79,21 +107,21 @@ public class armSubsystem extends SubsystemBase {
     public void manualExtend(double speed) {
         Extend.set(-speed);
     }
-    
 
-    public void setArmPose(double pose){
+    public void setArmPose(double pose) {
         this.articulatePose = pose;
-    }  
-    public void setExtendPose(double pose){
+    }
+
+    public void setExtendPose(double pose) {
         this.extendPose = pose;
     }
 
-    public boolean isAtPoseAT(double Pose, double threshold){
+    public boolean isAtPoseAT(double Pose, double threshold) {
         return (Math.abs(Pose - AvgPose()) < threshold);
 
     }
 
-    public boolean isAtPoseE(double Pose, double threshold){
+    public boolean isAtPoseE(double Pose, double threshold) {
         return (Math.abs(Pose - extendPose) < threshold);
     }
 
@@ -111,8 +139,9 @@ public class armSubsystem extends SubsystemBase {
     }
 
     public double AvgPose() {
-        return ( (ArticulateR.getEncoder().getPosition() + ArticulateL.getEncoder().getPosition()) / 2);
+        return ((ArticulateR.getEncoder().getPosition() + ArticulateL.getEncoder().getPosition()) / 2);
     }
+
     public double ExtendedPose() {
         return Extend.getEncoder().getPosition();
     }
@@ -135,59 +164,29 @@ public class armSubsystem extends SubsystemBase {
         return Math.copySign(1, AvgPose());
     }
 
-    
     /**
      * Extend to position and velocity
      * 
      * @param Position Position to extend to (in)
      * @param maxSpeed 0 to 1
      */
-    public void extentToPosition(double Position, double maxSpeed) {
-        if (maxSpeed < 0) {
-            throw new IllegalArgumentException("maxSpeed must be 0 to 1");
-        }
+  
 
-        double speed = MathUtil.clamp((Position - ExtendedPose()) * 0.1, -maxSpeed, maxSpeed);
-        manualExtend(speed);
-
+    public CommandBase flaseLimit() {
+        return new SequentialCommandGroup(
+                this.runOnce(() -> enableLimit = false),
+                this.runOnce(() -> setHome()));
     }
 
-    public CommandBase flaseLimit(){
-        return new SequentialCommandGroup( 
-            this.runOnce(() -> enableLimit = false),
-            this.runOnce(() -> setHome()));
-     }
-
-     public CommandBase trueLimit(){
+    public CommandBase trueLimit() {
         return this.runOnce(() -> enableLimit = true);
-     }
+    }
 
     /**
      * Set the home position for the extending motor
      */
     public void setHome() {
         Extend.getEncoder().setPosition(0);
-    }
-
-    @Override
-    public void periodic() {
-        Extend.enableSoftLimit(SoftLimitDirection.kForward, enableLimit);
-        Extend.enableSoftLimit(SoftLimitDirection.kReverse, enableLimit);
-       
-        MathUtil.clamp(extendPose, 0, 140);
-        MathUtil.clamp(articulatePose, -130, 130);
-        
-        moveToPos(articulatePose);
-        
-        if (IO.PrintDebugNumbers) {
-            SmartDashboard.putNumber("Right Pose", rightMotorPosition());
-            SmartDashboard.putNumber("Left Pose", leftMotorPosition());
-            SmartDashboard.putNumber("Number of Ticks Extend", Extend.getEncoder().getCountsPerRevolution());
-            SmartDashboard.putNumber("Number of Ticks Ar", ArticulateL.getEncoder().getCountsPerRevolution());
-            SmartDashboard.putNumber("Number of Ticks Al", ArticulateR.getEncoder().getCountsPerRevolution());
-        }
-        SmartDashboard.putNumber("Lead Screw Rotations: ", ExtendedPose());
-
     }
 
 }

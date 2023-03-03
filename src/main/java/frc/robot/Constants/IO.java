@@ -1,7 +1,14 @@
 package frc.robot.Constants;
 
-public final class IO{
-    public static boolean PrintDebugNumbers = false; // prints Debug info for wheels and speeds 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
+public class IO{
+    public static boolean PrintIntakeData = true;
+    public static boolean PrintSwerveData = true;
+    public static boolean PrintArmData = true;
+    public static boolean PrintGryoData = true;
+    public static boolean DISABLE_ALL_SMARTDASH_DATA = true;
+    
     public static boolean enableSlewrateLimiter = true;
     public static double driveDeadband;
 
@@ -16,5 +23,7 @@ public final class IO{
     public static final double xSpeedSlewRate = 3;
     public static final double ySpeedSlewRate = 3;
     public static final double TurnSpeedSlewRate = 3;
+
+    
 
 }

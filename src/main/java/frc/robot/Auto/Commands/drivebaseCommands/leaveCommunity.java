@@ -1,17 +1,9 @@
 package frc.robot.Auto.Commands.drivebaseCommands;
 
-import com.pathplanner.lib.PathPlannerTrajectory;
-import com.pathplanner.lib.auto.PIDConstants;
-import com.pathplanner.lib.auto.SwerveAutoBuilder;
-
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
-import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import edu.wpi.first.wpilibj2.command.PrintCommand;
-import frc.robot.Robot;
 import frc.robot.RobotContainer;
-import frc.robot.Constants.drivebaseConstants;
 import frc.robot.Constants.drivebaseConstants.kinematics;
 import frc.robot.subsystems.SwerveSubsystem;
 

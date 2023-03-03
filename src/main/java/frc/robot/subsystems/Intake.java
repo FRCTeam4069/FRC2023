@@ -7,7 +7,6 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants.IO;
 import frc.robot.Constants.armAndIntakeConstants.intakeConstants;
 
 public class Intake extends SubsystemBase {
@@ -38,6 +37,13 @@ public class Intake extends SubsystemBase {
 
     }
 
+    @Override
+    public void periodic() {
+        // This method will be called once per scheduler run
+        SmartDashboard.putNumber("wrist Pose", getWristPose());
+
+    }
+    
     public void wristToPose(double position){
         setWrist((position - getWristPose()*47) * intakeConstants.wristkP);
     }
@@ -119,11 +125,6 @@ public class Intake extends SubsystemBase {
         return this.runOnce(() -> setWristPose(pose));
     }
 
-    @Override
-    public void periodic() {
-        // This method will be called once per scheduler run
-        SmartDashboard.putNumber("wrist Pose", getWristPose());
-
-    }
+  
 
 }

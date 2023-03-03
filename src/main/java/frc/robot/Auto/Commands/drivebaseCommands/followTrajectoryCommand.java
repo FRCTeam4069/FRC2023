@@ -1,21 +1,12 @@
 package frc.robot.Auto.Commands.drivebaseCommands;
 
 import com.pathplanner.lib.PathPlannerTrajectory;
-import com.pathplanner.lib.auto.PIDConstants;
-import com.pathplanner.lib.auto.SwerveAutoBuilder;
-
-import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import edu.wpi.first.wpilibj2.command.PrintCommand;
 import frc.robot.RobotContainer;
-import frc.robot.Constants.drivebaseConstants;
 import frc.robot.subsystems.SwerveSubsystem;
 
 public class followTrajectoryCommand extends CommandBase{
     private static final SwerveSubsystem driveSubsystem = RobotContainer.swerveSubsystem;
-    private PathPlannerTrajectory traj;
-    private boolean isFirstPath, pathFinished;
-
 
     public followTrajectoryCommand() {
        
@@ -35,6 +26,6 @@ public class followTrajectoryCommand extends CommandBase{
 
     @Override
     public boolean isFinished() {
-        return pathFinished;
+        return true;
     }
 }
