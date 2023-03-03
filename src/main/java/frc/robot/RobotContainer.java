@@ -2,7 +2,9 @@ package frc.robot;
 
 import com.ctre.phoenix.music.Orchestra;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 import frc.robot.subsystems.SwerveSubsystem;
@@ -11,8 +13,10 @@ import frc.robot.Auto.Commands.armCommands.moveToPose;
 import frc.robot.Auto.Commands.drivebaseCommands.DefualtDriveCommand;
 import frc.robot.Auto.Commands.drivebaseCommands.autoBalance;
 import frc.robot.Auto.Commands.drivebaseCommands.followTrajectoryCommand;
+import frc.robot.Auto.Commands.drivebaseCommands.leaveCommunity;
 import frc.robot.Auto.Commands.intakeCommands.DefaultIntakeCommand;
 import frc.robot.Auto.routines.testRoutine;
+import frc.robot.Constants.drivebaseConstants.deviceIDs;
 import frc.robot.subsystems.armSubsystem;
 import frc.robot.subsystems.AutonSelect;
 import frc.robot.subsystems.Intake;
@@ -70,26 +74,26 @@ public class RobotContainer {
 
     private void configureButtonBindings() {
          new Trigger(Controller1::getAButton).whileTrue(swerveSubsystem.resetGyroCommmand());
-         new Trigger(Controller2::getYButton).whileTrue(intake.setMode(2));
+         new Trigger(Controller2::getStartButton).whileTrue(arm.runOnce(()-> arm.setZero()));
          new Trigger(Controller2::getLeftStickButton).whileTrue(arm.flaseLimit());
          new Trigger(Controller2::getRightStickButton).whileTrue(arm.trueLimit());
-         new Trigger(Controller2::getLeftBumper).onTrue(new moveToPose(0,1));
+         new Trigger(Controller2::getLeftBumper).whileTrue(new moveToPose(55,-1));
+         new Trigger(Controller2::getRightBumper).whileTrue(new moveToPose(-55,-1));
          
         
     }
 
     public Command getAutonomousCommand() {
         int autoIndex = autoSelecter.getSelected();
-        // switch(autoIndex){
-        //     case 0 :
-        //     return aBalance;
-        //     case 1: 
-        //     return testRoutine;
-        //     default: 
-        //     SmartDashboard.putString("Auto Selected:", "INVALID");
-        //     return new InstantCommand(); 
+        switch(autoIndex){
+            case 0 :
+            return aBalance;
+            case 5: 
+            return new testRoutine();
+            default:
+            SmartDashboard.putString("Auto Selected:", "INVALID");
+            return new InstantCommand(); 
             
-        // }
-        return testRoutine;
+        }
     }
 }

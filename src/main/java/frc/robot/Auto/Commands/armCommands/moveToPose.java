@@ -27,7 +27,11 @@ public class moveToPose extends CommandBase {
 
     @Override
     public boolean isFinished() {
+        if(threshold != -1){
         return arm.isAtPoseAT(targetPose, threshold);
+        } else return false;
+
     }
 
 }
+

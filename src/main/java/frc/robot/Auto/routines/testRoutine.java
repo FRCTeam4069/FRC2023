@@ -20,7 +20,7 @@ import frc.robot.Auto.Commands.drivebaseCommands.followTrajectoryCommand;
 public class testRoutine extends SequentialCommandGroup {
     
     public testRoutine(){
-        addCommands(new moveToPose(90,1), new moveToPose(0,1), new moveToPose(-90,1));
+        addCommands(new moveToPose(-130, 1).alongWith(new autoBalance()) );
 
     }
 

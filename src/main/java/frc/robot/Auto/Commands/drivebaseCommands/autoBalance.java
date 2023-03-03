@@ -1,8 +1,6 @@
 package frc.robot.Auto.Commands.drivebaseCommands;
 
-import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
-import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
@@ -25,8 +23,6 @@ public class autoBalance extends CommandBase {
   public boolean balanced, rollChange;
   public Timer timer = new Timer();
 
-  private double rollThreshold = 1;
-
   public autoBalance() {
     addRequirements(RobotContainer.swerveSubsystem); // adds a requirement - if its not met then it will throw an error
   }
@@ -37,7 +33,7 @@ public class autoBalance extends CommandBase {
     balanced = false;
     rollChange = false;
     SmartDashboard.putBoolean("rollChange", rollChange);
-    
+
   }
 
   @Override
@@ -78,6 +74,8 @@ public class autoBalance extends CommandBase {
   public boolean isFinished() {
     if (balanced == true)
       return true;
-    return false;
+    else {
+      return false;
+    }
   }
 }

@@ -17,11 +17,11 @@ public class AutonSelect extends SubsystemBase {
         autonRoutine = new SendableChooser<Integer>();
 
         autonRoutine.addOption("autoBalance", 0);
-        autonRoutine.addOption("1", 1);
-        autonRoutine.addOption("2", 2);
-        autonRoutine.addOption("3", 3);
-        autonRoutine.addOption("Leave Community", 4);
-        autonRoutine.setDefaultOption("Cone + Leave Community", 5);
+        //autonRoutine.addOption("TEST", 1);
+        //autonRoutine.addOption("2", 2);
+        //autonRoutine.addOption("3", 3);
+        //autonRoutine.addOption("Leave Community", 4);
+        autonRoutine.setDefaultOption("Leave Community", 1);
 
         auton.add("Autonomous", autonRoutine).withWidget(BuiltInWidgets.kComboBoxChooser).withPosition(0, 0).withSize(2,1);
     }

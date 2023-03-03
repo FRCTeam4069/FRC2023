@@ -27,6 +27,8 @@ public class armSubsystem extends SubsystemBase {
         ArticulateL = new CANSparkMax(armConstants.ARM_ID_L, MotorType.kBrushless);
         Extend = new CANSparkMax(armConstants.ARM_ID_E, MotorType.kBrushless);
 
+        Extend.setInverted(false);
+
         ArticulateL.getEncoder().setPositionConversionFactor(2);
         ArticulateR.getEncoder().setPositionConversionFactor(2);
         Extend.getEncoder().setPositionConversionFactor((1/392) * 0.5);
@@ -54,24 +56,18 @@ public class armSubsystem extends SubsystemBase {
 
     }
 
-    public boolean moveToPos(double pose, double maxSpeed) {
-        if (Math.abs(pose) > 140) {
-            return false;
-        } else {
-            if (maxSpeed < 0) {
-                throw new IllegalArgumentException("maxSpeed must be 0 to 1");
-            }
+    public boolean moveToPos(double pose) {
 
             double speed = MathUtil.clamp(
                     ((pose - AvgPose()) * armConstants.proportionalGain
-                            + (ExtendedPose() * AvgPose() * armConstants.GravGain * getSide())),
+                            + (ExtendedPose() * getSide() * armConstants.GravGain)),
 
-                    -maxSpeed, maxSpeed);
+                    -1, 1);
 
             manualArticulate(speed);
 
             return true;
-        }
+        
 
     }
 
@@ -81,7 +77,7 @@ public class armSubsystem extends SubsystemBase {
     }
 
     public void manualExtend(double speed) {
-        Extend.set(speed);
+        Extend.set(-speed);
     }
     
 
@@ -180,7 +176,7 @@ public class armSubsystem extends SubsystemBase {
         MathUtil.clamp(extendPose, 0, 140);
         MathUtil.clamp(articulatePose, -130, 130);
         
-        moveToPos(articulatePose, 1);
+        moveToPos(articulatePose);
         
         if (IO.PrintDebugNumbers) {
             SmartDashboard.putNumber("Right Pose", rightMotorPosition());
