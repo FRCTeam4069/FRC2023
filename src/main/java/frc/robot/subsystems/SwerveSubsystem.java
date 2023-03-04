@@ -7,7 +7,6 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.CommandBase;
@@ -59,16 +58,7 @@ public class SwerveSubsystem extends SubsystemBase {
 
     );
 
-    private GenericEntry BLp = tab.add("BLSwerveModule", BLSwerveModule.getPosition().toString()).getEntry();
-    private GenericEntry BRp = tab.add("BRSwerveModule", BLSwerveModule.getPosition().toString()).getEntry();
-    private GenericEntry FLp = tab.add("FLSwerveModule", BLSwerveModule.getPosition().toString()).getEntry();
-    private GenericEntry FRp = tab.add("FRSwerveModule", BLSwerveModule.getPosition().toString()).getEntry();
-    private GenericEntry BLs = tab.add("Back Left State", BLSwerveModule.getState()).getEntry();
-    private GenericEntry BRs = tab.add("Back Left State", BLSwerveModule.getState()).getEntry();
-    private GenericEntry Fls = tab.add("Back Left State", BLSwerveModule.getState()).getEntry();
-    private GenericEntry FRs = tab.add("Back Left State", BLSwerveModule.getState()).getEntry();
-
-    public static final Gyro gyro = RobotContainer.gyro;
+    public static final Gyro gyro = new Gyro(deviceIDs.PIGEON_ID);
     public final SwerveDriveOdometry odometry = new SwerveDriveOdometry(kinematics.m_kinematics, getRotation2d(),
             getModulePositions());
 
@@ -164,14 +154,7 @@ public class SwerveSubsystem extends SubsystemBase {
                 BLSwerveModule.getPosition() });
 
         if (IO.PrintSwerveData) {
-            tab.add("BLSwerveModule", BLSwerveModule.getPosition().toString());
-            tab.add("BRSwerveModule", BLSwerveModule.getPosition().toString());
-            tab.add("FLSwerveModule", BLSwerveModule.getPosition().toString());
-            tab.add("FRSwerveModule", BLSwerveModule.getPosition().toString());
-            tab.add("Back Left State", BLSwerveModule.getState());
-            tab.add("Back Left State", BLSwerveModule.getState());
-            tab.add("Back Left State", BLSwerveModule.getState());
-            tab.add("Back Left State", BLSwerveModule.getState());
+          
         }
 
     }

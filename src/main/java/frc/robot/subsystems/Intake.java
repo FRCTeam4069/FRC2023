@@ -2,6 +2,7 @@ package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
+import com.revrobotics.CANSparkMax.SoftLimitDirection;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -13,6 +14,8 @@ public class Intake extends SubsystemBase {
     private CANSparkMax intake, wrist;
     private RelativeEncoder intakeEncoder, wristEncoder;
     public int controlType;
+    
+    public boolean enableLimit;
 
     public Intake() {
         controlType = 0;
@@ -20,8 +23,10 @@ public class Intake extends SubsystemBase {
         intake = new CANSparkMax(intakeConstants.INTAKE_ID, MotorType.kBrushless);
         wrist = new CANSparkMax(intakeConstants.WRIST_ID, MotorType.kBrushless);
 
-        intake.setSmartCurrentLimit(25);
+        intake.setSmartCurrentLimit(40);
         wrist.setSmartCurrentLimit(30);
+
+
         wristEncoder = wrist.getEncoder();
         intakeEncoder = intake.getEncoder();
 
@@ -34,6 +39,16 @@ public class Intake extends SubsystemBase {
 
          wristEncoder.setPositionConversionFactor(47/70);
 
+        setWristPose(0);
+   //     setIntakePose(16.8 - 4.3);
+        setIntakePose(0);
+  
+          intake.setSoftLimit(SoftLimitDirection.kReverse, 0);
+        intake.setSoftLimit(SoftLimitDirection.kForward, 16);
+
+
+
+
 
     }
 
@@ -41,6 +56,10 @@ public class Intake extends SubsystemBase {
     public void periodic() {
         // This method will be called once per scheduler run
         SmartDashboard.putNumber("wrist Pose", getWristPose());
+        SmartDashboard.putNumber("grabber pose", getIntakePose());
+
+        intake.enableSoftLimit(SoftLimitDirection.kForward, enableLimit);
+        intake.enableSoftLimit(SoftLimitDirection.kReverse, enableLimit);
 
     }
     
@@ -123,6 +142,16 @@ public class Intake extends SubsystemBase {
 
     public CommandBase zeroWrist(double pose) {
         return this.runOnce(() -> setWristPose(pose));
+    }
+    public CommandBase zeroIntake(double pose) {
+        return this.runOnce(() -> setIntakePose(pose));
+    }
+
+    public CommandBase diableLimit(){
+        return this.runOnce(() -> enableLimit=false);
+    }  
+    public CommandBase enableLimit(){
+        return this.runOnce(() -> enableLimit=true);
     }
 
   

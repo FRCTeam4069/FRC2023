@@ -68,7 +68,7 @@ public class armSubsystem extends SubsystemBase {
         MathUtil.clamp(articulatePose, -130, 130);
 
         moveToPose(articulatePose);
-        extendToPose(extendPose, 0.5);
+        //extendToPose(extendPose, 0.5);
         if(IO.PrintIntakeData == true && IO.DISABLE_ALL_SMARTDASH_DATA == false){
             tab.add("Right Pose", rightMotorPosition());
             tab.add("Left Pose", leftMotorPosition());

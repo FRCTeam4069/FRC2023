@@ -31,7 +31,6 @@ public class RobotContainer {
     public static final armSubsystem arm = new armSubsystem();
     public static final Intake intake = new Intake();
     public static final LimeLight limelight = new LimeLight();
-    public static final Gyro gyro = new Gyro(deviceIDs.PIGEON_ID);
 
     
     public static final autoBalance aBalance = new autoBalance();
@@ -39,6 +38,7 @@ public class RobotContainer {
     public static final AutonSelect autoSelecter = new AutonSelect();
     public static final Debugger db = new Debugger();
     public followTrajectoryCommand fTrajectoryCommand;
+
 
     public void PlayMusic(String Filename) {
         Orchestra orchestra = new Orchestra();
@@ -82,9 +82,10 @@ public class RobotContainer {
         new Trigger(Controller2::getStartButton).whileTrue(arm.runOnce(() -> arm.setZero()));
         new Trigger(Controller2::getLeftStickButton).whileTrue(arm.flaseLimit());
         new Trigger(Controller2::getRightStickButton).whileTrue(arm.trueLimit());
-        new Trigger(Controller2::getLeftBumper).whileTrue(new FieldOrientedMTP(55, -1, () -> swerveSubsystem.setSide()));
+        new Trigger(Controller2::getLeftBumper).whileTrue(new FieldOrientedMTP(90, -1, () -> swerveSubsystem.setSide()));
         new Trigger(Controller2::getRightBumper).whileTrue(new FieldOrientedMTP(-55, -1, ()-> swerveSubsystem.setSide()));
-
+        new Trigger(Controller2::getAButton).toggleOnTrue(intake.enableLimit());
+        new Trigger(Controller2::getAButton).toggleOnFalse(intake.diableLimit());
     }
 
     public Command getAutonomousCommand() {
