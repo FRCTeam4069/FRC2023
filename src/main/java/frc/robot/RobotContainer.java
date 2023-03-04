@@ -2,6 +2,7 @@ package frc.robot;
 
 import com.ctre.phoenix.music.Orchestra;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -10,6 +11,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.Auto.Commands.armCommands.DefaultArmCommand;
 import frc.robot.Auto.Commands.armCommands.FieldOrientedMTP;
+import frc.robot.Auto.Commands.armCommands.extendToPose;
 import frc.robot.Auto.Commands.armCommands.moveToPose;
 import frc.robot.Auto.Commands.drivebaseCommands.DefualtDriveCommand;
 import frc.robot.Auto.Commands.drivebaseCommands.autoBalance;
@@ -64,7 +66,8 @@ public class RobotContainer {
 
         arm.setDefaultCommand(new DefaultArmCommand(
                 () -> Controller2.getRightY(),
-                () -> Controller2.getLeftY()));
+                () -> Controller2.getLeftY(),
+                ()-> swerveSubsystem.setSide()));
 
         intake.setDefaultCommand(new DefaultIntakeCommand(
                 intake,
@@ -82,10 +85,12 @@ public class RobotContainer {
         new Trigger(Controller2::getStartButton).whileTrue(arm.runOnce(() -> arm.setZero()));
         new Trigger(Controller2::getLeftStickButton).whileTrue(arm.flaseLimit());
         new Trigger(Controller2::getRightStickButton).whileTrue(arm.trueLimit());
-        new Trigger(Controller2::getLeftBumper).whileTrue(new FieldOrientedMTP(90, -1, () -> swerveSubsystem.setSide()));
-        new Trigger(Controller2::getRightBumper).whileTrue(new FieldOrientedMTP(-55, -1, ()-> swerveSubsystem.setSide()));
-        new Trigger(Controller2::getAButton).toggleOnTrue(intake.enableLimit());
-        new Trigger(Controller2::getAButton).toggleOnFalse(intake.diableLimit());
+       // new Trigger(Controller2::getAButton).whileTrue(new FieldOrientedMTP(-1, () -> swerveSubsystem.setSide(), () -> Controller2.getPOV(), () -> intake.getWristPose()));
+       // new Trigger(Controller2::getYButton).whileTrue(new FieldOrientedMTP(1, ()-> swerveSubsystem.setSide(), () -> Controller2.getPOV(), () -> intake.getWristPose()));
+        //new Trigger(Controller2::getAButton).toggleOnTrue(intake.enableLimit());
+        //31
+        //new Trigger(Controller2::getAButton).toggleOnFalse(intake.diableLimit());
+        //new Trigger(Controller2::getAButton).onTrue(new extendToPose(10, 1));
     }
 
     public Command getAutonomousCommand() {
@@ -93,8 +98,10 @@ public class RobotContainer {
         switch(autoIndex){
             case 0 :
             return new Middle_Path_0cones();
-            case 5: 
-            return new leaveCommunity();
+            case 1 :
+            return new leaveCommunity(-55, ()-> swerveSubsystem.odometry.getPoseMeters().getX());
+            case 2: 
+            return new leaveCommunity(-65, ()-> swerveSubsystem.odometry.getPoseMeters().getX());
             default:
                 SmartDashboard.putString("Auto Selected:", "INVALID");
                 return new InstantCommand();

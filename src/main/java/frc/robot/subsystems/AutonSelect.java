@@ -15,7 +15,8 @@ public class AutonSelect extends SubsystemBase {
         autonRoutine = new SendableChooser<Integer>();
 
         autonRoutine.addOption("autoBalance", 0);
-        autonRoutine.setDefaultOption("Leave Community", 1);
+        autonRoutine.setDefaultOption("Shortside", 1);
+        autonRoutine.addOption("Longside", 2);
         auton.add("Autonomous", autonRoutine).withWidget(BuiltInWidgets.kComboBoxChooser).withPosition(0, 0).withSize(5,5);
     }
 

@@ -63,20 +63,15 @@ public class armSubsystem extends SubsystemBase {
     public void periodic() {
         Extend.enableSoftLimit(SoftLimitDirection.kForward, enableLimit);
         Extend.enableSoftLimit(SoftLimitDirection.kReverse, enableLimit);
-
-        MathUtil.clamp(extendPose, 0, 140);
-        MathUtil.clamp(articulatePose, -130, 130);
+        if(enableLimit){
+        extendPose = MathUtil.clamp(extendPose, 0, 140);
+        articulatePose = MathUtil.clamp(articulatePose, -130, 130);}
 
         moveToPose(articulatePose);
-        //extendToPose(extendPose, 0.5);
-        if(IO.PrintIntakeData == true && IO.DISABLE_ALL_SMARTDASH_DATA == false){
-            tab.add("Right Pose", rightMotorPosition());
-            tab.add("Left Pose", leftMotorPosition());
-            tab.add("Number of Ticks Extend", Extend.getEncoder().getCountsPerRevolution());
-            tab.add("Number of Ticks Ar", ArticulateL.getEncoder().getCountsPerRevolution());
-            tab.add("Number of Ticks Al", ArticulateR.getEncoder().getCountsPerRevolution());
-            tab.add("Lead Screw Rotations: ", ExtendedPose());
-        }
+        //extendToPose(extendPose, 1);
+        
+        SmartDashboard.putNumber("Target Pose", articulatePose);
+        SmartDashboard.putNumber("Extention Pose", ExtendedPose());
     }
 
     private boolean moveToPose(double pose) {
@@ -94,7 +89,7 @@ public class armSubsystem extends SubsystemBase {
     }
 
     public void extendToPose(double Position, double maxSpeed) {
-        double speed = MathUtil.clamp((Position - ExtendedPose()) * 0.2, -maxSpeed, maxSpeed);
+        double speed = MathUtil.clamp((Position - ExtendedPose()) * 1, -maxSpeed, maxSpeed);
         manualExtend(speed);
 
     }
@@ -105,7 +100,7 @@ public class armSubsystem extends SubsystemBase {
     }
 
     public void manualExtend(double speed) {
-        Extend.set(-speed);
+        Extend.set(speed);
     }
 
     public void setArmPose(double pose) {
@@ -173,13 +168,13 @@ public class armSubsystem extends SubsystemBase {
   
 
     public CommandBase flaseLimit() {
-        return new SequentialCommandGroup(
-                this.runOnce(() -> enableLimit = false),
-                this.runOnce(() -> setHome()));
-    }
+        return this.runOnce(() -> enableLimit = false);
+        }
 
     public CommandBase trueLimit() {
-        return this.runOnce(() -> enableLimit = true);
+        return new SequentialCommandGroup(
+            this.runOnce(() -> enableLimit = true),
+            this.runOnce(() -> setHome()));
     }
 
     /**

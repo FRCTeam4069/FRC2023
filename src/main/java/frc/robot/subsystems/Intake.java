@@ -15,7 +15,7 @@ public class Intake extends SubsystemBase {
     private RelativeEncoder intakeEncoder, wristEncoder;
     public int controlType;
     
-    public boolean enableLimit;
+    public boolean enableLimit = true;
 
     public Intake() {
         controlType = 0;
@@ -25,7 +25,7 @@ public class Intake extends SubsystemBase {
 
         intake.setSmartCurrentLimit(40);
         wrist.setSmartCurrentLimit(30);
-
+        wrist.setOpenLoopRampRate(0.5);
 
         wristEncoder = wrist.getEncoder();
         intakeEncoder = intake.getEncoder();
@@ -40,10 +40,10 @@ public class Intake extends SubsystemBase {
          wristEncoder.setPositionConversionFactor(47/70);
 
         setWristPose(0);
-   //     setIntakePose(16.8 - 4.3);
-        setIntakePose(0);
+        setIntakePose(16.8 - 4.3);
+        //setIntakePose(0);
   
-          intake.setSoftLimit(SoftLimitDirection.kReverse, 0);
+        intake.setSoftLimit(SoftLimitDirection.kReverse, 0);
         intake.setSoftLimit(SoftLimitDirection.kForward, 16);
 
 
@@ -82,7 +82,7 @@ public class Intake extends SubsystemBase {
      * @param speed -iv is down and +iv is up
      */
     public void setWrist(double speed) {
-        wrist.set(speed);
+        wrist.set(speed*0.9);
     }
 
     /**
