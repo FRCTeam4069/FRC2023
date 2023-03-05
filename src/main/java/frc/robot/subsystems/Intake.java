@@ -39,15 +39,13 @@ public class Intake extends SubsystemBase {
 
          wristEncoder.setPositionConversionFactor(47/70);
 
-        setWristPose(-1.1);
+        setWristPose(-1);
 
-        setIntakePose(16.8 - 4.3);
         //setIntakePose(0);
   
         intake.setSoftLimit(SoftLimitDirection.kReverse, 0);
         intake.setSoftLimit(SoftLimitDirection.kForward, 16);
-        wrist.setSoftLimit(SoftLimitDirection.kReverse, -1);
-        wrist.setSoftLimit(SoftLimitDirection.kForward, 1);
+        
 
     }
 
@@ -66,7 +64,10 @@ public class Intake extends SubsystemBase {
     }
     
     public void wristToPose(double position){
-        setWrist((position - getWristPose()*47) * intakeConstants.wristkP);
+        setWrist((position - getWristPose()) * intakeConstants.wristkP);
+    } 
+    public void intakeToPose(double position){
+        setIntake((position - getIntake()) * intakeConstants.intakekP);
     }
 
     /**
@@ -94,6 +95,23 @@ public class Intake extends SubsystemBase {
      */
     public void setIntake(double speed) {
         intake.set(speed);
+    }
+
+    public boolean wristIsAtPose(double targetPose, double threshold){
+        
+        if((targetPose - getWristPose()) < threshold ){
+            return true;
+        }else{
+            return false;
+        }
+    }
+    public boolean intakeIsAtPose(double targetPose, double threshold){
+        
+        if((targetPose - getIntake()) < threshold ){
+            return true;
+        }else{
+            return false;
+        }
     }
 
     /**

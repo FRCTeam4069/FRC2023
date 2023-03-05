@@ -1,10 +1,7 @@
 package frc.robot.Auto.Commands.armCommands;
 
-import java.util.function.DoubleBinaryOperator;
 import java.util.function.Supplier;
-
 import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.armSubsystem;
@@ -25,9 +22,10 @@ public class DefaultArmCommand extends CommandBase {
     public void execute() {
         // 32 for p1
         // 120 for p2
-        arm.manualExtend(MathUtil.applyDeadband( -extendSpeed.get(), 0.08));
-        //arm.setExtendPose(arm.extendPose+ MathUtil.applyDeadband(-extendSpeed.get()*1.1, 0.05));
-        arm.setArmPose(arm.articulatePose + MathUtil.applyDeadband(side.get()*articulateSpeed.get()*2, 0.08) );
+        arm.manualExtend(MathUtil.applyDeadband(-extendSpeed.get(), 0.08));
+        // arm.setExtendPose(arm.extendPose+
+        // MathUtil.applyDeadband(-extendSpeed.get()*1.1, 0.05));
+        arm.setArmPose(arm.articulatePose + MathUtil.applyDeadband(side.get() * articulateSpeed.get() * 2, 0.08));
     }
 
     @Override

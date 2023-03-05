@@ -1,11 +1,14 @@
 package frc.robot.subsystems;
 
+import javax.swing.text.StyleContext.SmallAttributeSet;
+
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMax.SoftLimitDirection;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -46,7 +49,7 @@ public class armSubsystem extends SubsystemBase {
         ArticulateR.enableSoftLimit(SoftLimitDirection.kReverse, true);
 
         Extend.setSoftLimit(SoftLimitDirection.kReverse, 0);
-        Extend.setSoftLimit(SoftLimitDirection.kForward, 130);
+        Extend.setSoftLimit(SoftLimitDirection.kForward, 94);
         Extend.enableSoftLimit(SoftLimitDirection.kForward, enableLimit);
         Extend.enableSoftLimit(SoftLimitDirection.kReverse, enableLimit);
 
@@ -69,6 +72,8 @@ public class armSubsystem extends SubsystemBase {
         ArticulateL.setSoftLimit(SoftLimitDirection.kReverse, -armConstants.softlimits);
         ArticulateR.setSoftLimit(SoftLimitDirection.kForward, armConstants.softlimits);
         ArticulateR.setSoftLimit(SoftLimitDirection.kReverse, -armConstants.softlimits);
+
+        SmartDashboard.putNumber("Position extending motor", ExtendedPose());
 
 
         if(enableLimit){
