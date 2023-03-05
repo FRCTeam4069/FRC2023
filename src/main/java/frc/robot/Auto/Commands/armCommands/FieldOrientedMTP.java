@@ -5,13 +5,17 @@ import java.util.function.Supplier;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.RobotContainer;
+import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.armSubsystem;
 
 public class FieldOrientedMTP extends CommandBase {
     private Supplier<Double> side;
     private static final armSubsystem arm = RobotContainer.arm;
-    private double[] articulatePositions = {100, 45, 46, 31};
-    private double[] extendPositions = {0, 24, 130, 0};
+    private static final Intake intake = RobotContainer.intake;
+    private double[] articulatePositions = {130, 45, 46, 31};
+    private double[] wristPoses = {0, 0, 0, 0};
+    private double[] extendToPose = {0, 0, 0, 0};
+    
     private final Supplier<Integer> POV;
     private int AorB;
     private int poseNum;
@@ -44,7 +48,9 @@ public class FieldOrientedMTP extends CommandBase {
         }
         if(poseNum != -1){
         arm.setArmPose(articulatePositions[poseNum] * AorB * side.get());
-        //arm.extendToPose(extendPositions[poseNum], 1);
+        //arm.extendToPose(extendToPose[poseNum], 1);
+
+        
         SmartDashboard.putNumber("SIDE", side.get());
         }
     }
