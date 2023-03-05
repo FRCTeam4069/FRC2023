@@ -9,6 +9,7 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotContainer;
@@ -102,6 +103,7 @@ public class SwerveSubsystem extends SubsystemBase {
         return Rotation2d.fromDegrees(gyro.getHeading());
     }
 
+
     public Pose2d getPose() {
         return odometry.getPoseMeters();
     }
@@ -136,8 +138,8 @@ public class SwerveSubsystem extends SubsystemBase {
 
     }
 
-    public double setSide(){
-        if((Math.abs(gyro.getHeading())-90) > 90){
+    public double getSide(){
+        if(/* between 0 and 180 */ convertGyroValues(gyro.getHeading()) < 180 ){
             return -1;
         }else{
         return 1;}
@@ -151,9 +153,10 @@ public class SwerveSubsystem extends SubsystemBase {
                 FRSwerveModule.getPosition(),
                 FLSwerveModule.getPosition(),
                 BRSwerveModule.getPosition(),
-                BLSwerveModule.getPosition() });
-
-        if (IO.PrintSwerveData) {
+                BLSwerveModule.getPosition()});
+                SmartDashboard.putNumber("Gyro", convertGyroValues(gyro.getHeading()));
+                SmartDashboard.putNumber("side", getSide());
+                if (IO.PrintSwerveData) {
           
         }
 
@@ -173,6 +176,13 @@ public class SwerveSubsystem extends SubsystemBase {
 
     public TalonFX getBLDriveMotor() {
         return BLSwerveModule.getDriveMotor();
+    }
+
+    private double convertGyroValues(double gyroHeading){
+        if(gyroHeading < 0){
+            return gyroHeading + 360;
+        } else return gyroHeading;
+
     }
 
 }

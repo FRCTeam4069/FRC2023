@@ -6,21 +6,20 @@ import com.revrobotics.CANSparkMax.SoftLimitDirection;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
-import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants.IO;
-import frc.robot.Constants.armAndIntakeConstants.armConstants;;
+import frc.robot.Constants.armAndIntakeConstants.armConstants;
+import frc.robot.Constants.armAndIntakeConstants.intakeConstants;
+
 
 public class armSubsystem extends SubsystemBase {
     public CANSparkMax ArticulateR, ArticulateL, Extend;
     public RelativeEncoder leftEncoder, rightEncoder, extendEncoder;
     public boolean enableLimit;
     public double extendPose = 0, articulatePose = 0;
-    private ShuffleboardTab tab;
+    public int articulateLimit = 130;
+    
 
     public armSubsystem() {
         enableLimit = true;
@@ -34,11 +33,12 @@ public class armSubsystem extends SubsystemBase {
         ArticulateR.getEncoder().setPositionConversionFactor(2);
         Extend.getEncoder().setPositionConversionFactor((1 / 392) * 0.5);
 
+        armConstants.side = getSide();
         setZero();
-        ArticulateL.setSoftLimit(SoftLimitDirection.kForward, armConstants.softlimits);
-        ArticulateL.setSoftLimit(SoftLimitDirection.kReverse, -armConstants.softlimits);
-        ArticulateR.setSoftLimit(SoftLimitDirection.kForward, armConstants.softlimits);
-        ArticulateR.setSoftLimit(SoftLimitDirection.kReverse, -armConstants.softlimits);
+        ArticulateL.setSoftLimit(SoftLimitDirection.kForward, articulateLimit);
+        ArticulateL.setSoftLimit(SoftLimitDirection.kReverse, -articulateLimit);
+        ArticulateR.setSoftLimit(SoftLimitDirection.kForward, articulateLimit);
+        ArticulateR.setSoftLimit(SoftLimitDirection.kReverse, -articulateLimit);
 
         ArticulateL.enableSoftLimit(SoftLimitDirection.kForward, true);
         ArticulateL.enableSoftLimit(SoftLimitDirection.kReverse, true);
@@ -55,23 +55,28 @@ public class armSubsystem extends SubsystemBase {
 
         Extend.setInverted(armConstants.telescopeMotorInvert);
 
-        tab =  Shuffleboard.getTab("Debug");
 
     }
 
     @Override
     public void periodic() {
+        armConstants.side = getSide();
+
         Extend.enableSoftLimit(SoftLimitDirection.kForward, enableLimit);
         Extend.enableSoftLimit(SoftLimitDirection.kReverse, enableLimit);
+        ArticulateL.setSoftLimit(SoftLimitDirection.kForward, armConstants.softlimits);
+        ArticulateL.setSoftLimit(SoftLimitDirection.kReverse, -armConstants.softlimits);
+        ArticulateR.setSoftLimit(SoftLimitDirection.kForward, armConstants.softlimits);
+        ArticulateR.setSoftLimit(SoftLimitDirection.kReverse, -armConstants.softlimits);
+
+
         if(enableLimit){
         extendPose = MathUtil.clamp(extendPose, 0, 140);
-        articulatePose = MathUtil.clamp(articulatePose, -130, 130);}
+        articulatePose = MathUtil.clamp(articulatePose, -articulateLimit , articulateLimit);}
 
         moveToPose(articulatePose);
         //extendToPose(extendPose, 1);
         
-        SmartDashboard.putNumber("Target Pose", articulatePose);
-        SmartDashboard.putNumber("Extention Pose", ExtendedPose());
     }
 
     private boolean moveToPose(double pose) {
@@ -95,8 +100,16 @@ public class armSubsystem extends SubsystemBase {
     }
 
     public void manualArticulate(double speed) {
+
         ArticulateL.set(speed);
         ArticulateR.set(speed);
+
+        if(!(intakeConstants.wristPose * getSide() < 0) ){
+        articulateLimit = 130;  
+        } 
+        else{ 
+            articulateLimit = 89;
+        }
     }
 
     public void manualExtend(double speed) {

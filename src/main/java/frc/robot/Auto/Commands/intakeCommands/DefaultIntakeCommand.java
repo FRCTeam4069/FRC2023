@@ -4,6 +4,7 @@ import java.util.function.Supplier;
 
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Constants.armAndIntakeConstants.armConstants;
 import frc.robot.subsystems.Intake;
 
 public class DefaultIntakeCommand extends CommandBase{
@@ -41,7 +42,7 @@ public class DefaultIntakeCommand extends CommandBase{
     public void execute(){
         
   
-        intake.setWrist(wristUp.get() - wristDown.get());
+        intake.setWrist((-wristUp.get() + wristDown.get()) * armConstants.side);
         
         if(intakeOpen.get() && intakeClose.get()){
             intakeSpeed = 0;

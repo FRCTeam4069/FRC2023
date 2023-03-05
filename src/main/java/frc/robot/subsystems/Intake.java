@@ -5,7 +5,6 @@ import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMax.SoftLimitDirection;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.armAndIntakeConstants.intakeConstants;
@@ -39,27 +38,27 @@ public class Intake extends SubsystemBase {
 
          wristEncoder.setPositionConversionFactor(47/70);
 
-        setWristPose(0);
+        setWristPose(-1.1);
+
         setIntakePose(16.8 - 4.3);
         //setIntakePose(0);
   
         intake.setSoftLimit(SoftLimitDirection.kReverse, 0);
         intake.setSoftLimit(SoftLimitDirection.kForward, 16);
-
-
-
-
+        wrist.setSoftLimit(SoftLimitDirection.kReverse, -1);
+        wrist.setSoftLimit(SoftLimitDirection.kForward, 1);
 
     }
 
     @Override
     public void periodic() {
         // This method will be called once per scheduler run
-        SmartDashboard.putNumber("wrist Pose", getWristPose());
-        SmartDashboard.putNumber("grabber pose", getIntakePose());
+        intakeConstants.wristPose = getWristPose();
 
         intake.enableSoftLimit(SoftLimitDirection.kForward, enableLimit);
         intake.enableSoftLimit(SoftLimitDirection.kReverse, enableLimit);
+        wrist.enableSoftLimit(SoftLimitDirection.kForward, enableLimit);
+        wrist.enableSoftLimit(SoftLimitDirection.kReverse, enableLimit);
 
     }
     

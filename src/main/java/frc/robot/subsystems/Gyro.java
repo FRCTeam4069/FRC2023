@@ -3,17 +3,12 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.sensors.Pigeon2;
 
-import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
-import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants.IO;
 
 public class Gyro extends SubsystemBase{
     
     public Pigeon2 gyro;
-    public ShuffleboardTab tab = Shuffleboard.getTab("Gyro");
     public Gyro(int id){
         gyro = new Pigeon2(id);
     }
@@ -53,11 +48,5 @@ public class Gyro extends SubsystemBase{
 
     @Override
     public void periodic(){
-        
-        if(IO.PrintGryoData){
-        tab.add("GYRO PITCH", getPitch());
-        tab.add("GYRO YAW", getYaw());
-        tab.add("GYRO ROLL", getRoll());
-        tab.add("GYRO HEADING", getHeading()).withWidget(BuiltInWidgets.kGyro);}
     }
 }

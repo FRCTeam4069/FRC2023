@@ -21,6 +21,7 @@ public class armAndIntakeConstants{
         public static final double GravGain = -0.0001; // set to 0 to disable 
 
         public static final float softlimits = 130;
+        public static double side;
 
         // formula for arm stay to stay at pose
         // speed = input + armlength * kP + armAgle * kP 
@@ -73,6 +74,7 @@ public class armAndIntakeConstants{
         public static final int INTAKE_ID = 13;
         public static final int WRIST_ID = 12;
         public static final double wristkP = 0.1;
+        public static double wristPose;
 
         /*
          * degrees/tick

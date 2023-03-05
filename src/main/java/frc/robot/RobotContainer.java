@@ -2,7 +2,6 @@ package frc.robot;
 
 import com.ctre.phoenix.music.Orchestra;
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -11,21 +10,17 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.Auto.Commands.armCommands.DefaultArmCommand;
 import frc.robot.Auto.Commands.armCommands.FieldOrientedMTP;
-import frc.robot.Auto.Commands.armCommands.extendToPose;
-import frc.robot.Auto.Commands.armCommands.moveToPose;
 import frc.robot.Auto.Commands.drivebaseCommands.DefualtDriveCommand;
 import frc.robot.Auto.Commands.drivebaseCommands.autoBalance;
 import frc.robot.Auto.Commands.drivebaseCommands.followTrajectoryCommand;
 import frc.robot.Auto.Commands.drivebaseCommands.leaveCommunity;
 import frc.robot.Auto.Commands.intakeCommands.DefaultIntakeCommand;
 import frc.robot.Auto.routines.Middle_Path_0cones;
-import frc.robot.Constants.drivebaseConstants.deviceIDs;
 import frc.robot.subsystems.armSubsystem;
 import frc.robot.subsystems.AutonSelect;
 import frc.robot.subsystems.Debugger;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.LimeLight;
-import frc.robot.subsystems.Gyro;
 
 public class RobotContainer {
 
@@ -67,14 +62,14 @@ public class RobotContainer {
         arm.setDefaultCommand(new DefaultArmCommand(
                 () -> Controller2.getRightY(),
                 () -> Controller2.getLeftY(),
-                ()-> swerveSubsystem.setSide()));
+                ()-> swerveSubsystem.getSide()));
 
         intake.setDefaultCommand(new DefaultIntakeCommand(
                 intake,
                 () -> Controller2.getRightTriggerAxis(),
                 () -> Controller2.getLeftTriggerAxis(),
-                () -> Controller2.getXButton(),
-                () -> Controller2.getBButton()));
+                () -> Controller2.getRightBumper(),
+                () -> Controller2.getLeftBumper()));
 
         configureButtonBindings();
 
@@ -85,12 +80,8 @@ public class RobotContainer {
         new Trigger(Controller2::getStartButton).whileTrue(arm.runOnce(() -> arm.setZero()));
         new Trigger(Controller2::getLeftStickButton).whileTrue(arm.flaseLimit());
         new Trigger(Controller2::getRightStickButton).whileTrue(arm.trueLimit());
-       // new Trigger(Controller2::getAButton).whileTrue(new FieldOrientedMTP(-1, () -> swerveSubsystem.setSide(), () -> Controller2.getPOV(), () -> intake.getWristPose()));
-       // new Trigger(Controller2::getYButton).whileTrue(new FieldOrientedMTP(1, ()-> swerveSubsystem.setSide(), () -> Controller2.getPOV(), () -> intake.getWristPose()));
-        //new Trigger(Controller2::getAButton).toggleOnTrue(intake.enableLimit());
-        //31
-        //new Trigger(Controller2::getAButton).toggleOnFalse(intake.diableLimit());
-        //new Trigger(Controller2::getAButton).onTrue(new extendToPose(10, 1));
+        new Trigger(Controller2::getAButton).whileTrue(new FieldOrientedMTP(-1, () -> swerveSubsystem.getSide(), () -> Controller2.getPOV()));
+        new Trigger(Controller2::getYButton).whileTrue(new FieldOrientedMTP(1, ()-> swerveSubsystem.getSide(), () -> Controller2.getPOV()));
     }
 
     public Command getAutonomousCommand() {
