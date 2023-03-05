@@ -55,7 +55,8 @@ public class armSubsystem extends SubsystemBase {
 
         Extend.setInverted(armConstants.telescopeMotorInvert);
 
-
+        ArticulateL.setOpenLoopRampRate(0.25);
+        ArticulateR.setOpenLoopRampRate(0.25);
     }
 
     @Override

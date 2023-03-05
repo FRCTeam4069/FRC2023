@@ -5,6 +5,7 @@ import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMax.SoftLimitDirection;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.armAndIntakeConstants.intakeConstants;
@@ -23,7 +24,7 @@ public class Intake extends SubsystemBase {
         wrist = new CANSparkMax(intakeConstants.WRIST_ID, MotorType.kBrushless);
 
         intake.setSmartCurrentLimit(40);
-        wrist.setSmartCurrentLimit(30);
+        wrist.setSmartCurrentLimit(35);
         wrist.setOpenLoopRampRate(0.5);
 
         wristEncoder = wrist.getEncoder();
@@ -60,6 +61,8 @@ public class Intake extends SubsystemBase {
         wrist.enableSoftLimit(SoftLimitDirection.kForward, enableLimit);
         wrist.enableSoftLimit(SoftLimitDirection.kReverse, enableLimit);
 
+
+        SmartDashboard.putNumber("wrist Pose", getWristPose());
     }
     
     public void wristToPose(double position){
