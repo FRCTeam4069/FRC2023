@@ -4,12 +4,13 @@ import java.util.function.Supplier;
 
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.RobotContainer;
 import frc.robot.Constants.armAndIntakeConstants.armConstants;
 import frc.robot.subsystems.Intake;
 
 public class DefaultIntakeCommand extends CommandBase{
 
-    private final Intake intake;
+    private final Intake intake = RobotContainer.intake;
     private final Supplier<Boolean> intakeOpen, intakeClose;
     private final Supplier<Double> wristUp, wristDown;
     public double intakeSpeed, wristPose;
@@ -22,15 +23,13 @@ public class DefaultIntakeCommand extends CommandBase{
      * @param OPEN
      * @param CLOSE
      */
-    public DefaultIntakeCommand(Intake intake, Supplier<Double> UP, Supplier<Double> DOWN, Supplier<Boolean> OPEN, Supplier<Boolean> CLOSE) {
-        this.intake = intake;
-
+    public DefaultIntakeCommand(Supplier<Double> UP, Supplier<Double> DOWN, Supplier<Boolean> OPEN, Supplier<Boolean> CLOSE) {
         this.wristUp = UP; 
         this.wristDown = DOWN;
         this.intakeOpen = OPEN;
         this.intakeClose = CLOSE;
 
-        addRequirements(intake);
+        addRequirements(RobotContainer.intake);
     }
 
     @Override

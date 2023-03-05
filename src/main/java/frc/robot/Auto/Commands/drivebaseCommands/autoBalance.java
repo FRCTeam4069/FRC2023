@@ -52,7 +52,7 @@ public class autoBalance extends CommandBase {
       m_drivebase.setModuleStates(kinematics.m_kinematics.toSwerveModuleStates(new ChassisSpeeds(xspeed, 0, 0)));
       if (Math.abs(currRoll - Gyro.getRoll()) < 6) {
         timer.start();
-        if (timer.get() == 1) {
+        if (timer.get() == 0.5) {
           balanced = true;
         }
       } else {

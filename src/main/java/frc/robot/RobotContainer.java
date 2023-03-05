@@ -1,5 +1,7 @@
 package frc.robot;
 
+import javax.swing.text.PlainView;
+
 import com.ctre.phoenix.music.Orchestra;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -15,7 +17,11 @@ import frc.robot.Auto.Commands.drivebaseCommands.autoBalance;
 import frc.robot.Auto.Commands.drivebaseCommands.followTrajectoryCommand;
 import frc.robot.Auto.Commands.drivebaseCommands.leaveCommunity;
 import frc.robot.Auto.Commands.intakeCommands.DefaultIntakeCommand;
+import frc.robot.Auto.Commands.intakeCommands.OpenIntake;
+import frc.robot.Auto.Commands.intakeCommands.wristToPosition;
 import frc.robot.Auto.routines.Middle_Path_0cones;
+import frc.robot.Auto.routines.PlaceCubeAndArmDown;
+import frc.robot.Auto.routines.placeCube;
 import frc.robot.subsystems.armSubsystem;
 import frc.robot.subsystems.AutonSelect;
 import frc.robot.subsystems.Debugger;
@@ -65,11 +71,10 @@ public class RobotContainer {
                 ()-> swerveSubsystem.getSide()));
 
         intake.setDefaultCommand(new DefaultIntakeCommand(
-                intake,
                 () -> Controller2.getRightTriggerAxis(),
                 () -> Controller2.getLeftTriggerAxis(),
-                () -> Controller2.getRightBumper(),
-                () -> Controller2.getLeftBumper()));
+                () -> Controller2.getLeftBumper(),
+                () -> Controller2.getRightBumper()));
 
         configureButtonBindings();
 
@@ -90,9 +95,21 @@ public class RobotContainer {
             case 0 :
             return new Middle_Path_0cones();
             case 1 :
-            return new leaveCommunity(-55, ()-> swerveSubsystem.odometry.getPoseMeters().getX());
+            return new leaveCommunity(-60, ()-> swerveSubsystem.odometry.getPoseMeters().getX());
             case 2: 
-            return new leaveCommunity(-65, ()-> swerveSubsystem.odometry.getPoseMeters().getX());
+            return new leaveCommunity(-75, ()-> swerveSubsystem.odometry.getPoseMeters().getX());
+            case 3 :
+            return new placeCube();
+            case 4 :
+            return new PlaceCubeAndArmDown();
+
+            case 5 :
+            return new InstantCommand();
+            case 6 :
+            return new InstantCommand();
+
+
+
             default:
                 SmartDashboard.putString("Auto Selected:", "INVALID");
                 return new InstantCommand();
