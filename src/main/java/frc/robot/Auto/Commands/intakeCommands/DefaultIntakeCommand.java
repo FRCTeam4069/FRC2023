@@ -33,11 +33,6 @@ public class DefaultIntakeCommand extends CommandBase{
     }
 
     @Override
-    public void initialize(){
-        intake.setWristPose(-1);
-        wristPose = -1;
-    }
-    @Override
     public void execute(){
         
   

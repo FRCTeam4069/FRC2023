@@ -17,7 +17,7 @@ public class placeCube extends SequentialCommandGroup {
     public placeCube() {
         addCommands(new moveToPose(-55, 1)
         .andThen(new wristToPosition(0 ))
-        .andThen(new OpenIntake(16)));
+        .andThen(new OpenIntake()));
 
     }
 

@@ -40,11 +40,14 @@ public class Intake extends SubsystemBase {
          wristEncoder.setPositionConversionFactor(47/70);
 
         setWristPose(-1);
+        setIntakePose(16.8 - 4.3);
 
         //setIntakePose(0);
   
         intake.setSoftLimit(SoftLimitDirection.kReverse, 0);
         intake.setSoftLimit(SoftLimitDirection.kForward, 16);
+        wrist.setSoftLimit(SoftLimitDirection.kReverse, -1);
+        wrist.setSoftLimit(SoftLimitDirection.kForward, 1);
         
 
     }

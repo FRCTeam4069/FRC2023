@@ -87,6 +87,8 @@ public class RobotContainer {
         new Trigger(Controller2::getRightStickButton).whileTrue(arm.trueLimit());
         new Trigger(Controller2::getAButton).whileTrue(new FieldOrientedMTP(-1, () -> swerveSubsystem.getSide(), () -> Controller2.getPOV()));
         new Trigger(Controller2::getYButton).whileTrue(new FieldOrientedMTP(1, ()-> swerveSubsystem.getSide(), () -> Controller2.getPOV()));
+        new Trigger(Controller2::getXButton).whileTrue(intake.enableLimit());
+        new Trigger(Controller2::getBButton).whileTrue(intake.diableLimit());
     }
 
     public Command getAutonomousCommand() {
@@ -107,9 +109,6 @@ public class RobotContainer {
             return new InstantCommand();
             case 6 :
             return new InstantCommand();
-
-
-
             default:
                 SmartDashboard.putString("Auto Selected:", "INVALID");
                 return new InstantCommand();

@@ -49,7 +49,7 @@ public class armSubsystem extends SubsystemBase {
         ArticulateR.enableSoftLimit(SoftLimitDirection.kReverse, true);
 
         Extend.setSoftLimit(SoftLimitDirection.kReverse, 0);
-        Extend.setSoftLimit(SoftLimitDirection.kForward, 94);
+        Extend.setSoftLimit(SoftLimitDirection.kForward, 33);
         Extend.enableSoftLimit(SoftLimitDirection.kForward, enableLimit);
         Extend.enableSoftLimit(SoftLimitDirection.kReverse, enableLimit);
 
@@ -58,8 +58,8 @@ public class armSubsystem extends SubsystemBase {
 
         Extend.setInverted(armConstants.telescopeMotorInvert);
 
-        ArticulateL.setOpenLoopRampRate(0.25);
-        ArticulateR.setOpenLoopRampRate(0.25);
+        ArticulateL.setOpenLoopRampRate(0.5);
+        ArticulateR.setOpenLoopRampRate(0.5);
     }
 
     @Override

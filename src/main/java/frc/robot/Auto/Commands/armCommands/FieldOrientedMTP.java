@@ -12,8 +12,9 @@ public class FieldOrientedMTP extends CommandBase {
     private Supplier<Double> side;
     private static final armSubsystem arm = RobotContainer.arm;
     private static final Intake intake = RobotContainer.intake;
-    private double[] articulatePositions = {125, 45, 46, 31};
-    private double[] wristPoses = {1.05, 0, 0, 1.0};
+    private double[] articulatePositions = {125
+        , 45, 46, 31};
+    private double[] wristPoses = {1.05, 0, 0, -0.45};
     
     private final Supplier<Integer> POV;
     private int AorB;

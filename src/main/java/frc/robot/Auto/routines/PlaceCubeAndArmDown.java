@@ -17,7 +17,7 @@ public class PlaceCubeAndArmDown extends SequentialCommandGroup {
     public PlaceCubeAndArmDown() {
         addCommands(new moveToPose(-55, 1)
         .alongWith(new wristToPosition(0 ))
-        .andThen(new OpenIntake(16))
+        .andThen(new OpenIntake())
         .andThen(new wristToPosition(-1)
         .andThen(new moveToPose(-130, 1)).alongWith(new autoBalance())));
 
