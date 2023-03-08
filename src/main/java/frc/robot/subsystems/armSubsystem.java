@@ -34,6 +34,7 @@ public class armSubsystem extends SubsystemBase {
 
         ArticulateL.getEncoder().setPositionConversionFactor(2);
         ArticulateR.getEncoder().setPositionConversionFactor(2);
+        
         Extend.getEncoder().setPositionConversionFactor((1 / 392) * 0.5);
 
         armConstants.side = getSide();
@@ -73,11 +74,12 @@ public class armSubsystem extends SubsystemBase {
         ArticulateR.setSoftLimit(SoftLimitDirection.kForward, armConstants.softlimits);
         ArticulateR.setSoftLimit(SoftLimitDirection.kReverse, -armConstants.softlimits);
 
-        SmartDashboard.putNumber("Position extending motor", ExtendedPose());
+        SmartDashboard.putNumber("Arm: Articulate", AvgPose());
+        SmartDashboard.putNumber("Arm: Extend", ExtendedPose());
 
 
         if(enableLimit){
-        extendPose = MathUtil.clamp(extendPose, 0, 140);
+        extendPose = MathUtil.clamp(extendPose, 0, 33);
         articulatePose = MathUtil.clamp(articulatePose, -articulateLimit , articulateLimit);}
 
         moveToPose(articulatePose);
@@ -142,6 +144,7 @@ public class armSubsystem extends SubsystemBase {
     public void stop() {
         ArticulateL.stopMotor();
         ArticulateR.stopMotor();
+        Extend.stopMotor();
     }
 
     public double rightMotorPosition() {
