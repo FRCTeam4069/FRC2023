@@ -63,7 +63,7 @@ public class Intake extends SubsystemBase {
         wrist.enableSoftLimit(SoftLimitDirection.kReverse, enableLimit);
 
 
-        SmartDashboard.putNumber("wrist Pose", getWristPose());
+        //SmartDashboard.putNumber("wrist Pose", getWristPose());
     }
     
     public void wristToPose(double position){

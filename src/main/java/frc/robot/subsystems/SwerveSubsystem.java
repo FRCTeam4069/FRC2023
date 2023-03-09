@@ -12,7 +12,6 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.RobotContainer;
 import frc.robot.Constants.IO;
 import frc.robot.Constants.drivebaseConstants.ModuleConstants;
 import frc.robot.Constants.drivebaseConstants.deviceIDs;
@@ -154,8 +153,8 @@ public class SwerveSubsystem extends SubsystemBase {
                 FLSwerveModule.getPosition(),
                 BRSwerveModule.getPosition(),
                 BLSwerveModule.getPosition()});
-                SmartDashboard.putNumber("Gyro", convertGyroValues(gyro.getHeading()));
-                SmartDashboard.putNumber("side", getSide());
+                //SmartDashboard.putNumber("Gyro", convertGyroValues(gyro.getHeading()));
+                //SmartDashboard.putNumber("side", getSide());
                 if (IO.PrintSwerveData) {
           
         }
