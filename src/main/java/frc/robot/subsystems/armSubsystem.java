@@ -141,7 +141,7 @@ public class armSubsystem extends SubsystemBase {
     public void manualArticulate(double speed) {
 
         if ((speed * getSide() > 0) && (armConstants.y > armConstants.YLIMIT)) { // moving arm up but we're at the limit
-            return;
+            //return;
         }
 
         ArticulateL.set(speed);
@@ -156,7 +156,7 @@ public class armSubsystem extends SubsystemBase {
 
     public void manualExtend(double speed) {
         if ((speed > 0) && (armConstants.x > armConstants.XLIMIT)) { // moving arm out but we're at the limit
-            return;
+            //return;
         }
         Extend.set(speed);
     }
