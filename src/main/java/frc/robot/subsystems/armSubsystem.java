@@ -15,14 +15,12 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.armAndIntakeConstants.armConstants;
 import frc.robot.Constants.armAndIntakeConstants.intakeConstants;
 
-
 public class armSubsystem extends SubsystemBase {
     public CANSparkMax ArticulateR, ArticulateL, Extend;
     public RelativeEncoder leftEncoder, rightEncoder, extendEncoder;
-    public boolean enableLimit;
+    public boolean enableLimit, _enableLimit;
     public double extendPose = 0, articulatePose = 0;
     public int articulateLimit = 130;
-    
 
     public armSubsystem() {
         enableLimit = true;
@@ -34,7 +32,7 @@ public class armSubsystem extends SubsystemBase {
 
         ArticulateL.getEncoder().setPositionConversionFactor(2);
         ArticulateR.getEncoder().setPositionConversionFactor(2);
-        
+
         Extend.getEncoder().setPositionConversionFactor((1 / 392) * 0.5);
 
         armConstants.side = getSide();
@@ -65,26 +63,60 @@ public class armSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
+        // Update global variables
+        armConstants.armPose = AvgPose();
+        armConstants.extendPose = ExtendedPose();
         armConstants.side = getSide();
 
-        Extend.enableSoftLimit(SoftLimitDirection.kForward, enableLimit);
-        Extend.enableSoftLimit(SoftLimitDirection.kReverse, enableLimit);
-        ArticulateL.setSoftLimit(SoftLimitDirection.kForward, armConstants.softlimits);
-        ArticulateL.setSoftLimit(SoftLimitDirection.kReverse, -armConstants.softlimits);
-        ArticulateR.setSoftLimit(SoftLimitDirection.kForward, armConstants.softlimits);
-        ArticulateR.setSoftLimit(SoftLimitDirection.kReverse, -armConstants.softlimits);
+        // Set limits in motor controllers, stops robot from breaking itself
+        // only write to motor controllers on change of enable limit to reduce CAN
+        // utilization
+        if (enableLimit != _enableLimit) {
+            Extend.enableSoftLimit(SoftLimitDirection.kForward, enableLimit);
+            Extend.enableSoftLimit(SoftLimitDirection.kReverse, enableLimit);
+            ArticulateL.setSoftLimit(SoftLimitDirection.kForward, armConstants.softlimits);
+            ArticulateL.setSoftLimit(SoftLimitDirection.kReverse, -armConstants.softlimits);
+            ArticulateR.setSoftLimit(SoftLimitDirection.kForward, armConstants.softlimits);
+            ArticulateR.setSoftLimit(SoftLimitDirection.kReverse, -armConstants.softlimits);
+        }
 
+        // Stash last state of enablelimit
+        _enableLimit = enableLimit;
+
+        // Report to Dashboard
         SmartDashboard.putNumber("Arm: Articulate", AvgPose());
         SmartDashboard.putNumber("Arm: Extend", ExtendedPose());
 
+        // Set software limits, more dynamic, motor controller does not need to know
+        if (enableLimit) {
+            extendPose = MathUtil.clamp(extendPose, 0, 33);
+            articulatePose = MathUtil.clamp(articulatePose, -articulateLimit, articulateLimit);
+        }
 
-        if(enableLimit){
-        extendPose = MathUtil.clamp(extendPose, 0, 33);
-        articulatePose = MathUtil.clamp(articulatePose, -articulateLimit , articulateLimit);}
+        updateKin();
 
         moveToPose(articulatePose);
-        //extendToPose(extendPose, 1);
-        
+        // extendToPose(extendPose, 1);
+
+    }
+
+    private boolean updateKin() {
+        armConstants.c2 = Math.cos(Math.toRadians(armConstants.armPose));
+        armConstants.s2 = Math.sin(Math.toRadians(armConstants.armPose));
+        armConstants.c3 = Math.cos(Math.toRadians(intakeConstants.wristPose));
+        armConstants.s3 = Math.sin(Math.toRadians(intakeConstants.wristPose));
+
+        // Update length of L2
+        armConstants.L2 = armConstants.L2_OFFSET + armConstants.extendPose;
+
+        armConstants.x = armConstants.L3
+                * (armConstants.c1 * armConstants.c2 * armConstants.c3
+                        - armConstants.c1 * armConstants.s2 * armConstants.s3)
+                + armConstants.c1 * armConstants.c2 * armConstants.L2;
+        armConstants.y = armConstants.L3 * (armConstants.s2 * armConstants.c3 + armConstants.c2 * armConstants.s3)
+                + armConstants.s2 * armConstants.L2 + armConstants.L1;
+
+        return false;
     }
 
     private boolean moveToPose(double pose) {
@@ -92,7 +124,6 @@ public class armSubsystem extends SubsystemBase {
         double speed = MathUtil.clamp(
                 ((pose - AvgPose()) * armConstants.proportionalGain
                         + (ExtendedPose() * getSide() * armConstants.GravGain)),
-
                 -1, 1);
 
         manualArticulate(speed);
@@ -109,18 +140,24 @@ public class armSubsystem extends SubsystemBase {
 
     public void manualArticulate(double speed) {
 
+        if ((speed * getSide() > 0) && (armConstants.y > armConstants.YLIMIT)) { // moving arm up but we're at the limit
+            return;
+        }
+
         ArticulateL.set(speed);
         ArticulateR.set(speed);
 
-        if(!(intakeConstants.wristPose * getSide() < 0) ){
-        articulateLimit = 130;  
-        } 
-        else{ 
+        if (!(intakeConstants.wristPose * getSide() < 0)) {
+            articulateLimit = 130;
+        } else {
             articulateLimit = 89;
         }
     }
 
     public void manualExtend(double speed) {
+        if ((speed > 0) && (armConstants.x > armConstants.XLIMIT)) { // moving arm out but we're at the limit
+            return;
+        }
         Extend.set(speed);
     }
 
@@ -187,16 +224,15 @@ public class armSubsystem extends SubsystemBase {
      * @param Position Position to extend to (in)
      * @param maxSpeed 0 to 1
      */
-  
 
     public CommandBase flaseLimit() {
         return this.runOnce(() -> enableLimit = false);
-        }
+    }
 
     public CommandBase trueLimit() {
         return new SequentialCommandGroup(
-            this.runOnce(() -> enableLimit = true),
-            this.runOnce(() -> setHome()));
+                this.runOnce(() -> enableLimit = true),
+                this.runOnce(() -> setHome()));
     }
 
     /**

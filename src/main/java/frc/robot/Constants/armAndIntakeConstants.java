@@ -23,6 +23,24 @@ public class armAndIntakeConstants{
         public static final float softlimits = 130;
         public static double side;
 
+
+        public static double armPose;
+        public static double extendPose;
+
+        // For forward kinematics
+        public static final double L1 = 24; // inches, base of robot to shoulder
+        public static double L2; // inches, L2_OFFSET + Extension amount
+        public static final double L2_OFFSET = 5; // inches + extension amount
+        public static final double L3 = 12; // inches, wrist length
+
+
+        public static double c1 = 0, s1 = 1; // 1 since J1 does not move and is 90
+        public static double c2, s2, c3, s3;
+        public static double x = 0, y = 0; // x is away from the center of the robot, y is up
+
+        public static final double XLIMIT = 48;
+        public static final double YLIMIT = 54;
+
         // formula for arm stay to stay at pose
         // speed = input + armlength * kP + armAgle * kP 
     
