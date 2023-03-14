@@ -29,13 +29,13 @@ public class armAndIntakeConstants{
         public static double extendPose;
 
         // For forward kinematics
-        public static final double L1 = 24; // inches, base of robot to shoulder
+        public static final double L1 = 24.25; // inches, base of robot to shoulder
         public static double L2; // inches, L2_OFFSET + Extension amount
-        public static final double L2_OFFSET = 5; // inches + extension amount
-        public static final double L3 = 12; // inches, wrist length
+        public static final double L2_OFFSET = 27; // inches + extension amount
+        public static final double L3 = 13; // inches, wrist length
 
 
-        public static double c1 = 0, s1 = 1; // 1 since J1 does not move and is 90
+        public static double c1 = 1, s1 = 0; // 1 since J1 does not move and is 90
         public static double c2, s2, c3, s3;
         public static double x = 0, y = 0; // x is away from the center of the robot, y is up
 

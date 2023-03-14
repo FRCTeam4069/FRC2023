@@ -55,7 +55,7 @@ public class armSubsystem extends SubsystemBase {
         ArticulateR.enableSoftLimit(SoftLimitDirection.kReverse, true);
 
         Extend.setSoftLimit(SoftLimitDirection.kReverse, 0);
-        Extend.setSoftLimit(SoftLimitDirection.kForward, 33);
+        Extend.setSoftLimit(SoftLimitDirection.kForward, 24);
         Extend.enableSoftLimit(SoftLimitDirection.kForward, enableLimit);
         Extend.enableSoftLimit(SoftLimitDirection.kReverse, enableLimit);
 
@@ -94,18 +94,23 @@ public class armSubsystem extends SubsystemBase {
             ArticulateL.setSoftLimit(SoftLimitDirection.kReverse, -armConstants.softlimits);
             ArticulateR.setSoftLimit(SoftLimitDirection.kForward, armConstants.softlimits);
             ArticulateR.setSoftLimit(SoftLimitDirection.kReverse, -armConstants.softlimits);
+
+            // Stash last state of enablelimit
+            _enableLimit = enableLimit;
+
         }
 
-        // Stash last state of enablelimit
-        _enableLimit = enableLimit;
 
         SmartDashboard.putNumber("Arm: Articulate", rightMotorPosition());
         SmartDashboard.putNumber("Arm: Target Articulate", articulatePose);
         SmartDashboard.putNumber("Arm: Extend", ExtendedPose());
 
+        SmartDashboard.putNumber("Wrist X", armConstants.x);
+        SmartDashboard.putNumber("Wrist Y", armConstants.y);
+
         // Set software limits, more dynamic, motor controller does not need to know
         if (enableLimit) {
-            extendPose = MathUtil.clamp(extendPose, 0, 33);
+            extendPose = MathUtil.clamp(extendPose, 0, 24);
             articulatePose = MathUtil.clamp(articulatePose, -articulateLimit, articulateLimit);
         }
 
@@ -118,8 +123,8 @@ public class armSubsystem extends SubsystemBase {
     }
 
     private boolean updateKin() {
-        armConstants.c2 = Math.cos(Math.toRadians(armConstants.armPose));
-        armConstants.s2 = Math.sin(Math.toRadians(armConstants.armPose));
+        armConstants.c2 = Math.cos(Math.toRadians(armConstants.armPose + 90));
+        armConstants.s2 = Math.sin(Math.toRadians(armConstants.armPose + 90));
         armConstants.c3 = Math.cos(Math.toRadians(intakeConstants.wristPose));
         armConstants.s3 = Math.sin(Math.toRadians(intakeConstants.wristPose));
 
@@ -130,6 +135,7 @@ public class armSubsystem extends SubsystemBase {
                 * (armConstants.c1 * armConstants.c2 * armConstants.c3
                         - armConstants.c1 * armConstants.s2 * armConstants.s3)
                 + armConstants.c1 * armConstants.c2 * armConstants.L2;
+
         armConstants.y = armConstants.L3 * (armConstants.s2 * armConstants.c3 + armConstants.c2 * armConstants.s3)
                 + armConstants.s2 * armConstants.L2 + armConstants.L1;
 
@@ -158,7 +164,7 @@ public class armSubsystem extends SubsystemBase {
     public void manualArticulate(double speed) {
 
         if ((speed * getSide() > 0) && (armConstants.y > armConstants.YLIMIT)) { // moving arm up but we're at the limit
-            //return;
+        //   return;
         }
 
         ArticulateL.set(speed);
@@ -176,6 +182,8 @@ public class armSubsystem extends SubsystemBase {
         if ((speed > 0) && (armConstants.x > armConstants.XLIMIT)) { // moving arm out but we're at the limit
             //return;
         }
+
+
         Extend.set(speed);
     }
 

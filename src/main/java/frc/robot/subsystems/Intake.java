@@ -37,11 +37,11 @@ public class Intake extends SubsystemBase {
          * 1/2940
          */
 
-         wristEncoder.setPositionConversionFactor(2/81);
+         wristEncoder.setPositionConversionFactor(1);
          wristEncoder.setVelocityConversionFactor(1);
          SmartDashboard.putNumber("wrist", wristEncoder.getPositionConversionFactor());
 
-        setWristPose(40.5);
+        setWristPose(40);
         setIntakePose(16.8 - 4.3);
 
         //setIntakePose(0);
@@ -54,13 +54,13 @@ public class Intake extends SubsystemBase {
 
     }
     public double getWristAngle(){
-        return (getWristPose()*2/81 * 120);
+        return (getWristPose()*2/80 * 120);
     }
 
     @Override
     public void periodic() {
         // This method will be called once per scheduler run
-        intakeConstants.wristPose = getWristPose();
+        intakeConstants.wristPose = getWristAngle();
 
         intake.enableSoftLimit(SoftLimitDirection.kForward, enableLimit);
         intake.enableSoftLimit(SoftLimitDirection.kReverse, enableLimit);
@@ -70,7 +70,6 @@ public class Intake extends SubsystemBase {
 
         SmartDashboard.putNumber("wrist Pose", getWristPose());
         SmartDashboard.putNumber("wrist angle", getWristAngle());
-        SmartDashboard.putNumber("Working?", 12434);
     }
     
     public void wristToPose(double position){
