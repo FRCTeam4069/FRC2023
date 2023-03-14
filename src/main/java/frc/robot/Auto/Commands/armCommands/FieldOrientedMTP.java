@@ -25,6 +25,8 @@ public class FieldOrientedMTP extends CommandBase {
         this.POV = POV;
         this.AorB = side;
         addRequirements(RobotContainer.arm);
+        addRequirements(RobotContainer.intake);
+
     }
 
     @Override

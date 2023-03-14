@@ -22,6 +22,7 @@ public class armSubsystem extends SubsystemBase {
     public boolean enableLimit;
     public double extendPose = 0, articulatePose = 0;
     public int articulateLimit = 130;
+    public boolean moveToPoseMode = true;
     
 
     public armSubsystem() {
@@ -32,10 +33,15 @@ public class armSubsystem extends SubsystemBase {
 
         Extend.setInverted(false);
 
-        ArticulateL.getEncoder().setPositionConversionFactor(2);
         ArticulateR.getEncoder().setPositionConversionFactor(2);
-        
-        Extend.getEncoder().setPositionConversionFactor((1 / 392) * 0.5);
+        Extend.getEncoder().setPositionConversionFactor(0.5/2.33334);
+
+        ArticulateL.burnFlash();
+        ArticulateR.burnFlash();
+        Extend.burnFlash();
+
+        ArticulateL.getEncoder().setVelocityConversionFactor(1);
+        ArticulateR.getEncoder().setVelocityConversionFactor(1);
 
         armConstants.side = getSide();
         setZero();
@@ -59,13 +65,22 @@ public class armSubsystem extends SubsystemBase {
 
         Extend.setInverted(armConstants.telescopeMotorInvert);
 
-        ArticulateL.setOpenLoopRampRate(0.5);
-        ArticulateR.setOpenLoopRampRate(0.5);
+        ArticulateL.setOpenLoopRampRate(0);
+        ArticulateR.setOpenLoopRampRate(0);
+
+      
+
+
+        SmartDashboard.putNumber("Articulate", ArticulateL.getEncoder().getCountsPerRevolution());
+        SmartDashboard.putNumber("Extend", Extend.getEncoder().getCountsPerRevolution());
+        SmartDashboard.putNumber("Articulate Multi", ArticulateL.getEncoder().getPositionConversionFactor());
+        SmartDashboard.putNumber("Extend Multi", Extend.getEncoder().getPositionConversionFactor());
     }
 
     @Override
     public void periodic() {
         armConstants.side = getSide();
+        armConstants.ArmPose = AvgPose();
 
         Extend.enableSoftLimit(SoftLimitDirection.kForward, enableLimit);
         Extend.enableSoftLimit(SoftLimitDirection.kReverse, enableLimit);
@@ -74,7 +89,8 @@ public class armSubsystem extends SubsystemBase {
         ArticulateR.setSoftLimit(SoftLimitDirection.kForward, armConstants.softlimits);
         ArticulateR.setSoftLimit(SoftLimitDirection.kReverse, -armConstants.softlimits);
 
-        SmartDashboard.putNumber("Arm: Articulate", AvgPose());
+        SmartDashboard.putNumber("Arm: Articulate", rightMotorPosition());
+        SmartDashboard.putNumber("Arm: Target Articulate", articulatePose);
         SmartDashboard.putNumber("Arm: Extend", ExtendedPose());
 
 
@@ -82,8 +98,9 @@ public class armSubsystem extends SubsystemBase {
         extendPose = MathUtil.clamp(extendPose, 0, 33);
         articulatePose = MathUtil.clamp(articulatePose, -articulateLimit , articulateLimit);}
 
-        moveToPose(articulatePose);
+        if(moveToPoseMode){moveToPose(articulatePose);}
         //extendToPose(extendPose, 1);
+    
         
     }
 
@@ -116,7 +133,7 @@ public class armSubsystem extends SubsystemBase {
         articulateLimit = 130;  
         } 
         else{ 
-            articulateLimit = 89;
+            articulateLimit = 110;
         }
     }
 
@@ -152,11 +169,11 @@ public class armSubsystem extends SubsystemBase {
     }
 
     public double leftMotorPosition() {
-        return ArticulateR.getEncoder().getPosition();
+        return ArticulateL.getEncoder().getPosition();
     }
 
     public double AvgPose() {
-        return ((ArticulateR.getEncoder().getPosition() + ArticulateL.getEncoder().getPosition()) / 2);
+        return ((ArticulateR.getEncoder().getPosition() + ArticulateR.getEncoder().getPosition()) / 2);
     }
 
     public double ExtendedPose() {

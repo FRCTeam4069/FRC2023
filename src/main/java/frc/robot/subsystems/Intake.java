@@ -37,19 +37,24 @@ public class Intake extends SubsystemBase {
          * 1/2940
          */
 
-         wristEncoder.setPositionConversionFactor(47/70);
+         wristEncoder.setPositionConversionFactor(2/81);
+         wristEncoder.setVelocityConversionFactor(1);
+         SmartDashboard.putNumber("wrist", wristEncoder.getPositionConversionFactor());
 
-        setWristPose(-1);
+        setWristPose(40.5);
         setIntakePose(16.8 - 4.3);
 
         //setIntakePose(0);
   
         intake.setSoftLimit(SoftLimitDirection.kReverse, 0);
         intake.setSoftLimit(SoftLimitDirection.kForward, 16);
-        wrist.setSoftLimit(SoftLimitDirection.kReverse, -1);
-        wrist.setSoftLimit(SoftLimitDirection.kForward, 1);
+        wrist.setSoftLimit(SoftLimitDirection.kReverse, -40);
+        wrist.setSoftLimit(SoftLimitDirection.kForward, 40);
         
 
+    }
+    public double getWristAngle(){
+        return (getWristPose()*2/81 * 120);
     }
 
     @Override
@@ -63,7 +68,9 @@ public class Intake extends SubsystemBase {
         wrist.enableSoftLimit(SoftLimitDirection.kReverse, enableLimit);
 
 
-        //SmartDashboard.putNumber("wrist Pose", getWristPose());
+        SmartDashboard.putNumber("wrist Pose", getWristPose());
+        SmartDashboard.putNumber("wrist angle", getWristAngle());
+        SmartDashboard.putNumber("Working?", 12434);
     }
     
     public void wristToPose(double position){

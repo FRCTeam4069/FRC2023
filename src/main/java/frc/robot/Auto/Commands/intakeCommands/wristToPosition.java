@@ -22,7 +22,6 @@ public class wristToPosition extends CommandBase {
     @Override
     public boolean isFinished(){
         return intake.wristIsAtPose(targetPose, 0.1);
-
     }
 
 }

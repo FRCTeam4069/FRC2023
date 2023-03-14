@@ -22,6 +22,7 @@ public class armAndIntakeConstants{
 
         public static final float softlimits = 130;
         public static double side;
+        public static double ArmPose;
 
         // formula for arm stay to stay at pose
         // speed = input + armlength * kP + armAgle * kP 
@@ -73,7 +74,8 @@ public class armAndIntakeConstants{
 
         public static final int INTAKE_ID = 13;
         public static final int WRIST_ID = 12;
-        public static final double wristkP = 0.8;
+        public static final double wristkP = 1.2
+        ;
         public static double wristPose;
         public static final double intakekP = 0.3;
 
