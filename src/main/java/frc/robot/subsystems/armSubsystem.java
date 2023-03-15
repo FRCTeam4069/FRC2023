@@ -19,7 +19,7 @@ public class armSubsystem extends SubsystemBase {
     public CANSparkMax ArticulateR, ArticulateL, Extend;
     public RelativeEncoder leftEncoder, rightEncoder, extendEncoder;
     public boolean enableLimit, _enableLimit;
-    public double extendPose = 0, articulatePose = 0;
+    public double extendPose = 0, articulatePose = 0, changingArticulateLimits = 130;
     public int articulateLimit = 130;
     public boolean moveToPoseMode = true;
     
@@ -32,18 +32,15 @@ public class armSubsystem extends SubsystemBase {
 
         Extend.setInverted(false);
 
-        ArticulateR.getEncoder().setPositionConversionFactor(2);
-        Extend.getEncoder().setPositionConversionFactor(0.5/2.33334);
+        // ArticulateR.getEncoder().setPositionConversionFactor(2);
+        // Extend.getEncoder().setPositionConversionFactor(0.5/2.33334);
 
-        ArticulateL.burnFlash();
-        ArticulateR.burnFlash();
-        Extend.burnFlash();
-
-        ArticulateL.getEncoder().setVelocityConversionFactor(1);
-        ArticulateR.getEncoder().setVelocityConversionFactor(1);
+        // ArticulateL.getEncoder().setVelocityConversionFactor(1);
+        // ArticulateR.getEncoder().setVelocityConversionFactor(1);
 
         armConstants.side = getSide();
         setZero();
+
         ArticulateL.setSoftLimit(SoftLimitDirection.kForward, articulateLimit);
         ArticulateL.setSoftLimit(SoftLimitDirection.kReverse, -articulateLimit);
         ArticulateR.setSoftLimit(SoftLimitDirection.kForward, articulateLimit);
@@ -64,16 +61,8 @@ public class armSubsystem extends SubsystemBase {
 
         Extend.setInverted(armConstants.telescopeMotorInvert);
 
-        ArticulateL.setOpenLoopRampRate(0);
-        ArticulateR.setOpenLoopRampRate(0);
-
-      
-
-
-        SmartDashboard.putNumber("Articulate", ArticulateL.getEncoder().getCountsPerRevolution());
-        SmartDashboard.putNumber("Extend", Extend.getEncoder().getCountsPerRevolution());
-        SmartDashboard.putNumber("Articulate Multi", ArticulateL.getEncoder().getPositionConversionFactor());
-        SmartDashboard.putNumber("Extend Multi", Extend.getEncoder().getPositionConversionFactor());
+        ArticulateL.setOpenLoopRampRate(0.5);
+        ArticulateR.setOpenLoopRampRate(0.5);
     }
 
     @Override
@@ -82,7 +71,8 @@ public class armSubsystem extends SubsystemBase {
         armConstants.armPose = AvgPose();
         armConstants.extendPose = ExtendedPose();
         armConstants.side = getSide();
-        armConstants.ArmPose = AvgPose();
+
+        SmartDashboard.putNumber("Side", armConstants.side);
 
         // Set limits in motor controllers, stops robot from breaking itself
         // only write to motor controllers on change of enable limit to reduce CAN
@@ -97,11 +87,10 @@ public class armSubsystem extends SubsystemBase {
 
             // Stash last state of enablelimit
             _enableLimit = enableLimit;
-
         }
 
 
-        SmartDashboard.putNumber("Arm: Articulate", rightMotorPosition());
+        SmartDashboard.putNumber("Arm: Articulate", AvgPose());
         SmartDashboard.putNumber("Arm: Target Articulate", articulatePose);
         SmartDashboard.putNumber("Arm: Extend", ExtendedPose());
 
@@ -114,9 +103,18 @@ public class armSubsystem extends SubsystemBase {
             articulatePose = MathUtil.clamp(articulatePose, -articulateLimit, articulateLimit);
         }
 
+        if (enableLimit) {
+            changingArticulateLimits = Math.toDegrees(Math.acos((armConstants.L1 / armConstants.L2))) + 90;
+            if(-intakeConstants.wristPose * getSide() < 0){ changingArticulateLimits -= 10; }
+                //extendPose = MathUtil.clamp(extendPose, 0, 24);
+                //articulatePose = MathUtil.clamp(articulatePose, -changingArticulateLimits, changingArticulateLimits);
+                SmartDashboard.putNumber("Current Arm Limit", changingArticulateLimits);
+                SmartDashboard.putNumber("Current Math", 160 - Math.toDegrees(Math.acos((armConstants.L1 / armConstants.L2))));
+            }
+
         updateKin();
 
-        if(moveToPoseMode){moveToPose(articulatePose);}
+        moveToPose(articulatePose);
         //extendToPose(extendPose, 1);
     
         
@@ -170,7 +168,7 @@ public class armSubsystem extends SubsystemBase {
         ArticulateL.set(speed);
         ArticulateR.set(speed);
 
-        if(!(intakeConstants.wristPose * getSide() < 0) ){
+        if((-intakeConstants.wristPose * getSide() < 0) ){
         articulateLimit = 130;  
         } 
         else{ 
@@ -183,9 +181,18 @@ public class armSubsystem extends SubsystemBase {
             //return;
         }
 
-
+        if(ExtendedPose() < 2 && speed < -0.25){
+        Extend.set(speed*0.25);
+        }else if (ExtendedPose() > 22  && speed > 0.25){
+        Extend.set(speed*0.25);
+        }else{
         Extend.set(speed);
+        }
+
+
     }
+
+
 
     public void setArmPose(double pose) {
         this.articulatePose = pose;
@@ -201,25 +208,11 @@ public class armSubsystem extends SubsystemBase {
     }
 
     public boolean isAtPoseE(double Pose, double threshold) {
-        return (Math.abs(Pose - extendPose) < threshold);
-    }
-
-    public void stop() {
-        ArticulateL.stopMotor();
-        ArticulateR.stopMotor();
-        Extend.stopMotor();
-    }
-
-    public double rightMotorPosition() {
-        return ArticulateR.getEncoder().getPosition();
-    }
-
-    public double leftMotorPosition() {
-        return ArticulateL.getEncoder().getPosition();
+        return (Math.abs(Pose - ExtendedPose()) < threshold);
     }
 
     public double AvgPose() {
-        return ((ArticulateR.getEncoder().getPosition() + ArticulateR.getEncoder().getPosition()) / 2);
+        return ArticulateR.getEncoder().getPosition();
     }
 
     public double ExtendedPose() {

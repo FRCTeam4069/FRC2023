@@ -36,11 +36,8 @@ public class DefaultIntakeCommand extends CommandBase{
     public void execute(){
         
   
-        intake.setWrist((-wristUp.get() + wristDown.get()) * armConstants.side);
-        //if(Math.abs( -wristUp.get() + wristDown.get()) <= 0.08 ){
-        //intake.wristToPose((0.00883 * Math.abs(armConstants.ArmPose) - 0.773) * armConstants.side);       
-        //} else intake.setWrist((-wristUp.get() + wristDown.get()) * armConstants.side);
-
+        intake.setWrist((wristUp.get() - wristDown.get()) * armConstants.side);
+      
         if(intakeOpen.get() && intakeClose.get()){
             intakeSpeed = 0;
         }else if(intakeClose.get()){

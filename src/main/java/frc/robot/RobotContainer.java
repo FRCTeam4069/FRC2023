@@ -1,7 +1,5 @@
 package frc.robot;
 
-import javax.swing.text.PlainView;
-
 import com.ctre.phoenix.music.Orchestra;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -11,17 +9,20 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.Auto.Commands.armCommands.DefaultArmCommand;
-import frc.robot.Auto.Commands.armCommands.FieldOrientedMTP;
 import frc.robot.Auto.Commands.drivebaseCommands.DefualtDriveCommand;
 import frc.robot.Auto.Commands.drivebaseCommands.autoBalance;
 import frc.robot.Auto.Commands.drivebaseCommands.followTrajectoryCommand;
 import frc.robot.Auto.Commands.drivebaseCommands.leaveCommunity;
 import frc.robot.Auto.Commands.intakeCommands.DefaultIntakeCommand;
-import frc.robot.Auto.Commands.intakeCommands.OpenIntake;
 import frc.robot.Auto.Commands.intakeCommands.wristToPosition;
 import frc.robot.Auto.routines.Middle_Path_0cones;
 import frc.robot.Auto.routines.PlaceCubeAndArmDown;
 import frc.robot.Auto.routines.placeCube;
+import frc.robot.Auto.routines.ArmRoutines.HighPose;
+import frc.robot.Auto.routines.ArmRoutines.HomePose;
+import frc.robot.Auto.routines.ArmRoutines.HumanPlayerPose;
+import frc.robot.Auto.routines.ArmRoutines.MidPose;
+import frc.robot.Constants.IO;
 import frc.robot.subsystems.armSubsystem;
 import frc.robot.subsystems.AutonSelect;
 import frc.robot.subsystems.Debugger;
@@ -85,10 +86,10 @@ public class RobotContainer {
         new Trigger(Controller2::getStartButton).whileTrue(arm.runOnce(() -> arm.setZero()));
         new Trigger(Controller2::getLeftStickButton).whileTrue(arm.flaseLimit());
         new Trigger(Controller2::getRightStickButton).whileTrue(arm.trueLimit());
-        new Trigger(Controller2::getAButton).whileTrue(new FieldOrientedMTP(-1, () -> swerveSubsystem.getSide(), () -> Controller2.getPOV()));
-        new Trigger(Controller2::getYButton).whileTrue(new FieldOrientedMTP(1, ()-> swerveSubsystem.getSide(), () -> Controller2.getPOV()));
-        new Trigger(Controller2::getXButton).whileTrue(intake.enableLimit());
-        new Trigger(Controller2::getBButton).whileTrue(intake.diableLimit());
+        new Trigger(Controller2::getAButton).onTrue(new HomePose());
+        new Trigger(Controller2::getYButton).onTrue(new HighPose());
+        new Trigger(Controller2::getXButton).onTrue(new HumanPlayerPose());
+        new Trigger(Controller2::getBButton).onTrue(new MidPose());
     }
 
     public Command getAutonomousCommand() {

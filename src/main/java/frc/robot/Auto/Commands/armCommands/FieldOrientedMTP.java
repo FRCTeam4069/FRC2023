@@ -51,7 +51,6 @@ public class FieldOrientedMTP extends CommandBase {
         if(poseNum != -1){
         arm.setArmPose(articulatePositions[poseNum] * AorB * side.get());
         //arm.extendToPose(extendToPose[poseNum], 1);
-        intake.wristToPose(AorB * wristPoses[poseNum]);
 
         
         SmartDashboard.putNumber("SIDE", side.get());

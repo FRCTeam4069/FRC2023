@@ -5,19 +5,21 @@ import frc.robot.RobotContainer;
 import frc.robot.subsystems.armSubsystem;
 
 public class moveToPose extends CommandBase {
-    private final double targetPose, threshold;
+    private final double targetPose;
+    private final boolean armOriented;
+
     private static final armSubsystem arm = RobotContainer.arm;
 
-    public moveToPose(double position, double threshold) {
+    public moveToPose(double position, Boolean armOriented) {
         this.targetPose = position;
-        this.threshold = threshold;
+        this.armOriented = armOriented;
         addRequirements(RobotContainer.arm);
     }
 
     @Override
     public void execute() {
-        arm.setArmPose(targetPose);
-
+        if(armOriented) arm.setArmPose(targetPose*arm.getSide());
+        else arm.setArmPose(targetPose);
     }
 
     @Override
@@ -27,9 +29,10 @@ public class moveToPose extends CommandBase {
 
     @Override
     public boolean isFinished() {
-        if(threshold != -1){
-        return arm.isAtPoseAT(targetPose, threshold);
-        } else return false;
+        // if(threshold != -1){
+        return arm.isAtPoseAT(targetPose, 1);
+        // } else return false;
+        //return true;
 
     }
 

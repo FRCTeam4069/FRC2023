@@ -1,5 +1,6 @@
 package frc.robot.Auto.Commands.armCommands;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.armSubsystem;
@@ -18,6 +19,7 @@ public class extendToPose extends CommandBase {
     public void execute() {
         // arm.setExtendPose(MathUtil.clamp(targetPose, 0, 130));
         arm.extendToPose(targetPose, 1);
+        SmartDashboard.putNumber("Extend Error", targetPose - arm.ExtendedPose());
     }
 
     @Override
@@ -27,11 +29,7 @@ public class extendToPose extends CommandBase {
 
     @Override
     public boolean isFinished() {
-        if (threshold != -1) {
-            return arm.isAtPoseE(targetPose, threshold);
-        } else
-            return false;
-
+        return arm.isAtPoseE(targetPose, threshold);
     }
 
 }

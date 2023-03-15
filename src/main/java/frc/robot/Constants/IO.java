@@ -24,6 +24,5 @@ public class IO{
     public static final double ySpeedSlewRate = 3;
     public static final double TurnSpeedSlewRate = 3;
 
-    
-
+    public static String lastPressed;
 }

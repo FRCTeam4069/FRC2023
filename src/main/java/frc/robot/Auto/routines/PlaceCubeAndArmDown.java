@@ -7,6 +7,7 @@ import frc.robot.Auto.Commands.armCommands.moveToPose;
 import frc.robot.Auto.Commands.drivebaseCommands.autoBalance;
 import frc.robot.Auto.Commands.intakeCommands.OpenIntake;
 import frc.robot.Auto.Commands.intakeCommands.wristToPosition;
+import frc.robot.Constants.armAndIntakeConstants.armConstants;
 
 /**
  * Interface for autonomous routines.
@@ -15,11 +16,11 @@ import frc.robot.Auto.Commands.intakeCommands.wristToPosition;
 public class PlaceCubeAndArmDown extends SequentialCommandGroup {
 
     public PlaceCubeAndArmDown() {
-        addCommands(new moveToPose(-55, 1)
-        .alongWith(new wristToPosition(0 ))
+        addCommands(new moveToPose(-55, false)
+        .alongWith(new wristToPosition(0, 5 , 0.5, 3))
         .andThen(new OpenIntake())
-        .andThen(new wristToPosition(-1)
-        .andThen(new moveToPose(-130, 1)).alongWith(new autoBalance())));
+        .andThen(new wristToPosition(-1, 5, 0.5, 3)
+        .andThen(new moveToPose(-130, false)).alongWith(new autoBalance())));
     }
 
 }
