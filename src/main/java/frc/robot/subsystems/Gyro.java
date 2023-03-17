@@ -44,7 +44,6 @@ public class Gyro extends SubsystemBase{
     public double getRoll(){
         return gyro.getRoll();
     }
-    //Refer to CTRE docs for Piegon 2 to understand Pitch, and Roll
 
     @Override
     public void periodic(){

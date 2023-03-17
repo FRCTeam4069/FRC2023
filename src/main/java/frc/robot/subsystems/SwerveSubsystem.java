@@ -7,6 +7,7 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.IO;
@@ -79,7 +80,8 @@ public class SwerveSubsystem extends SubsystemBase {
     }
 
     public void resetGyro() {
-        gyro.setYaw(-90);
+        //gyro.setYaw(0);
+        gyro.setYaw(270);
     }
 
     public Gyro getGyro() {
@@ -144,6 +146,8 @@ public class SwerveSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
+        SmartDashboard.putString("Odometry", odometry.getPoseMeters().toString());
+        SmartDashboard.putString("Last Known State", IO.LastState.toString());
         odometry.update(getRotation2d(), new SwerveModulePosition[] {
                 FRSwerveModule.getPosition(),
                 FLSwerveModule.getPosition(),
@@ -153,7 +157,7 @@ public class SwerveSubsystem extends SubsystemBase {
                 //SmartDashboard.putNumber("side", getSide());
                 if (IO.PrintSwerveData) {
           
-        }
+            }
 
     }
 

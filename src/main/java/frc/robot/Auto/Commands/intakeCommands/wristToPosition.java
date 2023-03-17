@@ -32,12 +32,13 @@ public class wristToPosition extends CommandBase {
         SmartDashboard.putNumber("Wrist (power)", (targetPose * intake.side - intake.getWristAngle()) * (0.01));
         SmartDashboard.putNumber("Threshold Time", thresholdTimer.get());
         SmartDashboard.putNumber("Timout Time", timeOutTimer.get());
+        SmartDashboard.putBoolean("Is finished", thresholdTimer.hasElapsed(thresholdTime) || timeOutTimer.hasElapsed(timeOut));
         
 
         if (Math.abs(targetPose - intake.getWristAngle()) > 10) {
-            intake.setWrist((targetPose * intake.side - intake.getWristAngle()) * (0.01));
+            intake.setWrist((targetPose * intake.side - intake.getWristAngle()) * (0.012));
         } else {
-            intake.setWrist((targetPose * intake.side - intake.getWristAngle()) * (0.006));
+            intake.setWrist((targetPose * intake.side - intake.getWristAngle()) * (0.008));
         }
 
         if (Math.abs(targetPose - intake.getWristAngle()) < threshold) {

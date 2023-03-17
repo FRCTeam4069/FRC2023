@@ -9,19 +9,20 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.Auto.Commands.armCommands.DefaultArmCommand;
+import frc.robot.Auto.Commands.armCommands.ArmRoutines.HighPose;
+import frc.robot.Auto.Commands.armCommands.ArmRoutines.HomePose;
+import frc.robot.Auto.Commands.armCommands.ArmRoutines.HumanPlayerPose;
+import frc.robot.Auto.Commands.armCommands.ArmRoutines.MidPose;
 import frc.robot.Auto.Commands.drivebaseCommands.DefualtDriveCommand;
 import frc.robot.Auto.Commands.drivebaseCommands.autoBalance;
 import frc.robot.Auto.Commands.drivebaseCommands.followTrajectoryCommand;
 import frc.robot.Auto.Commands.drivebaseCommands.leaveCommunity;
 import frc.robot.Auto.Commands.intakeCommands.DefaultIntakeCommand;
+import frc.robot.Auto.Commands.intakeCommands.autoWristPose;
 import frc.robot.Auto.Commands.intakeCommands.wristToPosition;
 import frc.robot.Auto.routines.Middle_Path_0cones;
 import frc.robot.Auto.routines.PlaceCubeAndArmDown;
 import frc.robot.Auto.routines.placeCube;
-import frc.robot.Auto.routines.ArmRoutines.HighPose;
-import frc.robot.Auto.routines.ArmRoutines.HomePose;
-import frc.robot.Auto.routines.ArmRoutines.HumanPlayerPose;
-import frc.robot.Auto.routines.ArmRoutines.MidPose;
 import frc.robot.Constants.IO;
 import frc.robot.subsystems.armSubsystem;
 import frc.robot.subsystems.AutonSelect;
@@ -63,7 +64,7 @@ public class RobotContainer {
                 () -> Controller1.getLeftX(),
                 () -> -Controller1.getLeftY(),
                 () -> -Controller1.getRightX(),
-                () -> !Controller1.getAButton(),
+                () -> Controller1.getAButton(),
                 () -> Controller1.getRightBumper()));
 
         arm.setDefaultCommand(new DefaultArmCommand(
@@ -77,19 +78,22 @@ public class RobotContainer {
                 () -> Controller2.getLeftBumper(),
                 () -> Controller2.getRightBumper()));
 
+        //intake.setDefaultCommand(new autoWristPose());
+
         configureButtonBindings();
 
     }
 
     private void configureButtonBindings() {
         new Trigger(Controller1::getAButton).whileTrue(swerveSubsystem.resetGyroCommmand());
-        new Trigger(Controller2::getStartButton).whileTrue(arm.runOnce(() -> arm.setZero()));
+        //new Trigger(Controller2::getStartButton).whileTrue(arm.runOnce(() -> arm.setZero()));
         new Trigger(Controller2::getLeftStickButton).whileTrue(arm.flaseLimit());
         new Trigger(Controller2::getRightStickButton).whileTrue(arm.trueLimit());
         new Trigger(Controller2::getAButton).onTrue(new HomePose());
         new Trigger(Controller2::getYButton).onTrue(new HighPose());
         new Trigger(Controller2::getXButton).onTrue(new HumanPlayerPose());
         new Trigger(Controller2::getBButton).onTrue(new MidPose());
+        new Trigger(Controller2::getStartButton).whileTrue(new autoWristPose());
     }
 
     public Command getAutonomousCommand() {

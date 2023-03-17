@@ -8,10 +8,10 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.Intake;
 
-public class autoWristPose extends CommandBase {
+public class autoWristParallel extends CommandBase {
     private static final Intake intake = RobotContainer.intake;
     private double error;
-    public autoWristPose() {
+    public autoWristParallel() {
         addRequirements(RobotContainer.intake);
     }
     @Override

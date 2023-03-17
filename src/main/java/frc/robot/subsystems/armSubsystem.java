@@ -63,11 +63,14 @@ public class armSubsystem extends SubsystemBase {
 
         ArticulateL.setOpenLoopRampRate(0.5);
         ArticulateR.setOpenLoopRampRate(0.5);
+
     }
 
     @Override
     public void periodic() {
         // Update global variables
+
+
         armConstants.armPose = AvgPose();
         armConstants.extendPose = ExtendedPose();
         armConstants.side = getSide();
@@ -90,6 +93,21 @@ public class armSubsystem extends SubsystemBase {
         }
 
 
+  
+
+        if (enableLimit) {
+            extendPose = MathUtil.clamp(extendPose, 0, 24);
+            articulatePose = MathUtil.clamp(articulatePose, (int) -Math.abs(claculatedLimit()), (int) Math.abs(claculatedLimit()));
+
+                SmartDashboard.putNumber("Current Arm Limit", changingArticulateLimits);
+                SmartDashboard.putNumber("Current Math", 180 - Math.toDegrees(Math.acos((armConstants.L1 / armConstants.L2))));
+            }
+
+        updateKin();
+
+        moveToPose(articulatePose);
+        //extendToPose(extendPose, 1);
+        
         SmartDashboard.putNumber("Arm: Articulate", AvgPose());
         SmartDashboard.putNumber("Arm: Target Articulate", articulatePose);
         SmartDashboard.putNumber("Arm: Extend", ExtendedPose());
@@ -97,27 +115,15 @@ public class armSubsystem extends SubsystemBase {
         SmartDashboard.putNumber("Wrist X", armConstants.x);
         SmartDashboard.putNumber("Wrist Y", armConstants.y);
 
-        // Set software limits, more dynamic, motor controller does not need to know
-        if (enableLimit) {
-            extendPose = MathUtil.clamp(extendPose, 0, 24);
-            articulatePose = MathUtil.clamp(articulatePose, -articulateLimit, articulateLimit);
-        }
-
-        if (enableLimit) {
-            changingArticulateLimits = Math.toDegrees(Math.acos((armConstants.L1 / armConstants.L2))) + 90;
-            if(-intakeConstants.wristPose * getSide() < 0){ changingArticulateLimits -= 10; }
-                //extendPose = MathUtil.clamp(extendPose, 0, 24);
-                //articulatePose = MathUtil.clamp(articulatePose, -changingArticulateLimits, changingArticulateLimits);
-                SmartDashboard.putNumber("Current Arm Limit", changingArticulateLimits);
-                SmartDashboard.putNumber("Current Math", 160 - Math.toDegrees(Math.acos((armConstants.L1 / armConstants.L2))));
-            }
-
-        updateKin();
-
-        moveToPose(articulatePose);
-        //extendToPose(extendPose, 1);
-    
         
+    }
+
+    private double claculatedLimit(){
+        changingArticulateLimits = 180 - Math.toDegrees(Math.acos((armConstants.L1 / armConstants.L2)));
+        if(-intakeConstants.wristPose * getSide() < 0){ changingArticulateLimits -= 10; }
+        changingArticulateLimits = MathUtil.clamp(changingArticulateLimits, 0, 130);
+
+        return Math.abs(changingArticulateLimits);
     }
 
     private boolean updateKin() {

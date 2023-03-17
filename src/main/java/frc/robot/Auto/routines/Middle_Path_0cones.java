@@ -1,7 +1,7 @@
 package frc.robot.Auto.routines;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import frc.robot.Auto.Commands.armCommands.moveToPose;
+import frc.robot.Auto.Commands.armCommands.armToPose;
 import frc.robot.Auto.Commands.drivebaseCommands.autoBalance;
 
 /**
@@ -11,7 +11,7 @@ import frc.robot.Auto.Commands.drivebaseCommands.autoBalance;
 public class Middle_Path_0cones extends SequentialCommandGroup {
 
     public Middle_Path_0cones() {
-        addCommands(new moveToPose(-130, false).alongWith(new autoBalance()));
+        addCommands(new armToPose(-130, false, 5).alongWith(new autoBalance()));
 
     }
 

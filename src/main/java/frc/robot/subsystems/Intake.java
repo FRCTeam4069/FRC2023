@@ -14,7 +14,7 @@ import frc.robot.Constants.armAndIntakeConstants.intakeConstants;
 public class Intake extends SubsystemBase {
     private CANSparkMax intake, wrist;
     private RelativeEncoder intakeEncoder, wristEncoder;
-    public double side, wristTarget, low, gravGain, armAngle;    
+    public double side, wristTarget, low, gravGain, armAngle, parallelAngle;    
     public boolean enableLimit = true, _enableLimit = false;
 
     public Intake() {
@@ -75,6 +75,7 @@ public class Intake extends SubsystemBase {
         SmartDashboard.putNumber("gravGain t2 (sin)", Math.sin(Math.toRadians(getWristAngle() - low)) * 0.1);// * (0 - getWristAngle()));
         SmartDashboard.putNumber("gravGain t3 (cos)", Math.cos(Math.toRadians(getWristAngle() - low)));
         SmartDashboard.putNumber("parallel angle", low - (side*90));
+        parallelAngle = low - (side*90);
 
         
 

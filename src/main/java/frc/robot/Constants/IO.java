@@ -24,5 +24,13 @@ public class IO{
     public static final double ySpeedSlewRate = 3;
     public static final double TurnSpeedSlewRate = 3;
 
-    public static String lastPressed;
+    public enum state{
+        HIGH,
+        MID,
+        HUMAN, 
+        HOME,
+        START
+    };
+
+    public static state LastState = state.START;
 }
