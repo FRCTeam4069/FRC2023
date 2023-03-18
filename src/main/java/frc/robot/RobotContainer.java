@@ -1,6 +1,8 @@
 package frc.robot;
 
 import com.ctre.phoenix.music.Orchestra;
+
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -18,7 +20,7 @@ import frc.robot.Auto.Commands.drivebaseCommands.DefualtDriveCommand;
 import frc.robot.Auto.Commands.drivebaseCommands.followTrajectoryCommand;
 import frc.robot.Auto.Commands.drivebaseCommands.leaveCommunity;
 import frc.robot.Auto.Commands.intakeCommands.DefaultIntakeCommand;
-import frc.robot.Auto.Commands.intakeCommands.autoWristPose;
+import frc.robot.Auto.Commands.intakeCommands.wristToPosition;
 import frc.robot.Auto.routines.Middle_Path_0cones;
 import frc.robot.Auto.routines.PlaceCubeAndArmDown;
 import frc.robot.Auto.routines.placeCube;
@@ -94,7 +96,21 @@ public class RobotContainer {
         new Trigger(Controller2::getYButton).onTrue(new HighPose());
         new Trigger(Controller2::getXButton).onTrue(new HumanPlayerPose());
         new Trigger(Controller2::getBButton).onTrue(new MidPose());
-        new Trigger(Controller2::getStartButton).whileTrue(new autoWristPose());
+         
+
+        if( Controller2.getPOV() == 90 ){
+            new wristToPosition(-intake.parallelAngle, 0, 0.5, 1);
+        }
+        if( Controller2.getPOV() == 180 ){
+            new wristToPosition(MathUtil.clamp(-intake.armAngle, -120,120), 10, 0.5, 1);
+
+        }
+        if( Controller2.getPOV() == 270 ){
+            new wristToPosition(-intake.parallelAngle, 10, 0.5, 1);
+        }
+        if( Controller2.getPOV() == 0 ){
+            new wristToPosition(100, 10, 0.5, 1);
+        }
     }
 
     public Command getAutonomousCommand() {
