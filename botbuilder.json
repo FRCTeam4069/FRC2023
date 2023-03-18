@@ -1,13 +1,13 @@
 {
     "subsystemPackage": "{BASE_PACKAGE}/subsystems",
-    "commandPackage": "{BASE_PACKAGE}/Auto",
-    "instantCommandPackage": "{BASE_PACKAGE}/Auto/Commands",
-    "autoCommandPackage": "{BASE_PACKAGE}/Auto/Routines",
-    "instantAutoCommandPackage": "{BASE_PACKAGE}/Auto/Commands",
+    "commandPackage": "{BASE_PACKAGE}/commands",
+    "instantCommandPackage": "{BASE_PACKAGE}/commands/instant",
+    "autoCommandPackage": "{BASE_PACKAGE}/commands/autonomous",
+    "instantAutoCommandPackage": "{BASE_PACKAGE}/commands/instant",
     "baseClassName": "Robot",
     "srcFolder": "src/main/java",
     "buildFolder": "build/classes/java/main",
-    "testFolder": "src/main",
+    "testFolder": "src/test/java",
     "suppressMocksWarning": false,
     "hardware": {
         "motorControllers": [

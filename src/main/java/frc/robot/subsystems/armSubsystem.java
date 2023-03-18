@@ -1,5 +1,6 @@
 package frc.robot.subsystems;
 
+import javax.sound.sampled.SourceDataLine;
 import javax.swing.text.StyleContext.SmallAttributeSet;
 
 import com.revrobotics.CANSparkMax;
@@ -8,6 +9,7 @@ import com.revrobotics.CANSparkMax.SoftLimitDirection;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
@@ -18,11 +20,11 @@ import frc.robot.Constants.armAndIntakeConstants.intakeConstants;
 public class armSubsystem extends SubsystemBase {
     public CANSparkMax ArticulateR, ArticulateL, Extend;
     public RelativeEncoder leftEncoder, rightEncoder, extendEncoder;
-    public boolean enableLimit, _enableLimit;
+    public boolean enableLimit, _enableLimit, isStuck = false, _isStuck = false;
     public double extendPose = 0, articulatePose = 0, changingArticulateLimits = 130;
     public int articulateLimit = 130;
     public boolean moveToPoseMode = true;
-    
+    public Timer stuckTimer = new Timer();
 
     public armSubsystem() {
         enableLimit = true;
@@ -70,8 +72,7 @@ public class armSubsystem extends SubsystemBase {
     public void periodic() {
         // Update global variables
 
-
-        armConstants.armPose = AvgPose();
+        armConstants.armPose = articulateDegrees();
         armConstants.extendPose = ExtendedPose();
         armConstants.side = getSide();
 
@@ -92,35 +93,37 @@ public class armSubsystem extends SubsystemBase {
             _enableLimit = enableLimit;
         }
 
-
-  
-
         if (enableLimit) {
             extendPose = MathUtil.clamp(extendPose, 0, 24);
-            articulatePose = MathUtil.clamp(articulatePose, (int) -Math.abs(claculatedLimit()), (int) Math.abs(claculatedLimit()));
+            articulatePose = MathUtil.clamp(articulatePose, (int) -Math.abs(claculatedLimit()),
+                    (int) Math.abs(claculatedLimit()));
 
-                SmartDashboard.putNumber("Current Arm Limit", changingArticulateLimits);
-                SmartDashboard.putNumber("Current Math", 180 - Math.toDegrees(Math.acos((armConstants.L1 / armConstants.L2))));
-            }
-
+            SmartDashboard.putNumber("Current Arm Limit", changingArticulateLimits);
+            SmartDashboard.putNumber("Current Math",
+                    180 - Math.toDegrees(Math.acos((armConstants.L1 / armConstants.L2))));
+        }
+        armIsNotStuck();
         updateKin();
 
         moveToPose(articulatePose);
-        //extendToPose(extendPose, 1);
-        
-        SmartDashboard.putNumber("Arm: Articulate", AvgPose());
+        // extendToPose(extendPose, 1);
+
+        SmartDashboard.putNumber("Arm: Articulate", articulateDegrees());
         SmartDashboard.putNumber("Arm: Target Articulate", articulatePose);
         SmartDashboard.putNumber("Arm: Extend", ExtendedPose());
 
         SmartDashboard.putNumber("Wrist X", armConstants.x);
         SmartDashboard.putNumber("Wrist Y", armConstants.y);
 
-        
     }
 
-    private double claculatedLimit(){
+    private double claculatedLimit() {
         changingArticulateLimits = 180 - Math.toDegrees(Math.acos((armConstants.L1 / armConstants.L2)));
-        if(-intakeConstants.wristPose * getSide() < 0){ changingArticulateLimits -= 10; }
+        if (-intakeConstants.wristPose * getSide() < 0) {
+            changingArticulateLimits -= 10;
+        } else {
+            changingArticulateLimits -= 20;
+        }
         changingArticulateLimits = MathUtil.clamp(changingArticulateLimits, 0, 130);
 
         return Math.abs(changingArticulateLimits);
@@ -149,7 +152,7 @@ public class armSubsystem extends SubsystemBase {
     private boolean moveToPose(double pose) {
 
         double speed = MathUtil.clamp(
-                ((pose - AvgPose()) * armConstants.proportionalGain
+                ((pose - articulateDegrees()) * armConstants.proportionalGain
                         + (ExtendedPose() * getSide() * armConstants.GravGain)),
                 -1, 1);
 
@@ -168,37 +171,33 @@ public class armSubsystem extends SubsystemBase {
     public void manualArticulate(double speed) {
 
         if ((speed * getSide() > 0) && (armConstants.y > armConstants.YLIMIT)) { // moving arm up but we're at the limit
-        //   return;
+            // return;
         }
 
         ArticulateL.set(speed);
         ArticulateR.set(speed);
 
-        if((-intakeConstants.wristPose * getSide() < 0) ){
-        articulateLimit = 130;  
-        } 
-        else{ 
+        if ((-intakeConstants.wristPose * getSide() < 0)) {
+            articulateLimit = 130;
+        } else {
             articulateLimit = 110;
         }
     }
 
     public void manualExtend(double speed) {
         if ((speed > 0) && (armConstants.x > armConstants.XLIMIT)) { // moving arm out but we're at the limit
-            //return;
+            // return;
         }
 
-        if(ExtendedPose() < 2 && speed < -0.25){
-        Extend.set(speed*0.25);
-        }else if (ExtendedPose() > 22  && speed > 0.25){
-        Extend.set(speed*0.25);
-        }else{
-        Extend.set(speed);
+        if (ExtendedPose() < 2 && speed < -0.25) {
+            Extend.set(speed * 0.25);
+        } else if (ExtendedPose() > 22 && speed > 0.25) {
+            Extend.set(speed * 0.25);
+        } else {
+            Extend.set(speed);
         }
-
 
     }
-
-
 
     public void setArmPose(double pose) {
         this.articulatePose = pose;
@@ -209,7 +208,7 @@ public class armSubsystem extends SubsystemBase {
     }
 
     public boolean isAtPoseAT(double Pose, double threshold) {
-        return (Math.abs(Pose - AvgPose()) < threshold);
+        return (Math.abs(Pose - articulateDegrees()) < threshold);
 
     }
 
@@ -217,7 +216,12 @@ public class armSubsystem extends SubsystemBase {
         return (Math.abs(Pose - ExtendedPose()) < threshold);
     }
 
-    public double AvgPose() {
+    /**
+     * Arm Pose in Degrees
+     * 
+     * @return
+     */
+    public double articulateDegrees() {
         return ArticulateR.getEncoder().getPosition();
     }
 
@@ -240,7 +244,7 @@ public class armSubsystem extends SubsystemBase {
      * @return +ve or -ve 1 depeneding on which side the arm is on
      */
     public double getSide() {
-        return Math.copySign(1, AvgPose());
+        return Math.copySign(1, articulateDegrees());
     }
 
     /**
@@ -265,6 +269,46 @@ public class armSubsystem extends SubsystemBase {
      */
     public void setHome() {
         Extend.getEncoder().setPosition(0);
+    }
+
+    public void updtaeArmStates() {
+
+    }
+
+    /**
+     * {@summary Stops the arm form trying to break itself if it is stuck}
+     */
+    public void armIsNotStuck() {
+        // check if the arm is at its target position
+        // or atleast within a threshold fo the target position
+        // if arm if not then start a timer
+        // if timer gets past certain point then
+        // set the target position to current position
+
+        if (!isAtPoseAT(articulatePose, 5)) {
+            stuckTimer.start();
+            if (stuckTimer.hasElapsed(3) && !isAtPoseAT(articulatePose, 5)) {
+                isStuck = true;
+                articulatePose = articulateDegrees();
+            }
+        } else if (!isAtPoseAT(articulatePose, 130)) {
+            // Stops the arm target position to current position difference form ever being
+            // more then 130 degrees
+            // Theoretically stopping it form ever bashing into the ground...
+            isStuck = true;
+            articulatePose = articulateDegrees();
+        } else {
+            stuckTimer.reset();
+            stuckTimer.stop();
+        }
+
+        if (isStuck != _isStuck) {
+            System.out.println("Arm Got Stuck... @Position: " + articulateDegrees()
+                    + "\n Arm Target Position has been reset to :" + articulatePose);
+            isStuck = false;
+            _isStuck = isStuck;
+        }
+
     }
 
 }

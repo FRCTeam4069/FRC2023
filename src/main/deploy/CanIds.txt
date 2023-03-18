@@ -14,7 +14,7 @@ Swerve:
     Back Right  
         Rotation Motor   : 1
         Rotation CanCoder: 11 
-        Drive Motor      : 20 <-- physically 0
+        Drive Motor      : 20 <-- physical motor contoller is 0
     Pigeon               : 0
 
 

@@ -20,15 +20,22 @@ public class autoBalance extends CommandBase {
   private final SwerveSubsystem m_drivebase = RobotContainer.swerveSubsystem;
   private final Gyro Gyro = RobotContainer.swerveSubsystem.getGyro();
   public double thetaSpeed, xspeed, balancedtime, currRoll;
+  public final Double Timeout; 
   public boolean balanced, rollChange;
-  public Timer timer = new Timer();
+  public Timer timer = new Timer(), timeOutTimer = new Timer();
 
-  public autoBalance() {
+  /**
+   * 
+   * @param Timeout Seconds until command times out.
+   */
+  public autoBalance(double Timeout) {
+    this.Timeout = Timeout;
     addRequirements(RobotContainer.swerveSubsystem); // adds a requirement - if its not met then it will throw an error
   }
 
   @Override
   public void initialize() {
+    timeOutTimer.start();
     currRoll = Gyro.getRoll();
     balanced = false;
     rollChange = false;
@@ -72,7 +79,7 @@ public class autoBalance extends CommandBase {
 
   @Override
   public boolean isFinished() {
-    if (balanced == true)
+    if (balanced == true || timeOutTimer.hasElapsed(Timeout))
       return true;
     else {
       return false;

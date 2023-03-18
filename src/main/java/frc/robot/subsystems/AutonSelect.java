@@ -10,7 +10,7 @@ public class AutonSelect extends SubsystemBase {
     private SendableChooser<Integer> autonRoutine;
     private int selectedRoutine;
 
-    public AutonSelect(){
+    public AutonSelect() {
         ShuffleboardTab auton = Shuffleboard.getTab("Auto");
         autonRoutine = new SendableChooser<Integer>();
 
@@ -22,17 +22,17 @@ public class AutonSelect extends SubsystemBase {
         autonRoutine.addOption("5", 5);
         autonRoutine.setDefaultOption("Do nothing", 6);
 
-        auton.add("Autonomous", autonRoutine).withWidget(BuiltInWidgets.kComboBoxChooser).withPosition(0, 0).withSize(5,5);
+        auton.add("Autonomous", autonRoutine).withWidget(BuiltInWidgets.kComboBoxChooser).withPosition(0, 0).withSize(5,
+                5);
     }
 
     @Override
-    public void periodic(){
-        selectedRoutine = autonRoutine.getSelected();        
+    public void periodic() {
+        selectedRoutine = autonRoutine.getSelected();
     }
 
-    public int getSelected(){
+    public int getSelected() {
         return selectedRoutine;
     }
 
-    
 }

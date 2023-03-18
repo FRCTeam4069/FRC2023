@@ -11,7 +11,7 @@ import frc.robot.Auto.Commands.drivebaseCommands.autoBalance;
 public class Middle_Path_0cones extends SequentialCommandGroup {
 
     public Middle_Path_0cones() {
-        addCommands(new armToPose(-130, false, 5).alongWith(new autoBalance()));
+        addCommands(new armToPose(-130, false, 5).alongWith(new autoBalance(5)));
 
     }
 
