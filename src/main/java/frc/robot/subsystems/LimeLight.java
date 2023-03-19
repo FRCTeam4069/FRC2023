@@ -6,10 +6,13 @@ import java.util.List;
 
 import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonPoseEstimator;
+import org.photonvision.PhotonUtils;
 import org.photonvision.common.hardware.VisionLEDMode;
 import org.photonvision.targeting.PhotonTrackedTarget;
 
 import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.math.geometry.Transform3d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class LimeLight extends SubsystemBase {
@@ -23,6 +26,11 @@ public class LimeLight extends SubsystemBase {
         targetFound = false;
     }
 
+    @Override
+    public void periodic() {
+        runCamera();
+    }
+
     /**
      * Using PhotonVision to get the estimated pose of the Robot
      * 
@@ -32,15 +40,25 @@ public class LimeLight extends SubsystemBase {
     public void runCamera() {
         var results = camera.getLatestResult();
         targetFound = results.hasTargets();
-        List<PhotonTrackedTarget> targets = results.getTargets();
 
-        PhotonTrackedTarget target = results.getBestTarget();
-        int targetID = target.getFiducialId();
-        double poseAmbiguity = target.getPoseAmbiguity();
+        if (results.hasTargets()) {
+            PhotonTrackedTarget target = results.getBestTarget();
+            int targetID = target.getFiducialId();
+            Transform3d targetPose =  target.getBestCameraToTarget();
+            double poseAmbiguity = target.getPoseAmbiguity();
+            SmartDashboard.putNumber("tagetID", targetID);
+            SmartDashboard.putNumber("taget Y", targetPose.getY());
+            SmartDashboard.putNumber("taget X", targetPose.getX());
+            SmartDashboard.putNumber("taget Z", targetPose.getZ());
+            SmartDashboard.putNumber("taget Pitch", targetPose.getRotation().getAngle());
 
+            PhotonUtils.calculateDistanceToTargetMeters(6, targetID, poseAmbiguity, targetID);
+            
+        }
+        SmartDashboard.putBoolean("targetFound", targetFound);
     }
 
-    public void getAprilTags(){
+    public void getAprilTags() {
 
     }
 

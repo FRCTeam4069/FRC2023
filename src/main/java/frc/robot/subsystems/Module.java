@@ -26,8 +26,8 @@ public class Module extends SubsystemBase {
   private final CANSparkMax turnMotor;
   private final PIDController tPidController;
   private final CANCoder tCanCoder;
-  private final boolean absoluteEncoderReversed;
   private final double absoluteEncoderOffsetRad;
+  private final boolean absoluteEncoderReversed;
   private double output;
 
 
@@ -56,8 +56,8 @@ public class Module extends SubsystemBase {
     driveMotor.setInverted(driveMotorReversed);
     driveMotor.setNeutralMode(NeutralMode.Brake);
 
+    tCanCoder.configSensorDirection(absoluteEncoderReversed);
     turnMotor.setInverted(turnMotorReversed);
-
    
 
     tPidController = new PIDController(ModuleConstants.kPTurning, 0, 0);
@@ -69,7 +69,7 @@ public class Module extends SubsystemBase {
       return driveMotor.getSelectedSensorPosition()/2048*6.75*Math.PI*Units.inchesToMeters(4);
    }
    public double getTurnignPosition(){
-      return Math.toRadians(tCanCoder.getAbsolutePosition()) - (absoluteEncoderOffsetRad  * (absoluteEncoderReversed ? -1 : 1)); 
+      return Math.toRadians(tCanCoder.getAbsolutePosition()) - (absoluteEncoderOffsetRad); 
    }
    public double getDriveVelocity(){
       return (driveMotor.getSelectedSensorVelocity()/(2048*6.75))*10*Math.PI*Units.inchesToMeters(4);
@@ -77,9 +77,7 @@ public class Module extends SubsystemBase {
    public double getTurningVelocity(){
       return Math.toRadians(tCanCoder.getVelocity()); 
    }
-   public double getAbsoluteEncoderRad(){
-      return ((Math.toRadians(tCanCoder.getAbsolutePosition()) - absoluteEncoderOffsetRad ) * (absoluteEncoderReversed ? -1 : 1)); 
-   }
+
 
    public void resetEncoders(){
       driveMotor.setSelectedSensorPosition(0);
