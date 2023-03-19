@@ -9,9 +9,9 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class Gyro extends SubsystemBase {
 
     public Pigeon2 gyro;
-
     public Gyro(int id) {
         gyro = new Pigeon2(id);
+
     }
 
     public void resetGyro() {
@@ -30,11 +30,11 @@ public class Gyro extends SubsystemBase {
     /** 
      * @return Current heading 
      */
-    public double getHeading(double heading){
-        if(gyro.getYaw() % 360+heading < -180){
-            return (360-(gyro.getYaw()+heading % 360));
+    public double getHeading(){
+        if(gyro.getYaw()%360 < -180){
+            return ((360-(gyro.getYaw()) % 360));
         }else{
-            return ((gyro.getYaw()+heading % 360));
+            return ((gyro.getYaw() % 360));
         }
  
     }

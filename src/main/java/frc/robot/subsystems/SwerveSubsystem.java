@@ -88,7 +88,7 @@ public class SwerveSubsystem extends SubsystemBase {
 
     public void resetGyro() {
         //gyro.setYaw(0);
-        gyro.setYaw(heading);
+        gyro.setYaw(0);
     }
 
     public Gyro getGyro() {
@@ -104,7 +104,7 @@ public class SwerveSubsystem extends SubsystemBase {
     }
 
     public Rotation2d getRotation2d() {
-        return Rotation2d.fromDegrees(gyro.getHeading(heading));
+        return Rotation2d.fromDegrees(gyro.getHeading());
     }
 
 
@@ -114,11 +114,11 @@ public class SwerveSubsystem extends SubsystemBase {
 
     public void resetOdometry() {
         odometry.resetPosition(getRotation2d(), new SwerveModulePosition[] {
-                FRSwerveModule.getPosition(),
                 FLSwerveModule.getPosition(),
-                BRSwerveModule.getPosition(),
+                FRSwerveModule.getPosition(),
                 BLSwerveModule.getPosition(),
-        }, new Pose2d(0, 0, new Rotation2d(gyro.getHeading(heading))));
+                BRSwerveModule.getPosition(),
+        }, new Pose2d(0, 0, new Rotation2d(gyro.getHeading())));
     }
 
     public void stopModules() {
@@ -142,7 +142,7 @@ public class SwerveSubsystem extends SubsystemBase {
     }
 
     public double getSide(){
-        if(/* between 0 and 180 */ convertGyroValues(gyro.getHeading(heading)) < 90 ){
+        if(/* between 0 and 180 */ convertGyroValues(gyro.getHeading()) < 90 ){
             return -1;
         }else{
         return 1;}

@@ -5,24 +5,25 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.SwerveSubsystem;
 
-public class followTrajectoryCommand extends CommandBase{
+public class followTrajectoryCommand extends CommandBase {
     private static final SwerveSubsystem driveSubsystem = RobotContainer.swerveSubsystem;
     private final Pose2d targetPose2d;
     private final boolean firstPath;
 
-    public followTrajectoryCommand( Pose2d targetPose, boolean firstPath) {
+    public followTrajectoryCommand(Pose2d targetPose, boolean firstPath) {
         this.targetPose2d = targetPose;
         this.firstPath = firstPath;
         addRequirements(RobotContainer.swerveSubsystem);
     }
+
     @Override
-    public void initialize(){
+    public void initialize() {
 
     }
+
     @Override
     public void execute() {
-        
-        
+
     }
 
     @Override
