@@ -41,9 +41,9 @@ public class DefualtDriveCommand extends CommandBase{
         double yspeed = HalfSpeed.get() ? ySpd.get()/6 : ySpd.get();
         xspeed = MathUtil.applyDeadband(xspeed, IO.xdeadZone);
         yspeed = MathUtil.applyDeadband(yspeed, IO.ydeadZone);
-        SmartDashboard.putNumber("heading", swerveSubsystem.getGyro().getHeading());
-        SmartDashboard.putNumber("Sub 90", 90-swerveSubsystem.getGyro().getHeading());
-        SmartDashboard.putNumber("Sub 180", 270-swerveSubsystem.getGyro().getHeading());
+        SmartDashboard.putNumber("heading", swerveSubsystem.getGyro().getHeading(swerveSubsystem.heading));
+        SmartDashboard.putNumber("Sub 90", 90-swerveSubsystem.getGyro().getHeading(swerveSubsystem.heading));
+        SmartDashboard.putNumber("Sub 180", 270-swerveSubsystem.getGyro().getHeading(swerveSubsystem.heading));
         
         
         if(IO.enableSlewrateLimiter){
@@ -55,9 +55,9 @@ public class DefualtDriveCommand extends CommandBase{
             // Relative to field
             if(turnAlign.get()){
                 if(swerveSubsystem.getSide() == 1){
-                    Tspeed = MathUtil.clamp(0.1*-(90 - Math.abs(swerveSubsystem.getGyro().getHeading())), 2, 2);
+                    Tspeed = MathUtil.clamp(0.1*-(90 - Math.abs(swerveSubsystem.getGyro().getHeading(swerveSubsystem.heading))), 2, 2);
                 } else{
-                    Tspeed = MathUtil.clamp(0.1*-(270 - Math.abs(swerveSubsystem.getGyro().getHeading())), 2, 2);
+                    Tspeed = MathUtil.clamp(0.1*-(270 - Math.abs(swerveSubsystem.getGyro().getHeading(swerveSubsystem.heading))), 2, 2);
                 }
             } else{
                 Tspeed = HalfSpeed.get() ? TSpd.get()/4 : TSpd.get();

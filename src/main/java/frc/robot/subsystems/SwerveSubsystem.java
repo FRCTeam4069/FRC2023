@@ -16,6 +16,20 @@ import frc.robot.Constants.drivebaseConstants.deviceIDs;
 import frc.robot.Constants.drivebaseConstants.kinematics;
 
 public class SwerveSubsystem extends SubsystemBase {
+    public final double heading;
+    
+    public SwerveSubsystem(double heading) {
+        new Thread(() -> {
+            try {
+                Thread.sleep(1000);
+                resetGyro();
+            } catch (Exception e) {
+            }
+        }).start();
+
+        this.heading = heading;
+
+    }
 
     public final Module FRSwerveModule = new Module(
             deviceIDs.FR_DRIVE_MOTOR,
@@ -69,20 +83,12 @@ public class SwerveSubsystem extends SubsystemBase {
         };
     }
 
-    public SwerveSubsystem() {
-        new Thread(() -> {
-            try {
-                Thread.sleep(1000);
-                resetGyro();
-            } catch (Exception e) {
-            }
-        }).start();
+    
 
-    }
 
     public void resetGyro() {
         //gyro.setYaw(0);
-        gyro.setYaw(0);
+        gyro.setYaw(heading);
     }
 
     public Gyro getGyro() {
@@ -98,7 +104,7 @@ public class SwerveSubsystem extends SubsystemBase {
     }
 
     public Rotation2d getRotation2d() {
-        return Rotation2d.fromDegrees(gyro.getHeading());
+        return Rotation2d.fromDegrees(gyro.getHeading(heading));
     }
 
 
@@ -112,7 +118,7 @@ public class SwerveSubsystem extends SubsystemBase {
                 FLSwerveModule.getPosition(),
                 BRSwerveModule.getPosition(),
                 BLSwerveModule.getPosition(),
-        }, new Pose2d(0, 0, new Rotation2d(gyro.getHeading())));
+        }, new Pose2d(0, 0, new Rotation2d(gyro.getHeading(heading))));
     }
 
     public void stopModules() {
@@ -136,7 +142,7 @@ public class SwerveSubsystem extends SubsystemBase {
     }
 
     public double getSide(){
-        if(/* between 0 and 180 */ convertGyroValues(gyro.getHeading()) < 90 ){
+        if(/* between 0 and 180 */ convertGyroValues(gyro.getHeading(heading)) < 90 ){
             return -1;
         }else{
         return 1;}

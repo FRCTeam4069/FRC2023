@@ -30,11 +30,11 @@ public class Gyro extends SubsystemBase {
     /** 
      * @return Current heading 
      */
-    public double getHeading(){
-        if(gyro.getYaw() % 360+90 < -180){
-            return (360-(gyro.getYaw()-90 % 360));
+    public double getHeading(double heading){
+        if(gyro.getYaw() % 360+heading < -180){
+            return (360-(gyro.getYaw()+heading % 360));
         }else{
-            return ((gyro.getYaw()+90 % 360));
+            return ((gyro.getYaw()+heading % 360));
         }
  
     }
