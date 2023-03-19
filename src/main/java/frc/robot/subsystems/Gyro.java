@@ -1,19 +1,20 @@
 package frc.robot.subsystems;
 
-
 import com.ctre.phoenix.sensors.Pigeon2;
+import com.ctre.phoenix.sensors.Pigeon2Configuration;
 
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-public class Gyro extends SubsystemBase{
-    
+public class Gyro extends SubsystemBase {
+
     public Pigeon2 gyro;
-    public Gyro(int id){
+
+    public Gyro(int id) {
         gyro = new Pigeon2(id);
     }
 
-    public void resetGyro(){
+    public void resetGyro() {
         gyro.setYaw(0);
 
     }
@@ -22,7 +23,7 @@ public class Gyro extends SubsystemBase{
      * 
      * @return Accumalted Yaw
      */
-    public double getYaw(){
+    public double getYaw() {
         return gyro.getYaw();
     }
 
@@ -30,22 +31,27 @@ public class Gyro extends SubsystemBase{
      * @return Current heading 
      */
     public double getHeading(){
-        return gyro.getYaw() % 360;
+        if(gyro.getYaw() % 360+90 < -180){
+            return (360-(gyro.getYaw()-90 % 360));
+        }else{
+            return ((gyro.getYaw()+90 % 360));
+        }
+ 
     }
 
-    public void setYaw(double Yaw){
+    public void setYaw(double Yaw) {
         gyro.setYaw(Yaw);
     }
 
-    public double getPitch(){
+    public double getPitch() {
         return gyro.getPitch();
     }
 
-    public double getRoll(){
+    public double getRoll() {
         return gyro.getRoll();
     }
 
     @Override
-    public void periodic(){
+    public void periodic() {
     }
 }

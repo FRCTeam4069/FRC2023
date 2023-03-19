@@ -58,6 +58,7 @@ public class SwerveSubsystem extends SubsystemBase {
     public static final Gyro gyro = new Gyro(deviceIDs.PIGEON_ID);
     public final SwerveDriveOdometry odometry = new SwerveDriveOdometry(kinematics.m_kinematics, getRotation2d(),
             getModulePositions());
+            
 
     public SwerveModulePosition[] getModulePositions() {
         return new SwerveModulePosition[] {
@@ -81,7 +82,7 @@ public class SwerveSubsystem extends SubsystemBase {
 
     public void resetGyro() {
         //gyro.setYaw(0);
-        gyro.setYaw(270);
+        gyro.setYaw(0);
     }
 
     public Gyro getGyro() {
@@ -129,14 +130,13 @@ public class SwerveSubsystem extends SubsystemBase {
         SwerveDriveKinematics.desaturateWheelSpeeds(ModuleStates, ModuleConstants.MAX_VELOCITY_METERS_PER_SECOND);
         FLSwerveModule.setDesiredState(ModuleStates[0]);
         FRSwerveModule.setDesiredState(ModuleStates[1]);
-        ;
         BLSwerveModule.setDesiredState(ModuleStates[2]);
         BRSwerveModule.setDesiredState(ModuleStates[3]);
 
     }
 
     public double getSide(){
-        if(/* between 0 and 180 */ convertGyroValues(gyro.getHeading()) < 180 ){
+        if(/* between 0 and 180 */ convertGyroValues(gyro.getHeading()) < 90 ){
             return -1;
         }else{
         return 1;}
@@ -158,6 +158,11 @@ public class SwerveSubsystem extends SubsystemBase {
                 if (IO.PrintSwerveData) {
           
             }
+
+            SmartDashboard.putNumber("FR Pose", FRSwerveModule.getTurnignPosition());
+            SmartDashboard.putNumber("FL Pose", FLSwerveModule.getTurnignPosition());
+            SmartDashboard.putNumber("BR Pose", BRSwerveModule.getTurnignPosition());
+            SmartDashboard.putNumber("BL Pose", BLSwerveModule.getTurnignPosition());
 
     }
 
