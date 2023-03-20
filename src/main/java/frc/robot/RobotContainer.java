@@ -18,7 +18,7 @@ import frc.robot.Auto.Commands.armCommands.ArmRoutines.HomePose;
 import frc.robot.Auto.Commands.armCommands.ArmRoutines.HumanPlayerPose;
 import frc.robot.Auto.Commands.armCommands.ArmRoutines.MidPose;
 import frc.robot.Auto.Commands.armCommands.ArmRoutines.scoreThenHome;
-import frc.robot.Auto.Commands.drivebaseCommands.DefualtDriveCommand;
+import frc.robot.Auto.Commands.drivebaseCommands.defaultDriveCommand;
 import frc.robot.Auto.Commands.drivebaseCommands.followTrajectoryCommand;
 import frc.robot.Auto.Commands.drivebaseCommands.leaveCommunity;
 import frc.robot.Auto.Commands.intakeCommands.DefaultIntakeCommand;
@@ -75,7 +75,7 @@ public class RobotContainer {
 
     public RobotContainer() {
 
-        swerveSubsystem.setDefaultCommand(new DefualtDriveCommand(
+        swerveSubsystem.setDefaultCommand(new defaultDriveCommand(
                 swerveSubsystem,
                 () -> Controller1.getLeftX(),
                 () -> Controller1.getLeftY(),
