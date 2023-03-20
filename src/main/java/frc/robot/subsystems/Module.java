@@ -66,7 +66,7 @@ public class Module extends SubsystemBase {
    }
 
    public double getDrivePosition(){
-      return driveMotor.getSelectedSensorPosition()/2048*6.75*Math.PI*Units.inchesToMeters(4);
+      return (driveMotor.getSelectedSensorPosition()/(2048*6.75)) * Math.PI*Units.inchesToMeters(4);
    }
    public double getTurnignPosition(){
       return Math.toRadians(tCanCoder.getAbsolutePosition()) - (absoluteEncoderOffsetRad); 

@@ -10,7 +10,9 @@ import org.photonvision.PhotonUtils;
 import org.photonvision.common.hardware.VisionLEDMode;
 import org.photonvision.targeting.PhotonTrackedTarget;
 
+import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -58,14 +60,16 @@ public class LimeLight extends SubsystemBase {
         SmartDashboard.putBoolean("targetFound", targetFound);
     }
 
-    public void getAprilTags() {
+    public void setToAprilTags() {
+        camera.setLED(VisionLEDMode.kOn);
 
     }
 
-    public void getReflectiveTape() {
+    public void setToReflectiveTape() {
         camera.setLED(VisionLEDMode.kOn);
         camera.setPipelineIndex(0);
     }
+
 
     /**
      * Get the Distance from the Limelight to the Refelctive tape on the Poles

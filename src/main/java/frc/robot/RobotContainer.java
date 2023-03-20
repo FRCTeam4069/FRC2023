@@ -1,6 +1,8 @@
 package frc.robot;
 
 import com.ctre.phoenix.music.Orchestra;
+import com.pathplanner.lib.auto.PIDConstants;
+import com.pathplanner.lib.auto.SwerveAutoBuilder;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.XboxController;
@@ -23,8 +25,11 @@ import frc.robot.Auto.Commands.intakeCommands.DefaultIntakeCommand;
 import frc.robot.Auto.Commands.intakeCommands.wristToPosition;
 import frc.robot.Auto.routines.Middle_Path_0cones;
 import frc.robot.Auto.routines.PlaceCubeAndArmDown;
+import frc.robot.Auto.routines.TestPathPlannerPath;
 import frc.robot.Auto.routines.placeCube;
+import frc.robot.Constants.AutoValues;
 import frc.robot.Constants.IO;
+import frc.robot.Constants.drivebaseConstants;
 import frc.robot.subsystems.armSubsystem;
 import frc.robot.subsystems.AutonSelect;
 import frc.robot.subsystems.Debugger;
@@ -43,6 +48,18 @@ public class RobotContainer {
     public static final Debugger db = new Debugger();
     public followTrajectoryCommand fTrajectoryCommand;
 
+    public static final SwerveAutoBuilder autoBuilder = new SwerveAutoBuilder(
+        swerveSubsystem::getPose, // Pose2d supplier
+        swerveSubsystem::resetOdometry, // Pose2d consumer, used to reset odometry at the beginning of auto
+        drivebaseConstants.kinematics.m_kinematics, // SwerveDriveKinematics
+        new PIDConstants(5.0, 0.0, 0.0), // PID constants to correct for translation error (used to create the X and Y PID controllers)
+        new PIDConstants(0.5, 0.0, 0.0), // PID constants to correct for rotation error (used to create the rotation controller)
+        swerveSubsystem::setModuleStates, // Module states consumer used to output to the drive subsystem
+        AutoValues.eventMap,
+        false, // Should the path be automatically mirrored depending on alliance color. Optional, defaults to true
+        swerveSubsystem // The drive subsystem. Used to properly set the requirements of path following commands
+    );
+
     public void PlayMusic(String Filename) {
         Orchestra orchestra = new Orchestra();
         orchestra.loadMusic(Filename);
@@ -57,11 +74,12 @@ public class RobotContainer {
     private final XboxController Controller2 = new XboxController(1);
 
     public RobotContainer() {
+
         swerveSubsystem.setDefaultCommand(new DefualtDriveCommand(
                 swerveSubsystem,
                 () -> Controller1.getLeftX(),
-                () -> -Controller1.getLeftY(),
-                () -> -Controller1.getRightX(),
+                () -> Controller1.getLeftY(),
+                () -> Controller1.getRightX(),
                 () -> Controller1.getAButton(),
                 () -> Controller1.getRightBumper()));
 
@@ -113,6 +131,8 @@ public class RobotContainer {
         }
     }
 
+
+
     public Command getAutonomousCommand() {
         int autoIndex = autoSelecter.getSelected();
         switch (autoIndex) {
@@ -126,9 +146,8 @@ public class RobotContainer {
                 return new placeCube();
             case 4:
                 return new PlaceCubeAndArmDown();
-
             case 5:
-                return new InstantCommand();
+                return new TestPathPlannerPath();
             case 6:
                 return new InstantCommand();
             default:

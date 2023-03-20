@@ -1,6 +1,10 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
+import com.pathplanner.lib.PathPlannerTrajectory;
+import com.pathplanner.lib.commands.PPSwerveControllerCommand;
+
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
@@ -8,9 +12,13 @@ import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.IO;
+import frc.robot.Constants.drivebaseConstants;
 import frc.robot.Constants.drivebaseConstants.ModuleConstants;
 import frc.robot.Constants.drivebaseConstants.deviceIDs;
 import frc.robot.Constants.drivebaseConstants.kinematics;
@@ -112,13 +120,13 @@ public class SwerveSubsystem extends SubsystemBase {
         return odometry.getPoseMeters();
     }
 
-    public void resetOdometry() {
+    public void resetOdometry(Pose2d newPose2d) {
         odometry.resetPosition(getRotation2d(), new SwerveModulePosition[] {
                 FLSwerveModule.getPosition(),
                 FRSwerveModule.getPosition(),
                 BLSwerveModule.getPosition(),
                 BRSwerveModule.getPosition(),
-        }, new Pose2d(0, 0, new Rotation2d(gyro.getHeading())));
+        }, newPose2d);
     }
 
     public void stopModules() {
@@ -165,11 +173,16 @@ public class SwerveSubsystem extends SubsystemBase {
           
             }
 
-            SmartDashboard.putNumber("FR Pose", FRSwerveModule.getTurnignPosition());
-            SmartDashboard.putNumber("FL Pose", FLSwerveModule.getTurnignPosition());
-            SmartDashboard.putNumber("BR Pose", BRSwerveModule.getTurnignPosition());
-            SmartDashboard.putNumber("BL Pose", BLSwerveModule.getTurnignPosition());
+            SmartDashboard.putNumber("FR Pose", FRSwerveModule.getDrivePosition());
+            SmartDashboard.putNumber("FL Pose", FLSwerveModule.getDrivePosition());
+            SmartDashboard.putNumber("BR Pose", BRSwerveModule.getDrivePosition());
+            SmartDashboard.putNumber("BL Pose", BLSwerveModule.getDrivePosition());
 
+
+            SmartDashboard.putNumber("FR Wheel Spins", FRSwerveModule.getDrivePosition());
+            SmartDashboard.putNumber("FL Wheel Spins", FLSwerveModule.getDrivePosition());
+            SmartDashboard.putNumber("BR Wheel Spins", BRSwerveModule.getDrivePosition());
+            SmartDashboard.putNumber("BL Wheel Spins", BLSwerveModule.getDrivePosition());
     }
 
     public TalonFX getFRDriveMotor() {
@@ -194,5 +207,27 @@ public class SwerveSubsystem extends SubsystemBase {
         } else return gyroHeading;
 
     }
+
+    public Command followTrajectoryCommand(PathPlannerTrajectory traj, boolean isFirstPath) {
+        return new SequentialCommandGroup(
+             new InstantCommand(() -> {
+               // Reset odometry for the first path you run during auto
+               if(isFirstPath){
+                   this.resetOdometry(traj.getInitialHolonomicPose());
+               }
+             }),
+             new PPSwerveControllerCommand(
+                 traj, 
+                 this::getPose, // Pose supplier
+                 drivebaseConstants.kinematics.m_kinematics, // SwerveDriveKinematics
+                 new PIDController(0.3, 0, 0), // X controller. Tune these values for your robot. Leaving them 0 will only use feedforwards.
+                 new PIDController(0.3, 0, 0), // Y controller (usually the same values as X controller)
+                 new PIDController(0.5, 0, 0), // Rotation controller. Tune these values for your robot. Leaving them 0 will only use feedforwards.
+                 this::setModuleStates, // Module states consumer
+                 false, // Should the path be automatically mirrored depending on alliance color. Optional, defaults to true
+                 this // Requires this drive subsystem
+             )
+         );
+     }
 
 }
