@@ -24,13 +24,13 @@ public class LimeLight extends SubsystemBase {
     private boolean targetFound;
 
     public LimeLight() {
-        camera = new PhotonCamera("LimeLight");
-        targetFound = false;
+       // camera = new PhotonCamera("LimeLight");
+        //targetFound = false;
     }
 
     @Override
     public void periodic() {
-        runCamera();
+        //runCamera();
     }
 
     /**

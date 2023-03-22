@@ -43,10 +43,10 @@ public class armSubsystem extends SubsystemBase {
         armConstants.side = getSide();
         setZero();
 
-        ArticulateL.setSoftLimit(SoftLimitDirection.kForward, articulateLimit);
-        ArticulateL.setSoftLimit(SoftLimitDirection.kReverse, -articulateLimit);
-        ArticulateR.setSoftLimit(SoftLimitDirection.kForward, articulateLimit);
-        ArticulateR.setSoftLimit(SoftLimitDirection.kReverse, -articulateLimit);
+        ArticulateL.setSoftLimit(SoftLimitDirection.kForward, 130);
+        ArticulateL.setSoftLimit(SoftLimitDirection.kReverse, -130);
+        ArticulateR.setSoftLimit(SoftLimitDirection.kForward, 130);
+        ArticulateR.setSoftLimit(SoftLimitDirection.kReverse, -130);
 
         ArticulateL.enableSoftLimit(SoftLimitDirection.kForward, true);
         ArticulateL.enableSoftLimit(SoftLimitDirection.kReverse, true);
@@ -95,14 +95,17 @@ public class armSubsystem extends SubsystemBase {
 
         if (enableLimit) {
             extendPose = MathUtil.clamp(extendPose, 0, 24);
-            articulatePose = MathUtil.clamp(articulatePose, (int) -Math.abs(claculatedLimit()),
-                    (int) Math.abs(claculatedLimit()));
+            if (-intakeConstants.wristPose * getSide() < 0) {
+                articulatePose = MathUtil.clamp(articulatePose, -130, 130);
+            } else{
+            articulatePose = MathUtil.clamp(articulatePose, -110, 110);//(int) -Math.abs(claculatedLimit()),
+}
+            //(int) Math.abs(claculatedLimit()));
 
             SmartDashboard.putNumber("Current Arm Limit", changingArticulateLimits);
-            SmartDashboard.putNumber("Current Math",
-                    180 - Math.toDegrees(Math.acos((armConstants.L1 / armConstants.L2))));
+            SmartDashboard.putNumber("Current Math",claculatedLimit());
         }
-        armIsNotStuck();
+        //armIsNotStuck();
         updateKin();
 
         moveToPose(articulatePose);
@@ -118,13 +121,14 @@ public class armSubsystem extends SubsystemBase {
     }
 
     private double claculatedLimit() {
-        changingArticulateLimits = 180 - Math.toDegrees(Math.acos((armConstants.L1 / armConstants.L2)));
+        changingArticulateLimits = 180
+                - Math.toDegrees(Math.acos((armConstants.L1 / armConstants.L2_OFFSET + armConstants.extendPose)));
         if (-intakeConstants.wristPose * getSide() < 0) {
             changingArticulateLimits -= 10;
         } else {
             changingArticulateLimits -= 20;
         }
-        changingArticulateLimits = MathUtil.clamp(changingArticulateLimits, 0, 130);
+        changingArticulateLimits = MathUtil.clamp(Math.abs(changingArticulateLimits), 0, 130);
 
         return Math.abs(changingArticulateLimits);
     }

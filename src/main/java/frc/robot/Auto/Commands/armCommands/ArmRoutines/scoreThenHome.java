@@ -6,7 +6,6 @@ import frc.robot.Auto.Commands.setLastState;
 import frc.robot.Auto.Commands.armCommands.armToPose;
 import frc.robot.Auto.Commands.intakeCommands.OpenIntake;
 import frc.robot.Auto.Commands.intakeCommands.wristToPosition;
-import frc.robot.Constants.IO;
 import frc.robot.Constants.IO.state;
 
 public class scoreThenHome extends SequentialCommandGroup {

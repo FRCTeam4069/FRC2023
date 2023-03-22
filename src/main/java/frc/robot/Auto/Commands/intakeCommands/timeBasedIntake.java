@@ -33,12 +33,11 @@ public class timeBasedIntake extends CommandBase {
 
     @Override
     public boolean isFinished() {
-        return false;
+        return timer.hasElapsed(time);
     }
 
     @Override
     public void end(boolean interrupted) {
-        timer.hasElapsed(time);
 
     }
 }

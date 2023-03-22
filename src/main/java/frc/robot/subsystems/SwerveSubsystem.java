@@ -25,8 +25,12 @@ import frc.robot.Constants.drivebaseConstants.kinematics;
 
 public class SwerveSubsystem extends SubsystemBase {
     public final double heading;
+    public PIDController turningPID = new PIDController(0.7, 0, 0);
+
     
     public SwerveSubsystem(double heading) {
+        turningPID.enableContinuousInput(-180, 180);
+
         new Thread(() -> {
             try {
                 Thread.sleep(1000);
@@ -150,10 +154,9 @@ public class SwerveSubsystem extends SubsystemBase {
     }
 
     public double getSide(){
-        if(/* between 0 and 180 */ convertGyroValues(gyro.getHeading()) < 90 ){
+        if(Math.abs(odometry.getPoseMeters().getRotation().getDegrees()) > 90){
             return -1;
-        }else{
-        return 1;}
+        }else return 1;
     }
    
 
@@ -220,9 +223,9 @@ public class SwerveSubsystem extends SubsystemBase {
                  traj, 
                  this::getPose, // Pose supplier
                  drivebaseConstants.kinematics.m_kinematics, // SwerveDriveKinematics
-                 new PIDController(0.3, 0, 0), // X controller. Tune these values for your robot. Leaving them 0 will only use feedforwards.
-                 new PIDController(0.3, 0, 0), // Y controller (usually the same values as X controller)
-                 new PIDController(0.5, 0, 0), // Rotation controller. Tune these values for your robot. Leaving them 0 will only use feedforwards.
+                 new PIDController(2.6, 0, 0), // X controller. Tune these values for your robot. Leaving them 0 will only use feedforwards.
+                 new PIDController(2.6, 0, 0), // Y controller (usually the same values as X controller)
+                 turningPID, // Rotation controller. Tune these values for your robot. Leaving them 0 will only use feedforwards.
                  this::setModuleStates, // Module states consumer
                  false, // Should the path be automatically mirrored depending on alliance color. Optional, defaults to true
                  this // Requires this drive subsystem

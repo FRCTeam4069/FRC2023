@@ -80,7 +80,8 @@ public class RobotContainer {
                 () -> Controller1.getLeftX(),
                 () -> Controller1.getLeftY(),
                 () -> Controller1.getRightX(),
-                () -> Controller1.getAButton(),
+                () -> Controller1.getYButton(),
+                () -> Controller1.getLeftBumper(),
                 () -> Controller1.getRightBumper()));
 
         arm.setDefaultCommand(new DefaultArmCommand(
@@ -101,7 +102,7 @@ public class RobotContainer {
     }
 
     private void configureButtonBindings() {
-        new Trigger(Controller1::getAButton).whileTrue(swerveSubsystem.resetGyroCommmand());
+         new Trigger(Controller1::getAButton).whileTrue(swerveSubsystem.resetGyroCommmand());
         // new Trigger(Controller2::getStartButton).whileTrue(arm.runOnce(() ->
         // arm.setZero()));
         new Trigger(Controller2::getLeftStickButton).whileTrue(arm.flaseLimit());
@@ -112,23 +113,11 @@ public class RobotContainer {
             new Trigger(Controller2::getAButton).onTrue(new HomePose());
         }
         new Trigger(Controller2::getYButton).onTrue(new HighPose());
-        new Trigger(Controller2::getXButton).onTrue(new HumanPlayerPose());
-        new Trigger(Controller2::getBButton).onTrue(new MidPose());
+        new Trigger(Controller2::getBButton).onTrue(new HumanPlayerPose());
+        new Trigger(Controller2::getXButton).onTrue(new MidPose());
          
 
-        if( Controller2.getPOV() == 90 ){
-            new wristToPosition(-intake.parallelAngle, 0, 0.5, 1);
-        }
-        if( Controller2.getPOV() == 180 ){
-            new wristToPosition(MathUtil.clamp(-intake.armAngle, -120,120), 10, 0.5, 1);
-
-        }
-        if( Controller2.getPOV() == 270 ){
-            new wristToPosition(-intake.parallelAngle, 10, 0.5, 1);
-        }
-        if( Controller2.getPOV() == 0 ){
-            new wristToPosition(100, 10, 0.5, 1);
-        }
+        
     }
 
 

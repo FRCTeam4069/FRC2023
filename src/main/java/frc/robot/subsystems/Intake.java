@@ -1,11 +1,18 @@
 package frc.robot.subsystems;
 
+import org.opencv.photo.Photo;
+
+import com.revrobotics.AnalogInput;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMax.SoftLimitDirection;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.math.trajectory.Trajectory.State;
+import edu.wpi.first.networktables.GenericEntry;
+import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -19,16 +26,24 @@ public class Intake extends SubsystemBase {
     private CANSparkMax intake, wrist;
     private RelativeEncoder intakeEncoder, wristEncoder;
     public double side, wristTarget, low, gravGain, armAngle, parallelAngle;
-    public boolean enableLimit = true, _enableLimit = false;
+    public DigitalInput NeoSideLimit, Limit;
+    public edu.wpi.first.wpilibj.AnalogInput PhotoElectric;
+    public GenericEntry hasCone;
+    public boolean enableLimit = true, _enableLimit = false, coneInRange;
+    public ShuffleboardTab tab = Shuffleboard.getTab("Intake");
 
     public Intake() {
+        hasCone = tab.add("Intake has Somethig", coneInRange).getEntry();
 
         intake = new CANSparkMax(intakeConstants.INTAKE_ID, MotorType.kBrushless);
         wrist = new CANSparkMax(intakeConstants.WRIST_ID, MotorType.kBrushless);
+        NeoSideLimit = new DigitalInput(armConstants.NEO_LIMIT);
+        Limit = new DigitalInput(armConstants.LIMIT);
+        PhotoElectric = new edu.wpi.first.wpilibj.AnalogInput(armConstants.PHOTOELECTRIC);
 
         intake.setSmartCurrentLimit(40);
         wrist.setSmartCurrentLimit(40);
-        wrist.setInverted(true);
+        wrist.setInverted(false);
         wrist.setOpenLoopRampRate(0);
 
         wristEncoder = wrist.getEncoder();
@@ -45,11 +60,11 @@ public class Intake extends SubsystemBase {
         SmartDashboard.putNumber("wrist", wristEncoder.getPositionConversionFactor());
 
         setWristPose(-40);
-        intakeEncoder.setPosition(16.8 - 4.3);
+        intakeEncoder.setPosition(0);// 16.8 - 4.3);
 
         // setIntakePose(0);
         intake.setSoftLimit(SoftLimitDirection.kReverse, 0);
-        intake.setSoftLimit(SoftLimitDirection.kForward, 16);
+        intake.setSoftLimit(SoftLimitDirection.kForward, 15);
         wrist.setSoftLimit(SoftLimitDirection.kReverse, -40);
         wrist.setSoftLimit(SoftLimitDirection.kForward, 39);
 
@@ -58,6 +73,8 @@ public class Intake extends SubsystemBase {
     @Override
     public void periodic() {
         // This method will be called once per scheduler run
+        isConeInRange();
+        atLimit();
         intakeConstants.wristPose = getWristAngle();
         side = armConstants.side;
         armAngle = armConstants.armPose;
@@ -68,9 +85,14 @@ public class Intake extends SubsystemBase {
             wrist.enableSoftLimit(SoftLimitDirection.kReverse, enableLimit);
             _enableLimit = enableLimit;
         }
+
+        SmartDashboard.putNumber("Intake Pose", getIntakePose());
         SmartDashboard.putNumber("Wrist Subsystem received Arm side", side);
         SmartDashboard.putNumber("wrist angle", getWristAngle());
         SmartDashboard.putNumber("wrist Target (Subsystem)", wristTarget);
+        SmartDashboard.putNumber("PhotoElectric V", PhotoElectric.getVoltage());
+        SmartDashboard.putBoolean("Limit", !Limit.get());
+        SmartDashboard.putBoolean("NeoLimit", !NeoSideLimit.get());
         low = (180 - Math.abs(armConstants.armPose)) * armConstants.side;
         SmartDashboard.putNumber("Low", low);
         SmartDashboard.putNumber("gravGain t1", ((getWristAngle() - low) * 0.01));
@@ -80,10 +102,29 @@ public class Intake extends SubsystemBase {
         SmartDashboard.putNumber("parallel angle", low - (side * 90));
         parallelAngle = low - (side * 90);
 
+        hasCone.setBoolean(coneInRange);
+
     }
 
     // +iv is up in negitive Side (arm)
     // -iv is up in positive Side (arm)
+
+    public void isConeInRange() {
+        if (PhotoElectric.getVoltage() > 0.26) {
+            coneInRange = true;
+        } else
+            coneInRange = false;
+    }
+
+    public void atLimit() {
+        if (!NeoSideLimit.get() || !Limit.get()) {
+            intakeEncoder.setPosition(15);
+        }
+        else{
+
+        }
+
+    }
 
     public double getWristAngle() {
         return (getWristPose() * 2 / 80 * 120);

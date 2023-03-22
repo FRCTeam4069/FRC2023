@@ -15,16 +15,17 @@ import frc.robot.subsystems.SwerveSubsystem;
 public class defaultDriveCommand extends CommandBase {
     private final SwerveSubsystem swerveSubsystem;
     private final Supplier<Double> xSpd, ySpd, TSpd;
-    private final Supplier<Boolean> HalfSpeed, turnAlign;
+    private final Supplier<Boolean> HalfSpeed, turnAlign, QuarterSpeed;
     private final SlewRateLimiter xSlewRateLimiter, ySlewRateLimiter, turnSlewRateLimiter;
 
     public defaultDriveCommand(SwerveSubsystem swerveSubsystem,
             Supplier<Double> xSpd, Supplier<Double> ySpd, Supplier<Double> TSpd, Supplier<Boolean> turnAlign,
-            Supplier<Boolean> HalfSpeed) {
+            Supplier<Boolean> HalfSpeed, Supplier<Boolean> quarterSpeed) {
 
         this.swerveSubsystem = swerveSubsystem;
         this.xSpd = xSpd;
         this.turnAlign = turnAlign;
+        this.QuarterSpeed = quarterSpeed;
         this.ySpd = ySpd;
         this.TSpd = TSpd;
         this.HalfSpeed = HalfSpeed;
@@ -37,8 +38,18 @@ public class defaultDriveCommand extends CommandBase {
     @Override
     public void execute() {
         double Tspeed;
-        double xspeed = HalfSpeed.get() ? xSpd.get() / 6 : xSpd.get();
-        double yspeed = HalfSpeed.get() ? ySpd.get() / 6 : ySpd.get();
+        double xspeed;
+        double yspeed;
+        if(QuarterSpeed.get()){
+            xspeed =  xSpd.get() / 4;
+            yspeed =  ySpd.get() / 4;}
+        else if(HalfSpeed.get()){
+        xspeed =  xSpd.get() / 2;
+        yspeed =  ySpd.get() / 2;}
+        else{
+        xspeed = xSpd.get(); 
+        yspeed = ySpd.get();
+      }
         xspeed = MathUtil.applyDeadband(xspeed, IO.xdeadZone);
         yspeed = MathUtil.applyDeadband(yspeed, IO.ydeadZone);
         SmartDashboard.putNumber("heading", swerveSubsystem.getGyro().getHeading());
@@ -61,13 +72,14 @@ public class defaultDriveCommand extends CommandBase {
                         0.1 * -(270 - Math.abs(swerveSubsystem.getGyro().getHeading())), -2, 2);
             }
         } else {
-            Tspeed = HalfSpeed.get() ? TSpd.get() / 4 : TSpd.get();
+            Tspeed = HalfSpeed.get() ? TSpd.get() / 2 : TSpd.get();
+            Tspeed = QuarterSpeed.get() ? TSpd.get() / 4 : TSpd.get();
             Tspeed = MathUtil.applyDeadband(Tspeed, IO.tdeadZone);
             Tspeed = turnSlewRateLimiter.calculate(Tspeed);
         }
         chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(
-                yspeed * IO.maxSpeed,
-                xspeed * IO.maxSpeed,
+                -yspeed * IO.maxSpeed,
+                -xspeed * IO.maxSpeed,
                 Tspeed * IO.maxTurnSpeed,
                 swerveSubsystem.getRotation2d());
 

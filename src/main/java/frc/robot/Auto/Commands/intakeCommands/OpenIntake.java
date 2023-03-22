@@ -16,7 +16,7 @@ public class OpenIntake extends CommandBase {
    
     @Override
     public void execute(){
-        intake.intakeToPose(16);
+        intake.intakeToPose(15);
         timer.start();
     }
     @Override
@@ -25,7 +25,7 @@ public class OpenIntake extends CommandBase {
     }
     @Override
     public boolean isFinished(){
-        return timer.get() > .5;
+        return !intake.NeoSideLimit.get();
     }
 
 }

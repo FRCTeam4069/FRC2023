@@ -9,6 +9,10 @@ public class armAndIntakeConstants{
         public static final int ARM_ID_L = 15; // Left
         public static final int ARM_ID_R = 4; // Right
         public static final int ARM_ID_E = 5; // Extend //FIXME
+        public static final int NEO_LIMIT = 6; // Extend //FIXME
+        public static final int LIMIT = 7; // Extend //FIXME
+        public static final int PHOTOELECTRIC = 4; // Extend //FIXME
+        
         public static final boolean rightMotorInvert = false; 
         public static final boolean leftMotorInvert = true; 
         public static final boolean telescopeMotorInvert = false; 
