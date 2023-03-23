@@ -1,8 +1,5 @@
 package frc.robot.subsystems;
 
-import javax.sound.sampled.SourceDataLine;
-import javax.swing.text.StyleContext.SmallAttributeSet;
-
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMax.SoftLimitDirection;

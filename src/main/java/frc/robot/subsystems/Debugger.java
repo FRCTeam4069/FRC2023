@@ -10,8 +10,8 @@ import frc.robot.Constants.IO;
 public class Debugger extends SubsystemBase{
     public ShuffleboardTab debugTab;
     public GenericEntry arm, intake, swerve, gyro, A, S, I, G, disbaleAll, D;
-    public Debugger(){
 
+    public Debugger(){
         debugTab = Shuffleboard.getTab("Debug");   
         disbaleAll = debugTab.add("Disable all?", IO.PrintArmData).withPosition(0, 0).withSize(5, 1).withWidget(BuiltInWidgets.kToggleButton).getEntry();
         arm = debugTab.add("Print Arm Numbers", IO.PrintArmData).withPosition(0, 1).withSize(4, 1).withWidget(BuiltInWidgets.kToggleSwitch).getEntry();

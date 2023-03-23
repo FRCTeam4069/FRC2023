@@ -32,6 +32,8 @@ public class Robot extends TimedRobot {
   private String musicfile;
   private final SendableChooser<String> Music_Chooser = new SendableChooser<>();
 
+  //public LEDController led;
+
   /**
    * This function is run when the robot is first started up and should be used
    * for any
@@ -50,6 +52,7 @@ public class Robot extends TimedRobot {
     Music_Chooser.addOption("Tetris Theme", tetris);
     Music_Chooser.addOption("Star Wars", StarWars);
     SmartDashboard.putData(Music_Chooser);
+    //led = new LEDController();
 
   }
 
@@ -127,15 +130,19 @@ public class Robot extends TimedRobot {
   @Override
   public void testInit() {
     // Cancels all running commands at the start of test mode.
-    CommandScheduler.getInstance().cancelAll();
-    musicfile = Music_Chooser.getSelected();
-    m_robotContainer.PlayMusic(musicfile);
-    SmartDashboard.putString("Selected file :", musicfile);
+    // CommandScheduler.getInstance().cancelAll();
+    // musicfile = Music_Chooser.getSelected();
+    // m_robotContainer.PlayMusic(musicfile);
+    // SmartDashboard.putString("Selected file :", musicfile);
+
+    
   }
 
   /** This function is called periodically during test mode. */
   @Override
   public void testPeriodic() {
+
+    //led.testLights(1435);
   }
 
   @Override
