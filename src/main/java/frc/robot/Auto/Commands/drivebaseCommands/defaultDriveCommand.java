@@ -86,7 +86,7 @@ public class defaultDriveCommand extends CommandBase {
         // Convert chassis speeds to individual module states
         SwerveModuleState[] moduleStates = kinematics.m_kinematics.toSwerveModuleStates(chassisSpeeds);
         // Output each module states to wheels
-        swerveSubsystem.setModuleStates(moduleStates);
+        swerveSubsystem.setModuleState(moduleStates);
 
     }
 

@@ -27,7 +27,7 @@ public class leaveCommunity extends CommandBase{
     @Override
     public void execute() {
         speed = MathUtil.clamp(((targetPose - poseX.get())*0.1), -2,0);
-        driveSubsystem.setModuleStates(kinematics.m_kinematics.toSwerveModuleStates(new ChassisSpeeds(speed, 0, 0)));
+        driveSubsystem.setModuleState(kinematics.m_kinematics.toSwerveModuleStates(new ChassisSpeeds(speed, 0, 0)));
         SmartDashboard.putNumber("PoseX",poseX.get());
         SmartDashboard.putNumber("TargetPose", targetPose);
 

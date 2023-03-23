@@ -89,10 +89,10 @@ public class SwerveSubsystem extends SubsystemBase {
 
     public SwerveModulePosition[] getModulePositions() {
         return new SwerveModulePosition[] {
-                FRSwerveModule.getPosition(),
                 FLSwerveModule.getPosition(),
-                BRSwerveModule.getPosition(),
+                FRSwerveModule.getPosition(),
                 BLSwerveModule.getPosition(),
+                BRSwerveModule.getPosition(),
         };
     }
 
@@ -109,10 +109,10 @@ public class SwerveSubsystem extends SubsystemBase {
     }
 
     public void zeroAllWhels() {
-        FRSwerveModule.setDesiredState(new SwerveModuleState(0, new Rotation2d(0)));
-        BRSwerveModule.setDesiredState(new SwerveModuleState(0, new Rotation2d(0)));
         FLSwerveModule.setDesiredState(new SwerveModuleState(0, new Rotation2d(0)));
+        FRSwerveModule.setDesiredState(new SwerveModuleState(0, new Rotation2d(0)));
         BLSwerveModule.setDesiredState(new SwerveModuleState(0, new Rotation2d(0)));
+        BRSwerveModule.setDesiredState(new SwerveModuleState(0, new Rotation2d(0)));
 
     }
 
@@ -138,17 +138,17 @@ public class SwerveSubsystem extends SubsystemBase {
     }
 
     public void stopModules() {
-        FRSwerveModule.stop();
         FLSwerveModule.stop();
-        BRSwerveModule.stop();
+        FRSwerveModule.stop();
         BLSwerveModule.stop();
+        BRSwerveModule.stop();
     }
 
     public CommandBase resetGyroCommmand() {
         return this.runOnce(() -> resetGyro());
     }
 
-    public void setModuleStates(SwerveModuleState[] ModuleStates) {
+    public void setModuleState(SwerveModuleState[] ModuleStates) {
         SwerveDriveKinematics.desaturateWheelSpeeds(ModuleStates, ModuleConstants.MAX_VELOCITY_METERS_PER_SECOND);
         FLSwerveModule.setDesiredState(ModuleStates[0]);
         FRSwerveModule.setDesiredState(ModuleStates[1]);
@@ -170,10 +170,10 @@ public class SwerveSubsystem extends SubsystemBase {
         SmartDashboard.putString("Odometry", odometry.getPoseMeters().toString());
         SmartDashboard.putString("Last Known State", IO.LastState.toString());
         odometry.update(getRotation2d(), new SwerveModulePosition[] {
-                FRSwerveModule.getPosition(),
                 FLSwerveModule.getPosition(),
-                BRSwerveModule.getPosition(),
-                BLSwerveModule.getPosition()});
+                FRSwerveModule.getPosition(),
+                BLSwerveModule.getPosition(),
+                BRSwerveModule.getPosition()});
                 //SmartDashboard.putNumber("Gyro", convertGyroValues(gyro.getHeading()));
                 //SmartDashboard.putNumber("side", getSide());
                 if (IO.PrintSwerveData) {
@@ -234,7 +234,7 @@ public class SwerveSubsystem extends SubsystemBase {
                  new PIDController(1.7, 0, 0), // X controller. Tune these values for your robot. Leaving them 0 will only use feedforwards.
                  new PIDController(1.7, 0, 0), // Y controller (usually the same values as X controller)
                  turningPID, // Rotation controller. Tune these values for your robot. Leaving them 0 will only use feedforwards.
-                 this::setModuleStates, // Module states consumer
+                 this::setModuleState, // Module states consumer
                  false, // Should the path be automatically mirrored depending on alliance color. Optional, defaults to true
                  this // Requires this drive subsystem
              )

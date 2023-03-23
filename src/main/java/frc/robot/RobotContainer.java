@@ -80,7 +80,7 @@ public class RobotContainer {
                                              // Y PID controllers)
             new PIDConstants(0.7, 0.0, 0.0), // PID constants to correct for rotation error (used to create the rotation
                                              // controller)
-            swerveSubsystem::setModuleStates, // Module states consumer used to output to the drive subsystem
+            swerveSubsystem::setModuleState, // Module states consumer used to output to the drive subsystem
             eventMap,
             false, // Should the path be automatically mirrored depending on alliance color.
                    // Optional, defaults to true

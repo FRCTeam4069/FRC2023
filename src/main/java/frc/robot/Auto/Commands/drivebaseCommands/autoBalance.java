@@ -48,7 +48,7 @@ public class autoBalance extends CommandBase {
     SmartDashboard.putNumber("ROLL", currRoll - Gyro.getRoll());
 
     if (!rollChange) {
-      m_drivebase.setModuleStates(kinematics.m_kinematics.toSwerveModuleStates(new ChassisSpeeds(-2, 0, 0)));
+      m_drivebase.setModuleState(kinematics.m_kinematics.toSwerveModuleStates(new ChassisSpeeds(-2, 0, 0)));
       if (Gyro.getRoll() > currRoll + 2 || Gyro.getRoll() < currRoll - 2) {
         rollChange = true;
         SmartDashboard.putBoolean("rollChange", rollChange);
@@ -56,7 +56,7 @@ public class autoBalance extends CommandBase {
     }
     if (!balanced && rollChange) {
       xspeed = (Gyro.getRoll() - currRoll) * 0.03;
-      m_drivebase.setModuleStates(kinematics.m_kinematics.toSwerveModuleStates(new ChassisSpeeds(xspeed, 0, 0)));
+      m_drivebase.setModuleState(kinematics.m_kinematics.toSwerveModuleStates(new ChassisSpeeds(xspeed, 0, 0)));
       if (Math.abs(currRoll - Gyro.getRoll()) < 6) {
         timer.start();
         if (timer.get() == 0.5) {
