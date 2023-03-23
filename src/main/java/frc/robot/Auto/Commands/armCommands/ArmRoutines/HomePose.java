@@ -11,12 +11,10 @@ import frc.robot.Constants.IO.state;
 
 public class HomePose extends SequentialCommandGroup{
     public HomePose(){
-
-     
         addCommands(new setLastState(state.HOME));
-        addCommands(new armToPose(60, true, 5)
-        .andThen(new extendToPose(0, 1)
-        .alongWith(new wristToPosition(120, 10, 0.5, 1)))
+        addCommands(
+        new extendToPose(0, 1)
+        .alongWith(new wristToPosition(120, 10, 0.5, 1))
         .andThen(new armToPose(130, true, 5))
         .andThen(new extendToPose(0, 1))
 

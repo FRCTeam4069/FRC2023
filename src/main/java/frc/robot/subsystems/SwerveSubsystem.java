@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.RobotContainer;
 import frc.robot.Constants.IO;
 import frc.robot.Constants.drivebaseConstants;
 import frc.robot.Constants.drivebaseConstants.ModuleConstants;
@@ -25,7 +26,7 @@ import frc.robot.Constants.drivebaseConstants.kinematics;
 
 public class SwerveSubsystem extends SubsystemBase {
     public final double heading;
-    public PIDController turningPID = new PIDController(0.7, 0, 0);
+    public PIDController turningPID = new PIDController(0.5, 0.00, 0);
 
     
     public SwerveSubsystem(double heading) {
@@ -125,12 +126,15 @@ public class SwerveSubsystem extends SubsystemBase {
     }
 
     public void resetOdometry(Pose2d newPose2d) {
+        resetGyro();
         odometry.resetPosition(getRotation2d(), new SwerveModulePosition[] {
                 FLSwerveModule.getPosition(),
                 FRSwerveModule.getPosition(),
                 BLSwerveModule.getPosition(),
                 BRSwerveModule.getPosition(),
         }, newPose2d);
+
+        
     }
 
     public void stopModules() {
@@ -176,6 +180,8 @@ public class SwerveSubsystem extends SubsystemBase {
           
             }
 
+
+            /*
             SmartDashboard.putNumber("FR Pose", FRSwerveModule.getDrivePosition());
             SmartDashboard.putNumber("FL Pose", FLSwerveModule.getDrivePosition());
             SmartDashboard.putNumber("BR Pose", BRSwerveModule.getDrivePosition());
@@ -186,6 +192,8 @@ public class SwerveSubsystem extends SubsystemBase {
             SmartDashboard.putNumber("FL Wheel Spins", FLSwerveModule.getDrivePosition());
             SmartDashboard.putNumber("BR Wheel Spins", BRSwerveModule.getDrivePosition());
             SmartDashboard.putNumber("BL Wheel Spins", BLSwerveModule.getDrivePosition());
+            */
+
     }
 
     public TalonFX getFRDriveMotor() {
@@ -223,8 +231,8 @@ public class SwerveSubsystem extends SubsystemBase {
                  traj, 
                  this::getPose, // Pose supplier
                  drivebaseConstants.kinematics.m_kinematics, // SwerveDriveKinematics
-                 new PIDController(2.6, 0, 0), // X controller. Tune these values for your robot. Leaving them 0 will only use feedforwards.
-                 new PIDController(2.6, 0, 0), // Y controller (usually the same values as X controller)
+                 new PIDController(1.7, 0, 0), // X controller. Tune these values for your robot. Leaving them 0 will only use feedforwards.
+                 new PIDController(1.7, 0, 0), // Y controller (usually the same values as X controller)
                  turningPID, // Rotation controller. Tune these values for your robot. Leaving them 0 will only use feedforwards.
                  this::setModuleStates, // Module states consumer
                  false, // Should the path be automatically mirrored depending on alliance color. Optional, defaults to true

@@ -13,7 +13,7 @@ public class HumanPlayerPose extends SequentialCommandGroup {
         addCommands(
         new extendToPose(0, 1)
                         .andThen(new armToPose(40, true, 5)
-                                .alongWith(new wristToPosition(-40, 5, 0.5, 1))));
+                                .andThen(new wristToPosition(-40, 5, 0.5, 1))));
 
     }
 

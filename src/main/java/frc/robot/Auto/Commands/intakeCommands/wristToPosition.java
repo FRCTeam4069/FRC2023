@@ -1,5 +1,6 @@
 package frc.robot.Auto.Commands.intakeCommands;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
@@ -15,7 +16,7 @@ public class wristToPosition extends CommandBase {
         this.timeOut = timeOut;
         this.threshold = threshold;
         this.thresholdTime = thresholdTime;
-        this.targetPose = targetPose;
+        this.targetPose = MathUtil.clamp(targetPose, -90, 90);
         addRequirements(RobotContainer.intake);
     }
 
@@ -33,7 +34,6 @@ public class wristToPosition extends CommandBase {
         SmartDashboard.putNumber("Threshold Time", thresholdTimer.get());
         SmartDashboard.putNumber("Timout Time", timeOutTimer.get());
         SmartDashboard.putBoolean("Is finished", thresholdTimer.hasElapsed(thresholdTime) || timeOutTimer.hasElapsed(timeOut));
-        
 
         if (Math.abs(targetPose - intake.getWristAngle()) > 10) {
             intake.setWrist((targetPose * intake.side - intake.getWristAngle()) * (0.012));

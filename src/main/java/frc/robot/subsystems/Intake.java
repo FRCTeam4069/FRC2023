@@ -23,7 +23,7 @@ import frc.robot.Constants.armAndIntakeConstants.armConstants;
 import frc.robot.Constants.armAndIntakeConstants.intakeConstants;
 
 public class Intake extends SubsystemBase {
-    private CANSparkMax intake, wrist;
+    public CANSparkMax intake, wrist, intakeM1, intakeM2;
     private RelativeEncoder intakeEncoder, wristEncoder;
     public double side, wristTarget, low, gravGain, armAngle, parallelAngle;
     public DigitalInput NeoSideLimit, Limit;
@@ -37,9 +37,13 @@ public class Intake extends SubsystemBase {
 
         intake = new CANSparkMax(intakeConstants.INTAKE_ID, MotorType.kBrushless);
         wrist = new CANSparkMax(intakeConstants.WRIST_ID, MotorType.kBrushless);
+        intakeM1 = new CANSparkMax(21, MotorType.kBrushless);
+        intakeM2 = new CANSparkMax(22, MotorType.kBrushless);
         NeoSideLimit = new DigitalInput(armConstants.NEO_LIMIT);
         Limit = new DigitalInput(armConstants.LIMIT);
         PhotoElectric = new edu.wpi.first.wpilibj.AnalogInput(armConstants.PHOTOELECTRIC);
+
+        intakeM1.follow(intakeM2);
 
         intake.setSmartCurrentLimit(40);
         wrist.setSmartCurrentLimit(40);
@@ -65,8 +69,8 @@ public class Intake extends SubsystemBase {
         // setIntakePose(0);
         intake.setSoftLimit(SoftLimitDirection.kReverse, 0);
         intake.setSoftLimit(SoftLimitDirection.kForward, 15);
-        wrist.setSoftLimit(SoftLimitDirection.kReverse, -40);
-        wrist.setSoftLimit(SoftLimitDirection.kForward, 39);
+        wrist.setSoftLimit(SoftLimitDirection.kReverse, -30);
+        wrist.setSoftLimit(SoftLimitDirection.kForward, 30);
 
     }
 
@@ -75,6 +79,7 @@ public class Intake extends SubsystemBase {
         // This method will be called once per scheduler run
         isConeInRange();
         atLimit();
+        setIntakeMotors();
         intakeConstants.wristPose = getWristAngle();
         side = armConstants.side;
         armAngle = armConstants.armPose;
@@ -114,6 +119,16 @@ public class Intake extends SubsystemBase {
             coneInRange = true;
         } else
             coneInRange = false;
+    }
+
+    public void setIntakeMotors(){
+        if(intake.get() > 0){
+            intakeM2.set(0);
+        }else if(intake.get() < 0){
+            intakeM2.set(0.8);
+        }else{
+            intakeM2.set(0);
+        }
     }
 
     public void atLimit() {

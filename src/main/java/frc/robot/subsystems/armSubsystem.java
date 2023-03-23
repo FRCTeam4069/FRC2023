@@ -2,6 +2,7 @@ package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
+import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMax.SoftLimitDirection;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
@@ -57,6 +58,11 @@ public class armSubsystem extends SubsystemBase {
 
         ArticulateR.setInverted(armConstants.rightMotorInvert);
         ArticulateL.setInverted(armConstants.leftMotorInvert);
+
+        ArticulateL.setIdleMode(IdleMode.kBrake);
+        Extend.setIdleMode(IdleMode.kBrake);
+        ArticulateR.setIdleMode(IdleMode.kBrake);
+        
 
         Extend.setInverted(armConstants.telescopeMotorInvert);
 

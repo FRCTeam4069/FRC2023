@@ -23,4 +23,7 @@ Arm :
     Left Motor   : 4
     Extend Motor : 5
     Wrist Motor  : 12
-    Claw Motor   : 13
+    intake Motor : 13
+    intakeL Motor: 21
+    intakeR Motor: 22
+

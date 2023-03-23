@@ -80,7 +80,7 @@ public class defaultDriveCommand extends CommandBase {
         chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(
                 -yspeed * IO.maxSpeed,
                 -xspeed * IO.maxSpeed,
-                Tspeed * IO.maxTurnSpeed,
+                Tspeed/2 * IO.maxTurnSpeed,
                 swerveSubsystem.getRotation2d());
 
         // Convert chassis speeds to individual module states

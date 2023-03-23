@@ -25,7 +25,7 @@ public class OpenIntake extends CommandBase {
     }
     @Override
     public boolean isFinished(){
-        return !intake.NeoSideLimit.get();
+        return intake.getIntakePose() > 14;
     }
 
 }

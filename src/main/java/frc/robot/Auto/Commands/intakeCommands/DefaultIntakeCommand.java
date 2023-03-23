@@ -14,6 +14,7 @@ public class DefaultIntakeCommand extends CommandBase{
     private final Supplier<Boolean> intakeOpen, intakeClose;
     private final Supplier<Double> wristUp, wristDown;
     public double intakeSpeed, wristPose;
+    private Supplier<Integer> POV;
    
     /**
      * 
@@ -23,12 +24,12 @@ public class DefaultIntakeCommand extends CommandBase{
      * @param OPEN
      * @param CLOSE
      */
-    public DefaultIntakeCommand(Supplier<Double> UP, Supplier<Double> DOWN, Supplier<Boolean> OPEN, Supplier<Boolean> CLOSE) {
+    public DefaultIntakeCommand(Supplier<Double> UP, Supplier<Double> DOWN, Supplier<Boolean> OPEN, Supplier<Boolean> CLOSE, Supplier<Integer> POV) {
         this.wristUp = UP; 
         this.wristDown = DOWN;
         this.intakeOpen = OPEN;
         this.intakeClose = CLOSE;
-
+        this.POV = POV;
         addRequirements(RobotContainer.intake);
     }
 
@@ -48,6 +49,12 @@ public class DefaultIntakeCommand extends CommandBase{
             intakeSpeed = 0;
         }
         intake.setIntake(intakeSpeed);
+
+        if(POV.get() == 0){
+            intake.intakeM2.set(-1);
+        }else if(POV.get() == 180){
+            intake.intakeM2.set(0.7);
+        }
     }
 
     @Override
