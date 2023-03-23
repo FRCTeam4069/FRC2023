@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 import frc.robot.subsystems.SwerveSubsystem;
@@ -28,6 +29,7 @@ import frc.robot.Auto.Commands.drivebaseCommands.followTrajectoryCommand;
 import frc.robot.Auto.Commands.drivebaseCommands.leaveCommunity;
 import frc.robot.Auto.Commands.intakeCommands.DefaultIntakeCommand;
 import frc.robot.Auto.Commands.intakeCommands.timeBasedIntake;
+import frc.robot.Auto.Commands.intakeCommands.OpenIntake;
 import frc.robot.Auto.Commands.intakeCommands.wristToPosition;
 import frc.robot.Auto.routines.Middle_Path_0cones;
 import frc.robot.Auto.routines.PlaceCubeAndArmDown;
@@ -57,6 +59,7 @@ public class RobotContainer {
     public static HashMap<String, Command> eventMap = new HashMap<>();
 
 
+    public double pressed = 0;
 
     public static final SwerveAutoBuilder autoBuilder = new SwerveAutoBuilder(
         swerveSubsystem::getPose, // Pose2d supplier
@@ -85,7 +88,7 @@ public class RobotContainer {
 
     public RobotContainer() {
 
-    eventMap.put("CloseIntake", new timeBasedIntake(0.5, 1));
+    eventMap.put("CloseIntake", new timeBasedIntake(0.5, .25));
     eventMap.put("CUBE_L3", new placeCubeL3());
     eventMap.put("ARM_DOWN", new HomePose());
 
@@ -126,7 +129,9 @@ public class RobotContainer {
         } else {
             new Trigger(Controller2::getAButton).onTrue(new HomePose());
         }
-        new Trigger(Controller2::getYButton).onTrue(new HighPose());
+        new Trigger(Controller2::getYButton)
+        .onTrue(new HighPose())
+        .onFalse(new SequentialCommandGroup(new OpenIntake().andThen(new HomePose())));
         new Trigger(Controller2::getBButton).onTrue(new HumanPlayerPose());
         new Trigger(Controller2::getXButton).onTrue(new MidPose());
          
