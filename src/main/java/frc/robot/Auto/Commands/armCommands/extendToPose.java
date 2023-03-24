@@ -24,6 +24,7 @@ public class extendToPose extends CommandBase {
 
     @Override
     public void end(boolean interrupted) {
+        arm.Extend.set(0);
 
     }
 

@@ -15,7 +15,7 @@ public class updateState extends SubsystemBase {
 
     }
 
-    public void updateState( ){
+    public void updateState(){
         if(States.currArmState.equals(armState.ABOVE_POLES)){
 
         }

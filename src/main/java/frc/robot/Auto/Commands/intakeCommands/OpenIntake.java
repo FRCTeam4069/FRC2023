@@ -21,6 +21,8 @@ public class OpenIntake extends CommandBase {
     }
     @Override
     public void end(boolean interrupted){
+        intake.intakeM2.set(0);
+        intake.setIntake(0);
 
     }
     @Override

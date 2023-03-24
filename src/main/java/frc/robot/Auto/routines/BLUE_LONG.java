@@ -20,35 +20,20 @@ import frc.robot.Auto.Commands.drivebaseCommands.followTrajectoryCommand;
 import frc.robot.Auto.Commands.intakeCommands.timeBasedIntake;
 import frc.robot.subsystems.SwerveSubsystem;
 
-public class TestPathPlannerPath extends SequentialCommandGroup {
-    // /private final PathPlannerTrajectory pathGroup = PathPlanner.loadPath("ONE",
-    // new PathConstraints(2, 2));
-    private final PathPlannerTrajectory pathGroup;
-
+public class BLUE_LONG extends SequentialCommandGroup {
+    private final PathPlannerTrajectory pathGroup = PathPlanner.loadPath("BLUE_LONG",
+            new PathConstraints(2, 2));
     private static final SwerveSubsystem swerve = RobotContainer.swerveSubsystem;
-
     private HashMap<String, Command> eventMap = new HashMap<>();
 
-    public TestPathPlannerPath() {
-        // eventMap.put("CloseIntake", new timeBasedIntake(0.5, 1));
-        // eventMap.put("CUBE_L3", new placeCubeL3());
-        // eventMap.put("ARM_DOWN", new HomePose());
-
-        pathGroup = PathPlanner.generatePath(
-                new PathConstraints(2, 2),
-                new PathPoint(new Translation2d(0, 0), Rotation2d.fromDegrees(0)),
-                new PathPoint(new Translation2d(0, 0), Rotation2d.fromDegrees(90), Rotation2d.fromDegrees(90) ));
-
+    public BLUE_LONG() {
         FollowPathWithEvents command = new FollowPathWithEvents(
                 swerve.followTrajectoryCommand(pathGroup, true),
                 pathGroup.getMarkers(),
                 eventMap);
 
-        addCommands(command);
-    }
-
-    private Rotation2d Rotation2d() {
-        return null;
+        addCommands(
+        new placeCubeL3().andThen(command));
     }
 
 }

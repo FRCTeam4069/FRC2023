@@ -26,7 +26,7 @@ import frc.robot.Constants.drivebaseConstants.kinematics;
 
 public class SwerveSubsystem extends SubsystemBase {
     public final double heading;
-    public PIDController turningPID = new PIDController(0.5, 0.00, 0);
+    public PIDController turningPID = new PIDController(0, 0.00, 0);
 
     
     public SwerveSubsystem(double heading) {
@@ -96,7 +96,14 @@ public class SwerveSubsystem extends SubsystemBase {
         };
     }
 
-    
+    public SwerveModuleState[] angleModules(double degree){
+        return new SwerveModuleState[]{
+            new SwerveModuleState(0, Rotation2d.fromDegrees(degree)),
+            new SwerveModuleState(0, Rotation2d.fromDegrees(degree)),
+            new SwerveModuleState(0, Rotation2d.fromDegrees(degree)),
+            new SwerveModuleState(0, Rotation2d.fromDegrees(degree))};
+
+    }
 
 
     public void resetGyro() {
@@ -180,7 +187,9 @@ public class SwerveSubsystem extends SubsystemBase {
           
             }
 
-
+            SmartDashboard.putNumber("Pitch", gyro.getPitch());
+            SmartDashboard.putNumber("Roll", gyro.getRoll());
+            
             /*
             SmartDashboard.putNumber("FR Pose", FRSwerveModule.getDrivePosition());
             SmartDashboard.putNumber("FL Pose", FLSwerveModule.getDrivePosition());
@@ -231,8 +240,8 @@ public class SwerveSubsystem extends SubsystemBase {
                  traj, 
                  this::getPose, // Pose supplier
                  drivebaseConstants.kinematics.m_kinematics, // SwerveDriveKinematics
-                 new PIDController(1.7, 0, 0), // X controller. Tune these values for your robot. Leaving them 0 will only use feedforwards.
-                 new PIDController(1.7, 0, 0), // Y controller (usually the same values as X controller)
+                 new PIDController(1.9, 0, 0), // X controller. Tune these values for your robot. Leaving them 0 will only use feedforwards.
+                 new PIDController(1.9, 0, 0), // Y controller (usually the same values as X controller)
                  turningPID, // Rotation controller. Tune these values for your robot. Leaving them 0 will only use feedforwards.
                  this::setModuleState, // Module states consumer
                  false, // Should the path be automatically mirrored depending on alliance color. Optional, defaults to true

@@ -32,6 +32,7 @@ import frc.robot.Auto.Commands.armCommands.ArmRoutines.MidPose;
 import frc.robot.Auto.Commands.armCommands.ArmRoutines.MidPoseS1;
 import frc.robot.Auto.Commands.armCommands.ArmRoutines.MidPoseS2;
 import frc.robot.Auto.Commands.armCommands.ArmRoutines.scoreThenHome;
+import frc.robot.Auto.Commands.drivebaseCommands.autoBalance;
 import frc.robot.Auto.Commands.drivebaseCommands.defaultDriveCommand;
 import frc.robot.Auto.Commands.drivebaseCommands.followTrajectoryCommand;
 import frc.robot.Auto.Commands.drivebaseCommands.leaveCommunity;
@@ -40,8 +41,12 @@ import frc.robot.Auto.Commands.intakeCommands.timeBasedIntake;
 import frc.robot.Auto.Commands.intakeCommands.OpenIntake;
 import frc.robot.Auto.Commands.intakeCommands.autoWristParallel;
 import frc.robot.Auto.Commands.intakeCommands.wristToPosition;
+import frc.robot.Auto.routines.BLUE_LONG;
+import frc.robot.Auto.routines.BLUE_SHORT;
+import frc.robot.Auto.routines.MiddlePathL3CUBUE;
 import frc.robot.Auto.routines.Middle_Path_0cones;
-import frc.robot.Auto.routines.PlaceCubeAndArmDown;
+import frc.robot.Auto.routines.RED_LONG;
+import frc.robot.Auto.routines.RED_SHORT;
 import frc.robot.Auto.routines.TestPathPlannerPath;
 import frc.robot.Auto.routines.placeCubeL3;
 import frc.robot.Constants.AutoValues;
@@ -99,7 +104,7 @@ public class RobotContainer {
     }
 
     private final XboxController Controller1 = new XboxController(0);
-    private final XboxController Controller2 = new XboxController(1);
+    public final static XboxController Controller2 = new XboxController(1);
 
     public RobotContainer() {
 
@@ -161,19 +166,17 @@ public class RobotContainer {
         int autoIndex = autoSelecter.getSelected();
         switch (autoIndex) {
         case 0:
-        return new Middle_Path_0cones();
+        return new MiddlePathL3CUBUE();
         case 1:
-        return new leaveCommunity(-60, () ->
-        swerveSubsystem.odometry.getPoseMeters().getX());
+        return new RED_LONG();
         case 2:
-        return new leaveCommunity(-75, () ->
-        swerveSubsystem.odometry.getPoseMeters().getX());
+        return new RED_SHORT();
         case 3:
-        return new placeCubeL3();
+        return new BLUE_LONG();
         case 4:
-        return new InstantCommand();
+        return new BLUE_SHORT();
         case 5:
-        return new TestPathPlannerPath();
+        return new placeCubeL3();
         case 6:
         return new InstantCommand();
         default:

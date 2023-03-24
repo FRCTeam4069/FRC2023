@@ -5,5 +5,12 @@
       "/Shuffleboard/Auto/Autonomous": "String Chooser",
       "/SmartDashboard/SendableChooser[0]": "String Chooser"
     }
+  },
+  "NetworkTables": {
+    "transitory": {
+      "Shuffleboard": {
+        "open": true
+      }
+    }
   }
 }

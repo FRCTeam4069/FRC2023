@@ -23,7 +23,7 @@ public class MidPoseS1 extends SequentialCommandGroup {
         addCommands(
         (new armToPose(62, true, 30)
         .alongWith(new wristToPosition(120, 5, 0.5, 1)))
-        .andThen(new extendToPose(2, 0.5))
+        .andThen(new extendToPose(4, 0.5))
         .andThen(new wristToPosition(25, 5, 0.25, .5))
         );
         

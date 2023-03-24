@@ -11,11 +11,13 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.math.trajectory.Trajectory.State;
 import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.RobotContainer;
 import frc.robot.Constants.IO;
 import frc.robot.Constants.States;
 import frc.robot.Constants.States.intakeState;
@@ -29,7 +31,7 @@ public class Intake extends SubsystemBase {
     public DigitalInput NeoSideLimit, Limit;
     public edu.wpi.first.wpilibj.AnalogInput PhotoElectric;
     public GenericEntry hasCone;
-    public boolean enableLimit = true, _enableLimit = false, coneInRange;
+    public boolean enableLimit = true, _enableLimit = false, coneInRange, _coneInRange = false;
     public ShuffleboardTab tab = Shuffleboard.getTab("Intake");
 
     public Intake() {
@@ -63,7 +65,7 @@ public class Intake extends SubsystemBase {
         wristEncoder.setVelocityConversionFactor(1);
         SmartDashboard.putNumber("wrist", wristEncoder.getPositionConversionFactor());
 
-        setWristPose(-40);
+        setWristPose(40);
         intakeEncoder.setPosition(0);// 16.8 - 4.3);
 
         // setIntakePose(0);
@@ -79,7 +81,7 @@ public class Intake extends SubsystemBase {
         // This method will be called once per scheduler run
         isConeInRange();
         atLimit();
-        setIntakeMotors();
+        // setIntakeMotors();
         intakeConstants.wristPose = getWristAngle();
         side = armConstants.side;
         armAngle = armConstants.armPose;
@@ -115,18 +117,25 @@ public class Intake extends SubsystemBase {
     // -iv is up in positive Side (arm)
 
     public void isConeInRange() {
-        if (PhotoElectric.getVoltage() > 0.26) {
+        if (PhotoElectric.getVoltage() < 0.23) {
             coneInRange = true;
+            RobotContainer.Controller2.setRumble(RumbleType.kBothRumble, 1);
+
         } else
             coneInRange = false;
+        // if (_coneInRange != coneInRange) {
+        //     _coneInRange = coneInRange;
+        // } else
+        //     RobotContainer.Controller2.setRumble(RumbleType.kBothRumble, 0);
+
     }
 
-    public void setIntakeMotors(){
-        if(intake.get() > 0){
+    public void setIntakeMotors() {
+        if (intake.get() > 0) {
             intakeM2.set(0);
-        }else if(intake.get() < 0){
+        } else if (intake.get() < 0) {
             intakeM2.set(0.8);
-        }else{
+        } else {
             intakeM2.set(0);
         }
     }
@@ -134,8 +143,7 @@ public class Intake extends SubsystemBase {
     public void atLimit() {
         if (!NeoSideLimit.get() || !Limit.get()) {
             intakeEncoder.setPosition(15);
-        }
-        else{
+        } else {
 
         }
 

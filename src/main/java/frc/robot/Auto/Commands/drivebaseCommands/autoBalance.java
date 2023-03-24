@@ -1,6 +1,9 @@
 package frc.robot.Auto.Commands.drivebaseCommands;
 
+import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
@@ -19,9 +22,10 @@ import frc.robot.subsystems.SwerveSubsystem;
 public class autoBalance extends CommandBase {
   private final SwerveSubsystem m_drivebase = RobotContainer.swerveSubsystem;
   private final Gyro Gyro = RobotContainer.swerveSubsystem.getGyro();
-  public double thetaSpeed, xspeed, balancedtime, currRoll;
+  public double thetaSpeed, xspeed, balancedtime, currpitch;
   public final Double Timeout; 
-  public boolean balanced, rollChange;
+  public boolean balanced, pitchChange;
+  public PIDController PIDcontrol = new PIDController(0.03, 0.0001, 0);
   public Timer timer = new Timer(), timeOutTimer = new Timer();
 
   /**
@@ -36,30 +40,33 @@ public class autoBalance extends CommandBase {
   @Override
   public void initialize() {
     timeOutTimer.start();
-    currRoll = Gyro.getRoll();
+    currpitch = Gyro.getPitch();
     balanced = false;
-    rollChange = false;
-    SmartDashboard.putBoolean("rollChange", rollChange);
-
+    pitchChange = false;
+    PIDcontrol.setSetpoint(currpitch);
+    SmartDashboard.putBoolean("pitchChange", pitchChange);
+    m_drivebase.setModuleState(m_drivebase.angleModules(0));
   }
 
   @Override
   public void execute() {
-    SmartDashboard.putNumber("ROLL", currRoll - Gyro.getRoll());
+    SmartDashboard.putNumber("pitch", currpitch - Gyro.getPitch());
+    
 
-    if (!rollChange) {
-      m_drivebase.setModuleState(kinematics.m_kinematics.toSwerveModuleStates(new ChassisSpeeds(-2, 0, 0)));
-      if (Gyro.getRoll() > currRoll + 2 || Gyro.getRoll() < currRoll - 2) {
-        rollChange = true;
-        SmartDashboard.putBoolean("rollChange", rollChange);
+    if (!pitchChange) {
+      m_drivebase.setModuleState(kinematics.m_kinematics.toSwerveModuleStates(new ChassisSpeeds(.3, 0, 0)));
+      if (Math.abs(Gyro.getPitch() - currpitch) > 15) {
+        pitchChange = true;
+        SmartDashboard.putBoolean("pitchChange", pitchChange);
       }
     }
-    if (!balanced && rollChange) {
-      xspeed = (Gyro.getRoll() - currRoll) * 0.03;
+    if (!balanced && pitchChange) {
+      xspeed = MathUtil.clamp(PIDcontrol.calculate(-(Gyro.getPitch() - currpitch)), -0.25, 0.25);
+      if(xspeed < 0){ PIDcontrol.setP(0.02);}
       m_drivebase.setModuleState(kinematics.m_kinematics.toSwerveModuleStates(new ChassisSpeeds(xspeed, 0, 0)));
-      if (Math.abs(currRoll - Gyro.getRoll()) < 6) {
+      if (Math.abs(currpitch - Gyro.getPitch()) < 6) {
         timer.start();
-        if (timer.get() == 0.5) {
+        if (timer.get() == 1) {
           balanced = true;
         }
       } else {
