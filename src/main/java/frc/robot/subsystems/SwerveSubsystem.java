@@ -28,7 +28,6 @@ public class SwerveSubsystem extends SubsystemBase {
     public final double heading;
     public PIDController turningPID = new PIDController(0, 0.00, 0);
 
-    
     public SwerveSubsystem(double heading) {
         turningPID.enableContinuousInput(-180, 180);
 
@@ -53,7 +52,7 @@ public class SwerveSubsystem extends SubsystemBase {
             deviceIDs.FR_STEER_OFFSET,
             deviceIDs.FR_STEER_ENCODER_REVERSED);
 
-    private final Module FLSwerveModule = new Module(
+    public final Module FLSwerveModule = new Module(
             deviceIDs.FL_DRIVE_MOTOR,
             deviceIDs.FL_STEER_MOTOR,
             deviceIDs.FL_DRIVE_MOTOR_REVERSED,
@@ -62,7 +61,7 @@ public class SwerveSubsystem extends SubsystemBase {
             deviceIDs.FL_STEER_OFFSET,
             deviceIDs.FL_STEER_ENCODER_REVERSED);
 
-    private final Module BRSwerveModule = new Module(
+    public final Module BRSwerveModule = new Module(
             deviceIDs.BR_DRIVE_MOTOR,
             deviceIDs.BR_STEER_MOTOR,
             deviceIDs.BR_DRIVE_MOTOR_REVERSED,
@@ -71,7 +70,7 @@ public class SwerveSubsystem extends SubsystemBase {
             deviceIDs.BR_STEER_OFFSET,
             deviceIDs.BR_STEER_ENCODER_REVERSED);
 
-    private final Module BLSwerveModule = new Module(
+    public final Module BLSwerveModule = new Module(
             deviceIDs.BL_DRIVE_MOTOR,
             deviceIDs.BL_STEER_MOTOR,
             deviceIDs.BL_DRIVE_MOTOR_REVERSED,
@@ -85,7 +84,6 @@ public class SwerveSubsystem extends SubsystemBase {
     public static final Gyro gyro = new Gyro(deviceIDs.PIGEON_ID);
     public final SwerveDriveOdometry odometry = new SwerveDriveOdometry(kinematics.m_kinematics, getRotation2d(),
             getModulePositions());
-            
 
     public SwerveModulePosition[] getModulePositions() {
         return new SwerveModulePosition[] {
@@ -96,18 +94,17 @@ public class SwerveSubsystem extends SubsystemBase {
         };
     }
 
-    public SwerveModuleState[] angleModules(double degree){
-        return new SwerveModuleState[]{
-            new SwerveModuleState(0, Rotation2d.fromDegrees(degree)),
-            new SwerveModuleState(0, Rotation2d.fromDegrees(degree)),
-            new SwerveModuleState(0, Rotation2d.fromDegrees(degree)),
-            new SwerveModuleState(0, Rotation2d.fromDegrees(degree))};
+    public SwerveModuleState[] angleModules(double degree) {
+        return new SwerveModuleState[] {
+                new SwerveModuleState(0, Rotation2d.fromDegrees(degree)),
+                new SwerveModuleState(0, Rotation2d.fromDegrees(degree)),
+                new SwerveModuleState(0, Rotation2d.fromDegrees(degree)),
+                new SwerveModuleState(0, Rotation2d.fromDegrees(degree)) };
 
     }
 
-
     public void resetGyro() {
-        //gyro.setYaw(0);
+        // gyro.setYaw(0);
         gyro.setYaw(0);
     }
 
@@ -127,7 +124,6 @@ public class SwerveSubsystem extends SubsystemBase {
         return Rotation2d.fromDegrees(gyro.getHeading());
     }
 
-
     public Pose2d getPose() {
         return odometry.getPoseMeters();
     }
@@ -141,7 +137,6 @@ public class SwerveSubsystem extends SubsystemBase {
                 BRSwerveModule.getPosition(),
         }, newPose2d);
 
-        
     }
 
     public void stopModules() {
@@ -157,20 +152,19 @@ public class SwerveSubsystem extends SubsystemBase {
 
     public void setModuleState(SwerveModuleState[] ModuleStates) {
         SwerveDriveKinematics.desaturateWheelSpeeds(ModuleStates, ModuleConstants.MAX_VELOCITY_METERS_PER_SECOND);
-        FLSwerveModule.setDesiredState(ModuleStates[0]);
-        FRSwerveModule.setDesiredState(ModuleStates[1]);
-        BLSwerveModule.setDesiredState(ModuleStates[2]);
-        BRSwerveModule.setDesiredState(ModuleStates[3]);
+        FLSwerveModule.setDesiredState(SwerveModuleState.optimize(ModuleStates[0], FLSwerveModule.getState().angle));
+        FRSwerveModule.setDesiredState(SwerveModuleState.optimize(ModuleStates[1], FRSwerveModule.getState().angle));
+        BLSwerveModule.setDesiredState(SwerveModuleState.optimize(ModuleStates[2], BLSwerveModule.getState().angle));
+        BRSwerveModule.setDesiredState(SwerveModuleState.optimize(ModuleStates[3], BRSwerveModule.getState().angle));
 
     }
 
-    public double getSide(){
-        if(Math.abs(odometry.getPoseMeters().getRotation().getDegrees()) > 90){
+    public double getSide() {
+        if (Math.abs(odometry.getPoseMeters().getRotation().getDegrees()) > 90) {
             return -1;
-        }else return 1;
+        } else
+            return 1;
     }
-   
-
 
     @Override
     public void periodic() {
@@ -180,28 +174,32 @@ public class SwerveSubsystem extends SubsystemBase {
                 FLSwerveModule.getPosition(),
                 FRSwerveModule.getPosition(),
                 BLSwerveModule.getPosition(),
-                BRSwerveModule.getPosition()});
-                //SmartDashboard.putNumber("Gyro", convertGyroValues(gyro.getHeading()));
-                //SmartDashboard.putNumber("side", getSide());
-                if (IO.PrintSwerveData) {
-          
-            }
+                BRSwerveModule.getPosition() });
+        // SmartDashboard.putNumber("Gyro", convertGyroValues(gyro.getHeading()));
+        // SmartDashboard.putNumber("side", getSide());
+        if (IO.PrintSwerveData) {
 
-            SmartDashboard.putNumber("Pitch", gyro.getPitch());
-            SmartDashboard.putNumber("Roll", gyro.getRoll());
-            
-            /*
-            SmartDashboard.putNumber("FR Pose", FRSwerveModule.getDrivePosition());
-            SmartDashboard.putNumber("FL Pose", FLSwerveModule.getDrivePosition());
-            SmartDashboard.putNumber("BR Pose", BRSwerveModule.getDrivePosition());
-            SmartDashboard.putNumber("BL Pose", BLSwerveModule.getDrivePosition());
+        }
 
+        SmartDashboard.putNumber("Pitch", gyro.getPitch());
+        SmartDashboard.putNumber("Roll", gyro.getRoll());
 
-            SmartDashboard.putNumber("FR Wheel Spins", FRSwerveModule.getDrivePosition());
-            SmartDashboard.putNumber("FL Wheel Spins", FLSwerveModule.getDrivePosition());
-            SmartDashboard.putNumber("BR Wheel Spins", BRSwerveModule.getDrivePosition());
-            SmartDashboard.putNumber("BL Wheel Spins", BLSwerveModule.getDrivePosition());
-            */
+        /*
+         * SmartDashboard.putNumber("FR Pose", FRSwerveModule.getDrivePosition());
+         * SmartDashboard.putNumber("FL Pose", FLSwerveModule.getDrivePosition());
+         * SmartDashboard.putNumber("BR Pose", BRSwerveModule.getDrivePosition());
+         * SmartDashboard.putNumber("BL Pose", BLSwerveModule.getDrivePosition());
+         * 
+         * 
+         * SmartDashboard.putNumber("FR Wheel Spins",
+         * FRSwerveModule.getDrivePosition());
+         * SmartDashboard.putNumber("FL Wheel Spins",
+         * FLSwerveModule.getDrivePosition());
+         * SmartDashboard.putNumber("BR Wheel Spins",
+         * BRSwerveModule.getDrivePosition());
+         * SmartDashboard.putNumber("BL Wheel Spins",
+         * BLSwerveModule.getDrivePosition());
+         */
 
     }
 
@@ -221,33 +219,36 @@ public class SwerveSubsystem extends SubsystemBase {
         return BLSwerveModule.getDriveMotor();
     }
 
-    private double convertGyroValues(double gyroHeading){
-        if(gyroHeading < 0){
+    private double convertGyroValues(double gyroHeading) {
+        if (gyroHeading < 0) {
             return gyroHeading + 360;
-        } else return gyroHeading;
+        } else
+            return gyroHeading;
 
     }
 
     public Command followTrajectoryCommand(PathPlannerTrajectory traj, boolean isFirstPath) {
         return new SequentialCommandGroup(
-             new InstantCommand(() -> {
-               // Reset odometry for the first path you run during auto
-               if(isFirstPath){
-                   this.resetOdometry(traj.getInitialHolonomicPose());
-               }
-             }),
-             new PPSwerveControllerCommand(
-                 traj, 
-                 this::getPose, // Pose supplier
-                 drivebaseConstants.kinematics.m_kinematics, // SwerveDriveKinematics
-                 new PIDController(1.9, 0, 0), // X controller. Tune these values for your robot. Leaving them 0 will only use feedforwards.
-                 new PIDController(1.9, 0, 0), // Y controller (usually the same values as X controller)
-                 turningPID, // Rotation controller. Tune these values for your robot. Leaving them 0 will only use feedforwards.
-                 this::setModuleState, // Module states consumer
-                 false, // Should the path be automatically mirrored depending on alliance color. Optional, defaults to true
-                 this // Requires this drive subsystem
-             )
-         );
-     }
+                new InstantCommand(() -> {
+                    // Reset odometry for the first path you run during auto
+                    if (isFirstPath) {
+                        this.resetOdometry(traj.getInitialHolonomicPose());
+                    }
+                }),
+                new PPSwerveControllerCommand(
+                        traj,
+                        this::getPose, // Pose supplier
+                        drivebaseConstants.kinematics.m_kinematics, // SwerveDriveKinematics
+                        new PIDController(1.9, 0, 0), // X controller. Tune these values for your robot. Leaving them 0
+                                                      // will only use feedforwards.
+                        new PIDController(1.9, 0, 0), // Y controller (usually the same values as X controller)
+                        turningPID, // Rotation controller. Tune these values for your robot. Leaving them 0 will
+                                    // only use feedforwards.
+                        this::setModuleState, // Module states consumer
+                        false, // Should the path be automatically mirrored depending on alliance color.
+                               // Optional, defaults to true
+                        this // Requires this drive subsystem
+                ));
+    }
 
 }

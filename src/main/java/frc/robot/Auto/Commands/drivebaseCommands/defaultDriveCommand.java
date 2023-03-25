@@ -37,50 +37,38 @@ public class defaultDriveCommand extends CommandBase {
 
     @Override
     public void execute() {
+        double magnitude = Math.sqrt(xSpd.get() * xSpd.get() + ySpd.get() * ySpd.get());
         double Tspeed;
         double xspeed;
         double yspeed;
-        if(QuarterSpeed.get()){
-            xspeed =  xSpd.get() / 4;
-            yspeed =  ySpd.get() / 4;}
-        else if(HalfSpeed.get()){
-        xspeed =  xSpd.get() / 2;
-        yspeed =  ySpd.get() / 2;}
-        else{
-        xspeed = xSpd.get(); 
-        yspeed = ySpd.get();
-      }
-        xspeed = MathUtil.applyDeadband(xspeed, IO.xdeadZone);
-        yspeed = MathUtil.applyDeadband(yspeed, IO.ydeadZone);
-        SmartDashboard.putNumber("heading", swerveSubsystem.getGyro().getHeading());
-        SmartDashboard.putNumber("Sub 90", 90 - swerveSubsystem.getGyro().getHeading());
-        SmartDashboard.putNumber("Sub 180", 270 - swerveSubsystem.getGyro().getHeading());
+        xspeed = MathUtil.applyDeadband(xSpd.get(), IO.xdeadZone);
+        yspeed = MathUtil.applyDeadband(ySpd.get(), IO.ydeadZone);
+        Tspeed = MathUtil.applyDeadband(TSpd.get(), IO.tdeadZone);
+
+        if (QuarterSpeed.get()) {
+            xspeed = xspeed / 8;
+            yspeed = yspeed / 8;
+        } else if (HalfSpeed.get()) {
+            xspeed = xspeed / 6;
+            yspeed = yspeed / 6;
+        }
+
+        Tspeed = HalfSpeed.get() ? TSpd.get() / 4 : TSpd.get();
+        Tspeed = QuarterSpeed.get() ? TSpd.get() / 6 : TSpd.get();
 
         if (IO.enableSlewrateLimiter) {
+            Tspeed = turnSlewRateLimiter.calculate(Tspeed);
             xspeed = xSlewRateLimiter.calculate(xspeed);
             yspeed = ySlewRateLimiter.calculate(yspeed);
         }
         ChassisSpeeds chassisSpeeds;
 
         // Relative to field
-        if (turnAlign.get()) {
-            if (swerveSubsystem.getSide() == 1) {
-                Tspeed = MathUtil.clamp(
-                        0.1 * -(90 - Math.abs(swerveSubsystem.getGyro().getHeading())), -2, 2);
-            } else {
-                Tspeed = MathUtil.clamp(
-                        0.1 * -(270 - Math.abs(swerveSubsystem.getGyro().getHeading())), -2, 2);
-            }
-        } else {
-            Tspeed = HalfSpeed.get() ? TSpd.get() / 2 : TSpd.get();
-            Tspeed = QuarterSpeed.get() ? TSpd.get() / 4 : TSpd.get();
-            Tspeed = MathUtil.applyDeadband(Tspeed, IO.tdeadZone);
-            Tspeed = turnSlewRateLimiter.calculate(Tspeed);
-        }
+
         chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(
                 -yspeed * IO.maxSpeed,
                 -xspeed * IO.maxSpeed,
-                Tspeed/2 * IO.maxTurnSpeed,
+                Tspeed * IO.maxTurnSpeed,
                 swerveSubsystem.getRotation2d());
 
         // Convert chassis speeds to individual module states

@@ -42,12 +42,10 @@ public class DefaultIntakeCommand extends CommandBase {
             intakeSpeed = 0;
         } else if (intakeClose.get()) {
             intakeSpeed = -1;
-            intake.intakeM2.set(0.25);
         } else if (intakeOpen.get()) {
             intakeSpeed = 1;
         } else {
             intakeSpeed = 0;
-            intake.intakeM2.set(0);
         }
         intake.setIntake(intakeSpeed);
 
@@ -55,10 +53,10 @@ public class DefaultIntakeCommand extends CommandBase {
             intake.intakeM2.set(-0.5);
         } else if (POV.get() == 180) {
             intake.intakeM2.set(0.7);
-        } else {
-            intake.intakeM2.set(0);
+        } else if(intakeClose.get()) {
+            intake.intakeM2.set(0.25);
+        }else intake.intakeM2.set(0);
 
-        }
     }
 
     @Override

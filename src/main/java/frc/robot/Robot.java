@@ -5,6 +5,7 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -41,6 +42,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotInit() {
+
     // Instantiate our RobotContainer. This will perform all our button bindings,
     // and put our
     // autonomous chooser on the dashboard.
@@ -69,6 +71,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotPeriodic() {
+
     // Runs the Scheduler. This is responsible for polling buttons, adding
     // newly-scheduled
     // commands, running already-scheduled commands, removing finished or
@@ -83,6 +86,7 @@ public class Robot extends TimedRobot {
   @Override
   public void disabledInit() {
 
+
   }
 
   @Override
@@ -95,6 +99,12 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
+
+    //Set FF controllers 
+    RobotContainer.swerveSubsystem.FRSwerveModule.setCurrentFFController(0);
+    RobotContainer.swerveSubsystem.FLSwerveModule.setCurrentFFController(0);
+    RobotContainer.swerveSubsystem.BRSwerveModule.setCurrentFFController(0);
+    RobotContainer.swerveSubsystem.BLSwerveModule.setCurrentFFController(0);
 
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
 
@@ -115,6 +125,13 @@ public class Robot extends TimedRobot {
     // teleop starts running. If you want the autonomous to
     // continue until interrupted by another command, remove
     // this line or comment it out.
+    //Set FF controllers 
+    RobotContainer.swerveSubsystem.FRSwerveModule.setCurrentFFController(1);
+    RobotContainer.swerveSubsystem.FLSwerveModule.setCurrentFFController(1);
+    RobotContainer.swerveSubsystem.BRSwerveModule.setCurrentFFController(1);
+    RobotContainer.swerveSubsystem.BLSwerveModule.setCurrentFFController(1);
+    
+
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
@@ -124,7 +141,8 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during operator control. */
   @Override
   public void teleopPeriodic() {
-
+    // RobotContainer.Controller2.setRumble(RumbleType.kBothRumble, 1);
+    // RobotContainer.Controller1.setRumble(RumbleType.kBothRumble, 1);
   }
 
   @Override

@@ -40,11 +40,13 @@ import frc.robot.Auto.Commands.intakeCommands.DefaultIntakeCommand;
 import frc.robot.Auto.Commands.intakeCommands.timeBasedIntake;
 import frc.robot.Auto.Commands.intakeCommands.OpenIntake;
 import frc.robot.Auto.Commands.intakeCommands.autoWristParallel;
+import frc.robot.Auto.Commands.intakeCommands.intakeToPose;
 import frc.robot.Auto.Commands.intakeCommands.wristToPosition;
 import frc.robot.Auto.routines.BLUE_LONG;
 import frc.robot.Auto.routines.BLUE_SHORT;
 import frc.robot.Auto.routines.MiddlePathL3CUBUE;
 import frc.robot.Auto.routines.Middle_Path_0cones;
+import frc.robot.Auto.routines.OVERSHOOT_RAMP;
 import frc.robot.Auto.routines.RED_LONG;
 import frc.robot.Auto.routines.RED_SHORT;
 import frc.robot.Auto.routines.TestPathPlannerPath;
@@ -103,7 +105,7 @@ public class RobotContainer {
         orchestra.play();
     }
 
-    private final XboxController Controller1 = new XboxController(0);
+    public final static XboxController Controller1 = new XboxController(0);
     public final static XboxController Controller2 = new XboxController(1);
 
     public RobotContainer() {
@@ -156,7 +158,7 @@ public class RobotContainer {
         new Trigger(Controller2::getXButton).onTrue(new MidPoseS1()).onFalse(new MidPoseS2());
         new POVButton(Controller2, 270).whileTrue(new autoWristParallel());
         new POVButton(Controller2, 90).onTrue(new wristToPosition(-70, 10, 0.5, 1));
-
+        new POVButton(Controller2, 180).whileTrue(new intakeToPose(12.5, 0.1, 1, .6));
     }
 
 
@@ -179,6 +181,8 @@ public class RobotContainer {
         return new placeCubeL3();
         case 6:
         return new InstantCommand();
+        case 7:
+        return new OVERSHOOT_RAMP();
         default:
         SmartDashboard.putString("Auto Selected:", "INVALID");
         return new InstantCommand();

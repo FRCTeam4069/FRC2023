@@ -25,36 +25,44 @@ public class autoBalance extends CommandBase {
   public double thetaSpeed, xspeed, balancedtime, currpitch;
   public final Double Timeout; 
   public boolean balanced, pitchChange;
+  private final boolean reversed;
   public PIDController PIDcontrol = new PIDController(0.03, 0.0001, 0);
   public Timer timer = new Timer(), timeOutTimer = new Timer();
+  public boolean init, _init;
 
   /**
    * 
    * @param Timeout Seconds until command times out.
    */
-  public autoBalance(double Timeout) {
+  public autoBalance(double Timeout, boolean reversed) {
     this.Timeout = Timeout;
+    this.reversed = reversed;
     addRequirements(RobotContainer.swerveSubsystem); // adds a requirement - if its not met then it will throw an error
   }
 
   @Override
   public void initialize() {
-    timeOutTimer.start();
+    timeOutTimer.reset();
+    timeOutTimer.stop();
     currpitch = Gyro.getPitch();
     balanced = false;
     pitchChange = false;
     PIDcontrol.setSetpoint(currpitch);
-    SmartDashboard.putBoolean("pitchChange", pitchChange);
     m_drivebase.setModuleState(m_drivebase.angleModules(0));
+    init = true;
+    _init = false;
   }
 
   @Override
   public void execute() {
-    SmartDashboard.putNumber("pitch", currpitch - Gyro.getPitch());
-    
+    if(_init != init){
+      initialize();
+      _init = init;
+    }
+    timeOutTimer.start();   
 
     if (!pitchChange) {
-      m_drivebase.setModuleState(kinematics.m_kinematics.toSwerveModuleStates(new ChassisSpeeds(.3, 0, 0)));
+      m_drivebase.setModuleState(kinematics.m_kinematics.toSwerveModuleStates(new ChassisSpeeds(.4 * (reversed ? -1 : 1), 0, 0)));
       if (Math.abs(Gyro.getPitch() - currpitch) > 15) {
         pitchChange = true;
         SmartDashboard.putBoolean("pitchChange", pitchChange);
@@ -62,11 +70,12 @@ public class autoBalance extends CommandBase {
     }
     if (!balanced && pitchChange) {
       xspeed = MathUtil.clamp(PIDcontrol.calculate(-(Gyro.getPitch() - currpitch)), -0.25, 0.25);
-      if(xspeed < 0){ PIDcontrol.setP(0.02);}
+      if(xspeed * (reversed ? -1 : 1) < 0){ PIDcontrol.setP(0.017);}
       m_drivebase.setModuleState(kinematics.m_kinematics.toSwerveModuleStates(new ChassisSpeeds(xspeed, 0, 0)));
       if (Math.abs(currpitch - Gyro.getPitch()) < 6) {
         timer.start();
         if (timer.get() == 1) {
+          System.out.println("Balanced = True");
           balanced = true;
         }
       } else {

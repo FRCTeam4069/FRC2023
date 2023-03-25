@@ -1,7 +1,5 @@
 package frc.robot.subsystems;
 
-import org.opencv.photo.Photo;
-
 import com.revrobotics.AnalogInput;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
@@ -11,6 +9,7 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.math.trajectory.Trajectory.State;
 import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
@@ -33,6 +32,7 @@ public class Intake extends SubsystemBase {
     public GenericEntry hasCone;
     public boolean enableLimit = true, _enableLimit = false, coneInRange, _coneInRange = false;
     public ShuffleboardTab tab = Shuffleboard.getTab("Intake");
+    public Timer itsRUMBLEtime = new Timer();
 
     public Intake() {
         hasCone = tab.add("Intake has Somethig", coneInRange).getEntry();
@@ -80,6 +80,7 @@ public class Intake extends SubsystemBase {
     public void periodic() {
         // This method will be called once per scheduler run
         isConeInRange();
+
         atLimit();
         // setIntakeMotors();
         intakeConstants.wristPose = getWristAngle();
@@ -117,16 +118,26 @@ public class Intake extends SubsystemBase {
     // -iv is up in positive Side (arm)
 
     public void isConeInRange() {
-        if (PhotoElectric.getVoltage() < 0.23) {
+        if (PhotoElectric.getVoltage() < 0.26) {
             coneInRange = true;
-            RobotContainer.Controller2.setRumble(RumbleType.kBothRumble, 1);
-
-        } else
+        } else {
             coneInRange = false;
-        // if (_coneInRange != coneInRange) {
-        //     _coneInRange = coneInRange;
-        // } else
+        }
+
+        // if ((_coneInRange != coneInRange) && (coneInRange == true)) {
+        //     itsRUMBLEtime.start();
+        //     if (!itsRUMBLEtime.hasElapsed(1)) {
+        //         RobotContainer.Controller2.setRumble(RumbleType.kBothRumble, 1);
+
+        //     } else {
+        //         // if timer has elasped spot and reset
+        //         itsRUMBLEtime.reset();
+        //         itsRUMBLEtime.stop();
+        //     }
+        // } else {
         //     RobotContainer.Controller2.setRumble(RumbleType.kBothRumble, 0);
+        // }
+        _coneInRange = coneInRange;
 
     }
 

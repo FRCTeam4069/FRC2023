@@ -48,25 +48,27 @@ public class drivebaseConstants {
     }
 
     public static class CharacterizationData{
-/*
-        public static final double Ks = 0.63253;
-        public static final double Kv = 2.2936;
-        public static final double Ka = 0.18409;
-*/
+
+        public static final double teleKs = 0.63253;
+        public static final double teleKv = 2.2936;
+        public static final double teleKa = 0.18409;
 
 
-        public static final double Ks = 0.14083;
-        public static final double Kv = 7.3213;
-        public static final double Ka = 0.82794;
+        //AUTO FeedFWD
+        public static final double autoKs = 0.14083;
+        public static final double autoKv = 7.3213;
+        public static final double autoKa = 0.82794;
 
         // public static final double Kp = 2.6902;
         // public static final double Kd = 0;
 
-        public static final double Kp = 0.0060247;
-        public static final double Kd = 0;
+        // public static final double Kp = 0.0060247;
+        // public static final double Kd = 0;
 
-        public static final SimpleMotorFeedforward feedForwardController = new SimpleMotorFeedforward(Ks, Kv, Ka);
+        public static final SimpleMotorFeedforward AutofeedForwardController = new SimpleMotorFeedforward(autoKs, autoKv, autoKa);
+        public static final SimpleMotorFeedforward TelefeedForwardController = new SimpleMotorFeedforward(teleKs, teleKv, teleKa);
 
+        public static SimpleMotorFeedforward CurrentFFController = AutofeedForwardController;
     }
 
     public static final class deviceIDs{

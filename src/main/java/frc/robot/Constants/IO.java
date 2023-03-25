@@ -13,9 +13,9 @@ public class IO{
     public static double driveDeadband;
 
     public static final double Contoller1portNum = 0;
-    public static final double maxTurnSpeed = 4; // Meters/sec
-    public static final double maxSpeed = 4; // Meters/sec
-
+    public static final double maxTurnSpeed = 5; // Meters/sec
+    public static final double maxSpeed = 5; // Meters/sec
+    
     public static final double xdeadZone = 0.07;
     public static final double ydeadZone = 0.07;
     public static final double tdeadZone = 0.07;
