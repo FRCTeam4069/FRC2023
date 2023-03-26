@@ -28,8 +28,6 @@ public class autoBalance extends CommandBase {
   private final boolean reversed;
   public PIDController PIDcontrol = new PIDController(0.03, 0.0001, 0);
   public Timer timer = new Timer(), timeOutTimer = new Timer();
-  public boolean init, _init;
-
   /**
    * 
    * @param Timeout Seconds until command times out.
@@ -49,16 +47,12 @@ public class autoBalance extends CommandBase {
     pitchChange = false;
     PIDcontrol.setSetpoint(currpitch);
     m_drivebase.setModuleState(m_drivebase.angleModules(0));
-    init = true;
-    _init = false;
+ 
   }
 
   @Override
   public void execute() {
-    if(_init != init){
-      initialize();
-      _init = init;
-    }
+    
     timeOutTimer.start();   
 
     if (!pitchChange) {

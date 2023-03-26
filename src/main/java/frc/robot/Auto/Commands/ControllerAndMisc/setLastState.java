@@ -1,4 +1,4 @@
-package frc.robot.Auto.Commands;
+package frc.robot.Auto.Commands.ControllerAndMisc;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants.IO;
