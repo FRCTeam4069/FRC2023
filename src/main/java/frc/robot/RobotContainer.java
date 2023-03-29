@@ -2,8 +2,6 @@ package frc.robot;
 
 import java.util.HashMap;
 import java.util.function.BooleanSupplier;
-import java.util.function.Supplier;
-
 import com.ctre.phoenix.music.Orchestra;
 import com.pathplanner.lib.PathConstraints;
 import com.pathplanner.lib.PathPlanner;
@@ -11,34 +9,26 @@ import com.pathplanner.lib.PathPlannerTrajectory;
 import com.pathplanner.lib.auto.PIDConstants;
 import com.pathplanner.lib.auto.SwerveAutoBuilder;
 
-import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.event.EventLoop;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.Auto.Commands.armCommands.DefaultArmCommand;
-import frc.robot.Auto.Commands.armCommands.ArmRoutines.HighPose;
 import frc.robot.Auto.Commands.armCommands.ArmRoutines.HighPoseS1;
 import frc.robot.Auto.Commands.armCommands.ArmRoutines.HighPoseS2;
 import frc.robot.Auto.Commands.armCommands.ArmRoutines.HomePose;
 import frc.robot.Auto.Commands.armCommands.ArmRoutines.HumanPlayerPose;
-import frc.robot.Auto.Commands.armCommands.ArmRoutines.MidPose;
 import frc.robot.Auto.Commands.armCommands.ArmRoutines.MidPoseS1;
 import frc.robot.Auto.Commands.armCommands.ArmRoutines.MidPoseS2;
 import frc.robot.Auto.Commands.armCommands.ArmRoutines.scoreThenHome;
-import frc.robot.Auto.Commands.drivebaseCommands.autoBalance;
 import frc.robot.Auto.Commands.drivebaseCommands.defaultDriveCommand;
-import frc.robot.Auto.Commands.drivebaseCommands.followTrajectoryCommand;
-import frc.robot.Auto.Commands.drivebaseCommands.leaveCommunity;
+import frc.robot.Auto.Commands.drivebaseCommands.AutoCommands.followTrajectoryCommand;
 import frc.robot.Auto.Commands.intakeCommands.DefaultIntakeCommand;
 import frc.robot.Auto.Commands.intakeCommands.timeBasedIntake;
-import frc.robot.Auto.Commands.intakeCommands.OpenIntake;
 import frc.robot.Auto.Commands.intakeCommands.autoWristParallel;
 import frc.robot.Auto.Commands.intakeCommands.intakeToPose;
 import frc.robot.Auto.Commands.intakeCommands.wristToPosition;
@@ -46,12 +36,11 @@ import frc.robot.Auto.routines.BLUE_LONG;
 import frc.robot.Auto.routines.BLUE_SHORT;
 import frc.robot.Auto.routines.MiddlePathL3CUBUE;
 import frc.robot.Auto.routines.Middle_Path_0cones;
-import frc.robot.Auto.routines.OVERSHOOT_RAMP;
 import frc.robot.Auto.routines.RED_LONG;
 import frc.robot.Auto.routines.RED_SHORT;
 import frc.robot.Auto.routines.TestPathPlannerPath;
+import frc.robot.Auto.routines.TwoThings;
 import frc.robot.Auto.routines.placeCubeL3;
-import frc.robot.Constants.AutoValues;
 import frc.robot.Constants.IO;
 import frc.robot.Constants.drivebaseConstants;
 import frc.robot.subsystems.armSubsystem;
@@ -70,7 +59,6 @@ public class RobotContainer {
     public static final Middle_Path_0cones testRoutine = new Middle_Path_0cones();
     public static final AutonSelect autoSelecter = new AutonSelect();
     public static final Debugger db = new Debugger();
-    public followTrajectoryCommand fTrajectoryCommand;
     private static final PathPlannerTrajectory pathGroup = PathPlanner.loadPath("Two Items", new PathConstraints(4, 3));
     public static HashMap<String, Command> eventMap = new HashMap<>();
 
@@ -182,7 +170,7 @@ public class RobotContainer {
         case 6:
         return new InstantCommand();
         case 7:
-        return new OVERSHOOT_RAMP();
+        return new followTrajectoryCommand(PathPlanner.loadPath("Two Items", new PathConstraints(2, 2)), true);
         default:
         SmartDashboard.putString("Auto Selected:", "INVALID");
         return new InstantCommand();

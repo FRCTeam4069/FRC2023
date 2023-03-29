@@ -22,6 +22,7 @@ import frc.robot.subsystems.SwerveSubsystem;
 public class autoBalance extends CommandBase {
   private final SwerveSubsystem m_drivebase = RobotContainer.swerveSubsystem;
   private final Gyro Gyro = RobotContainer.swerveSubsystem.getGyro();
+  private final double initSpeed;
   public double thetaSpeed, xspeed, balancedtime, currpitch;
   public final Double Timeout; 
   public boolean balanced, pitchChange;
@@ -34,9 +35,10 @@ public class autoBalance extends CommandBase {
    * 
    * @param Timeout Seconds until command times out.
    */
-  public autoBalance(double Timeout, boolean reversed) {
+  public autoBalance(double Timeout, boolean reversed, double initSpeed) {
     this.Timeout = Timeout;
     this.reversed = reversed;
+    this.initSpeed = initSpeed;
     addRequirements(RobotContainer.swerveSubsystem); // adds a requirement - if its not met then it will throw an error
   }
 

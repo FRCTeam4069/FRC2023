@@ -21,8 +21,10 @@ public class armAndIntakeConstants{
         public static final double speedLimiter = 1;
 
         //for Arm move to position
-        public static final double proportionalGain = 0.02;
-        public static final double GravGain = -0.0001; // set to 0 to disable 
+        public static final double armKP = 0.025;
+        public static final double armKD = 0.0001;
+        public static final double armKI = 0; //0.01;
+        public static final double GravGain = -0.0001;// set to 0 to disable 
 
         public static final float softlimits = 130;
         public static double side = 1;

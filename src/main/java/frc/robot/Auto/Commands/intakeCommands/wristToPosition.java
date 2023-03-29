@@ -16,7 +16,7 @@ public class wristToPosition extends CommandBase {
         this.timeOut = timeOut;
         this.threshold = threshold;
         this.thresholdTime = thresholdTime;
-        this.targetPose = MathUtil.clamp(targetPose, -90, 90);
+        this.targetPose = MathUtil.clamp(targetPose, -100, 100);
         addRequirements(RobotContainer.intake);
     }
 
@@ -36,9 +36,9 @@ public class wristToPosition extends CommandBase {
         SmartDashboard.putBoolean("Is finished", thresholdTimer.hasElapsed(thresholdTime) || timeOutTimer.hasElapsed(timeOut));
 
         if (Math.abs(targetPose - intake.getWristAngle()) > 10) {
-            intake.setWrist((targetPose * intake.side - intake.getWristAngle()) * (0.012));
+            intake.setWrist((targetPose * intake.side - intake.getWristAngle()) * (0.019));
         } else {
-            intake.setWrist((targetPose * intake.side - intake.getWristAngle()) * (0.008));
+            intake.setWrist((targetPose * intake.side - intake.getWristAngle()) * (0.01));
         }
 
         if (Math.abs(targetPose - intake.getWristAngle()) < threshold) {

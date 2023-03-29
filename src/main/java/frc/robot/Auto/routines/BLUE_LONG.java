@@ -16,7 +16,6 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.RobotContainer;
 import frc.robot.Auto.Commands.armCommands.ArmRoutines.HomePose;
-import frc.robot.Auto.Commands.drivebaseCommands.followTrajectoryCommand;
 import frc.robot.Auto.Commands.intakeCommands.timeBasedIntake;
 import frc.robot.subsystems.SwerveSubsystem;
 

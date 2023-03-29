@@ -55,9 +55,9 @@ public class drivebaseConstants {
 
 
         //AUTO FeedFWD
-        public static final double autoKs = 0.14083;
-        public static final double autoKv = 7.3213;
-        public static final double autoKa = 0.82794;
+        public static final double autoKs = 0.63253;
+        public static final double autoKv = 2.2936;
+        public static final double autoKa = 0.18409;
 
         // public static final double Kp = 2.6902;
         // public static final double Kd = 0;

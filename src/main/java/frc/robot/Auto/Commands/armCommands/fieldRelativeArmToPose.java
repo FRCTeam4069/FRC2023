@@ -4,28 +4,20 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.armSubsystem;
 
-public class armRelativeArmToPose extends CommandBase {
-    private final double change, threshold;
-    private double targetPose;
-
+public class fieldRelativeArmToPose extends CommandBase {
+    private final double targetPose, threshold;
     private static final armSubsystem arm = RobotContainer.arm;
+    
 
-    public armRelativeArmToPose(double change, double threshold) {
-        this.change = change;
+    public fieldRelativeArmToPose(double position, double threshold) {
+        this.targetPose = position;
         this.threshold = threshold;
         addRequirements(RobotContainer.arm);
     }
 
     @Override
-    public void initialize() {
-        targetPose = arm.articulatePose + (change *arm.getSide()); 
-    }
-         
-    @Override
     public void execute() {
-         
-        arm.setArmPose(arm.articulatePose + (change *arm.getSide()));
-
+        arm.setArmPose(targetPose * RobotContainer.swerveSubsystem.getSide());
     }
 
     @Override
@@ -35,8 +27,7 @@ public class armRelativeArmToPose extends CommandBase {
 
     @Override
     public boolean isFinished() {
-        return arm.isAtPoseAT(targetPose, threshold);
-
+        return arm.isAtPoseAT(targetPose * RobotContainer.swerveSubsystem.getSide(), threshold);
     }
 
 }

@@ -54,7 +54,7 @@ public class DefaultIntakeCommand extends CommandBase {
         } else if (POV.get() == 180) {
             intake.intakeM2.set(0.7);
         } else if(intakeClose.get()) {
-            intake.intakeM2.set(0.25);
+            intake.intakeM2.set(0.5);
         }else intake.intakeM2.set(0);
 
     }

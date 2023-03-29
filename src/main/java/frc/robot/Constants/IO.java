@@ -16,9 +16,9 @@ public class IO{
     public static final double maxTurnSpeed = 5; // Meters/sec
     public static final double maxSpeed = 5; // Meters/sec
     
-    public static final double xdeadZone = 0.07;
-    public static final double ydeadZone = 0.07;
-    public static final double tdeadZone = 0.07;
+    public static final double xdeadZone = 0.1;
+    public static final double ydeadZone = 0.1;
+    public static final double tdeadZone = 0.1;
 
     public static final double xSpeedSlewRate = 3; // meters/sec/sec
     public static final double ySpeedSlewRate = 3; 

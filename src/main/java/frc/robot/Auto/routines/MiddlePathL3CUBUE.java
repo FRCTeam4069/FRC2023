@@ -11,7 +11,7 @@ import frc.robot.Auto.Commands.drivebaseCommands.autoBalance;
 public class MiddlePathL3CUBUE extends SequentialCommandGroup {
 
     public MiddlePathL3CUBUE() {
-        addCommands(new placeCubeL3().andThen(new autoBalance(10, false)));
+        addCommands(new placeCubeL3());
 
     }
 

@@ -8,6 +8,7 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
+import com.ctre.phoenix.sensors.AbsoluteSensorRange;
 import com.ctre.phoenix.sensors.CANCoder;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
@@ -21,7 +22,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.drivebaseConstants.CharacterizationData;
 import frc.robot.Constants.drivebaseConstants.ModuleConstants;
 
-public class Module extends SubsystemBase {
+public class swerveModule extends SubsystemBase {
    private final TalonFX driveMotor;
    private final CANSparkMax turnMotor;
    private final PIDController tPidController;
@@ -40,7 +41,7 @@ public class Module extends SubsystemBase {
     * @param absoluteEncoderOffsetRad Absolute encoder offset in Rad
     * @param absoluteEncoderReversed  Is absolute encoder reversed?
     */
-   public Module(int driveMotorId, int turnMotorId, boolean driveMotorReversed, boolean turnMotorReversed,
+   public swerveModule(int driveMotorId, int turnMotorId, boolean driveMotorReversed, boolean turnMotorReversed,
          int absoluteEncoderID, double absoluteEncoderOffsetRad, boolean absoluteEncoderReversed) {
 
       this.absoluteEncoderOffsetRad = absoluteEncoderOffsetRad;
@@ -54,6 +55,7 @@ public class Module extends SubsystemBase {
       driveMotor.setNeutralMode(NeutralMode.Brake);
 
       tCanCoder.configSensorDirection(absoluteEncoderReversed);
+      tCanCoder.configAbsoluteSensorRange(AbsoluteSensorRange.Unsigned_0_to_360, absoluteEncoderID);
       turnMotor.setInverted(turnMotorReversed);
 
       tPidController = new PIDController(ModuleConstants.kPTurning, 0, 0);

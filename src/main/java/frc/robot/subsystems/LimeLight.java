@@ -2,35 +2,88 @@
 
 package frc.robot.subsystems;
 
-import java.util.List;
+import java.io.IOException;
 
 import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonPoseEstimator;
-import org.photonvision.PhotonUtils;
+import org.photonvision.PhotonPoseEstimator.PoseStrategy;
 import org.photonvision.common.hardware.VisionLEDMode;
 import org.photonvision.targeting.PhotonTrackedTarget;
 
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
-import edu.wpi.first.cameraserver.CameraServer;
-import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.apriltag.AprilTagFields;
+import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
+import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
+import edu.wpi.first.math.geometry.Translation3d;
+import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.RobotContainer;
 
-public class LimeLight extends SubsystemBase {
+public class 
+LimeLight extends SubsystemBase {
 
-    private PhotonCamera camera;
-    private PhotonPoseEstimator estimator;
-    private boolean targetFound;
+    public PhotonCamera F_camera, B_camera;
+    private PhotonPoseEstimator B_estimator, F_estimator;
+    public boolean F_targetFound, B_targetFound;
+    public double F_pitch, B_pitch, F_area, B_area;
+    public  SwerveDrivePoseEstimator est;
 
     public LimeLight() {
-       // camera = new PhotonCamera("LimeLight");
-        //targetFound = false;
+
+        
+        F_camera = new PhotonCamera("LimeLightONE");
+        B_camera = new PhotonCamera("LimeLightTWO");
+        
+        try {
+            // Attempt to load the AprilTagFieldLayout that will tell us where the tags are
+            // on the field.
+            AprilTagFieldLayout fieldLayout = AprilTagFields.k2023ChargedUp.loadAprilTagLayoutField();
+            // Create pose estimator
+            B_estimator = new PhotonPoseEstimator(
+                    fieldLayout, PoseStrategy.MULTI_TAG_PNP, B_camera,
+                    new Transform3d(new Translation3d(Units.inchesToMeters(-6), Units.inchesToMeters(-7.1),
+                            Units.inchesToMeters(15)), new Rotation3d(0, 0, Units.degreesToRadians(-80))));
+            B_estimator.setMultiTagFallbackStrategy(PoseStrategy.LOWEST_AMBIGUITY);
+        } catch (IOException e) {
+            // The AprilTagFieldLayout failed to load. We won't be able to estimate poses if
+            // we don't know
+            // where the tags are.
+            DriverStation.reportError("Failed to load AprilTagFieldLayout", e.getStackTrace());
+            B_estimator = null;
+        }
+
+        try {
+            // Attempt to load the AprilTagFieldLayout that will tell us where the tags are
+            // on the field.
+            AprilTagFieldLayout fieldLayout = AprilTagFields.k2023ChargedUp.loadAprilTagLayoutField();
+            // Create pose estimator
+            F_estimator = new PhotonPoseEstimator(
+                    fieldLayout, PoseStrategy.MULTI_TAG_PNP, F_camera,
+                    new Transform3d(new Translation3d(Units.inchesToMeters(6), Units.inchesToMeters(7.1),
+                            Units.inchesToMeters(15)), new Rotation3d(0, Units.degreesToRadians(90), Units.degreesToRadians(80)))
+
+            );
+            B_estimator.setMultiTagFallbackStrategy(PoseStrategy.LOWEST_AMBIGUITY);
+
+        } catch (IOException e) {
+            // The AprilTagFieldLayout failed to load. We won't be able to estimate poses if
+            // we don't know
+            // where the tags are.
+            DriverStation.reportError("Failed to load AprilTagFieldLayout", e.getStackTrace());
+            F_estimator = null;
+        }
+        
+        F_camera.setPipelineIndex(2);
+        F_camera.setLED(VisionLEDMode.kOff);
+
     }
 
     @Override
     public void periodic() {
-        //runCamera();
+     runCamera();
     }
 
     /**
@@ -40,36 +93,34 @@ public class LimeLight extends SubsystemBase {
      */
 
     public void runCamera() {
-        var results = camera.getLatestResult();
-        targetFound = results.hasTargets();
+        if (F_camera.getLatestResult().hasTargets()) {
+            PhotonTrackedTarget F_target = F_camera.getLatestResult().getBestTarget();
+            if(F_target != null){
+            F_pitch = F_target.getPitch(); 
+            F_area = F_target.getArea(); 
 
-        if (results.hasTargets()) {
-            PhotonTrackedTarget target = results.getBestTarget();
-            int targetID = target.getFiducialId();
-            Transform3d targetPose =  target.getBestCameraToTarget();
-            double poseAmbiguity = target.getPoseAmbiguity();
-            SmartDashboard.putNumber("tagetID", targetID);
-            SmartDashboard.putNumber("taget Y", targetPose.getY());
-            SmartDashboard.putNumber("taget X", targetPose.getX());
-            SmartDashboard.putNumber("taget Z", targetPose.getZ());
-            SmartDashboard.putNumber("taget Pitch", targetPose.getRotation().getAngle());
+            F_estimator.update(F_camera.getLatestResult());
+            F_estimator.setReferencePose(RobotContainer.swerveSubsystem.getPose());
+            F_estimator.setPrimaryStrategy(PoseStrategy.MULTI_TAG_PNP);
 
-            PhotonUtils.calculateDistanceToTargetMeters(6, targetID, poseAmbiguity, targetID);
-            
-        }
-        SmartDashboard.putBoolean("targetFound", targetFound);
+        }}
+        
+        if (B_camera.getLatestResult().hasTargets()) {
+            PhotonTrackedTarget B_target = B_camera.getLatestResult().getBestTarget();
+            if(B_target != null){
+            B_pitch = B_target.getPitch(); 
+            B_area = B_target.getArea(); 
+        }}
+        
+        
     }
 
     public void setToAprilTags() {
-        camera.setLED(VisionLEDMode.kOn);
 
     }
 
     public void setToReflectiveTape() {
-        camera.setLED(VisionLEDMode.kOn);
-        camera.setPipelineIndex(0);
     }
-
 
     /**
      * Get the Distance from the Limelight to the Refelctive tape on the Poles
@@ -91,22 +142,5 @@ public class LimeLight extends SubsystemBase {
         return 0;
     }
 
-    /**
-     * Get the Distance from the Limelight to the April tags
-     * 
-     * @return DOuble of the distance from the Limelight to the April Tags
-     */
-    public double apriltagDist() {
-        return 0;
-    }
-
-    /**
-     * Get the Angle from the Limelight to the April tags
-     * 
-     * @return double of the angle from the Limelight to the April Tags
-     */
-    public double apriltagAngle() {
-        return 0;
-    }
 
 }

@@ -4,9 +4,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Auto.Commands.armCommands.extendToPose;
 import frc.robot.Auto.Commands.setLastState;
 import frc.robot.Auto.Commands.armCommands.armToPose;
-import frc.robot.Auto.Commands.intakeCommands.timeBasedIntake;
 import frc.robot.Auto.Commands.intakeCommands.wristToPosition;
-import frc.robot.Constants.IO;
 import frc.robot.Constants.IO.state;
 
 

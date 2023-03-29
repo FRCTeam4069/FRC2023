@@ -71,8 +71,8 @@ public class Intake extends SubsystemBase {
         // setIntakePose(0);
         intake.setSoftLimit(SoftLimitDirection.kReverse, 0);
         intake.setSoftLimit(SoftLimitDirection.kForward, 15);
-        wrist.setSoftLimit(SoftLimitDirection.kReverse, -30);
-        wrist.setSoftLimit(SoftLimitDirection.kForward, 30);
+        wrist.setSoftLimit(SoftLimitDirection.kReverse, -34);
+        wrist.setSoftLimit(SoftLimitDirection.kForward, 34 );
 
     }
 
@@ -93,7 +93,7 @@ public class Intake extends SubsystemBase {
             wrist.enableSoftLimit(SoftLimitDirection.kReverse, enableLimit);
             _enableLimit = enableLimit;
         }
-
+        /* 
         SmartDashboard.putNumber("Intake Pose", getIntakePose());
         SmartDashboard.putNumber("Wrist Subsystem received Arm side", side);
         SmartDashboard.putNumber("wrist angle", getWristAngle());
@@ -101,14 +101,14 @@ public class Intake extends SubsystemBase {
         SmartDashboard.putNumber("PhotoElectric V", PhotoElectric.getVoltage());
         SmartDashboard.putBoolean("Limit", !Limit.get());
         SmartDashboard.putBoolean("NeoLimit", !NeoSideLimit.get());
-        low = (180 - Math.abs(armConstants.armPose)) * armConstants.side;
         SmartDashboard.putNumber("Low", low);
         SmartDashboard.putNumber("gravGain t1", ((getWristAngle() - low) * 0.01));
-        SmartDashboard.putNumber("gravGain t2 (sin)", Math.sin(Math.toRadians(getWristAngle() - low)) * 0.1);// * (0 -
-                                                                                                             // getWristAngle()));
+        SmartDashboard.putNumber("gravGain t2 (sin)", Math.sin(Math.toRadians(getWristAngle() - low)) * 0.1);// * (0 -                                                                                               // getWristAngle()));
         SmartDashboard.putNumber("gravGain t3 (cos)", Math.cos(Math.toRadians(getWristAngle() - low)));
         SmartDashboard.putNumber("parallel angle", low - (side * 90));
+        */
         parallelAngle = low - (side * 90);
+        low = (180 - Math.abs(armConstants.armPose)) * armConstants.side;
 
         hasCone.setBoolean(coneInRange);
 

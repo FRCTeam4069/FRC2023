@@ -7,6 +7,7 @@ import com.pathplanner.lib.commands.PPSwerveControllerCommand;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
@@ -17,7 +18,6 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.RobotContainer;
 import frc.robot.Constants.IO;
 import frc.robot.Constants.drivebaseConstants;
 import frc.robot.Constants.drivebaseConstants.ModuleConstants;
@@ -26,10 +26,7 @@ import frc.robot.Constants.drivebaseConstants.kinematics;
 
 public class SwerveSubsystem extends SubsystemBase {
     public final double heading;
-    public PIDController turningPID = new PIDController(0, 0.00, 0);
-
     public SwerveSubsystem(double heading) {
-        turningPID.enableContinuousInput(-180, 180);
 
         new Thread(() -> {
             try {
@@ -39,11 +36,13 @@ public class SwerveSubsystem extends SubsystemBase {
             }
         }).start();
 
+        resetOdometry(new Pose2d());
+
         this.heading = heading;
 
     }
 
-    public final Module FRSwerveModule = new Module(
+    public final swerveModule FRSwerveModule = new swerveModule(
             deviceIDs.FR_DRIVE_MOTOR,
             deviceIDs.FR_STEER_MOTOR,
             deviceIDs.FR_DRIVE_MOTOR_REVERSED,
@@ -52,7 +51,7 @@ public class SwerveSubsystem extends SubsystemBase {
             deviceIDs.FR_STEER_OFFSET,
             deviceIDs.FR_STEER_ENCODER_REVERSED);
 
-    public final Module FLSwerveModule = new Module(
+    public final swerveModule FLSwerveModule = new swerveModule(
             deviceIDs.FL_DRIVE_MOTOR,
             deviceIDs.FL_STEER_MOTOR,
             deviceIDs.FL_DRIVE_MOTOR_REVERSED,
@@ -61,7 +60,7 @@ public class SwerveSubsystem extends SubsystemBase {
             deviceIDs.FL_STEER_OFFSET,
             deviceIDs.FL_STEER_ENCODER_REVERSED);
 
-    public final Module BRSwerveModule = new Module(
+    public final swerveModule BRSwerveModule = new swerveModule(
             deviceIDs.BR_DRIVE_MOTOR,
             deviceIDs.BR_STEER_MOTOR,
             deviceIDs.BR_DRIVE_MOTOR_REVERSED,
@@ -70,7 +69,7 @@ public class SwerveSubsystem extends SubsystemBase {
             deviceIDs.BR_STEER_OFFSET,
             deviceIDs.BR_STEER_ENCODER_REVERSED);
 
-    public final Module BLSwerveModule = new Module(
+    public final swerveModule BLSwerveModule = new swerveModule(
             deviceIDs.BL_DRIVE_MOTOR,
             deviceIDs.BL_STEER_MOTOR,
             deviceIDs.BL_DRIVE_MOTOR_REVERSED,
@@ -159,6 +158,10 @@ public class SwerveSubsystem extends SubsystemBase {
 
     }
 
+    public void setChassisSpeeds(ChassisSpeeds chassisSpeeds){
+        setModuleState(kinematics.m_kinematics.toSwerveModuleStates(chassisSpeeds));
+    }
+
     public double getSide() {
         if (Math.abs(odometry.getPoseMeters().getRotation().getDegrees()) > 90) {
             return -1;
@@ -168,28 +171,29 @@ public class SwerveSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
+        
+        SmartDashboard.putNumber("Pitch", gyro.getPitch());
+        SmartDashboard.putNumber("Roll", gyro.getRoll());
         SmartDashboard.putString("Odometry", odometry.getPoseMeters().toString());
         SmartDashboard.putString("Last Known State", IO.LastState.toString());
+        SmartDashboard.putNumber("Robot Side", getSide());
+
         odometry.update(getRotation2d(), new SwerveModulePosition[] {
                 FLSwerveModule.getPosition(),
                 FRSwerveModule.getPosition(),
                 BLSwerveModule.getPosition(),
                 BRSwerveModule.getPosition() });
-        // SmartDashboard.putNumber("Gyro", convertGyroValues(gyro.getHeading()));
-        // SmartDashboard.putNumber("side", getSide());
         if (IO.PrintSwerveData) {
 
         }
 
-        SmartDashboard.putNumber("Pitch", gyro.getPitch());
-        SmartDashboard.putNumber("Roll", gyro.getRoll());
-
         /*
+         * SmartDashboard.putNumber("Gyro", convertGyroValues(gyro.getHeading()));
+         * SmartDashboard.putNumber("side", getSide());
          * SmartDashboard.putNumber("FR Pose", FRSwerveModule.getDrivePosition());
          * SmartDashboard.putNumber("FL Pose", FLSwerveModule.getDrivePosition());
          * SmartDashboard.putNumber("BR Pose", BRSwerveModule.getDrivePosition());
          * SmartDashboard.putNumber("BL Pose", BLSwerveModule.getDrivePosition());
-         * 
          * 
          * SmartDashboard.putNumber("FR Wheel Spins",
          * FRSwerveModule.getDrivePosition());
@@ -219,13 +223,6 @@ public class SwerveSubsystem extends SubsystemBase {
         return BLSwerveModule.getDriveMotor();
     }
 
-    private double convertGyroValues(double gyroHeading) {
-        if (gyroHeading < 0) {
-            return gyroHeading + 360;
-        } else
-            return gyroHeading;
-
-    }
 
     public Command followTrajectoryCommand(PathPlannerTrajectory traj, boolean isFirstPath) {
         return new SequentialCommandGroup(
@@ -242,7 +239,7 @@ public class SwerveSubsystem extends SubsystemBase {
                         new PIDController(1.9, 0, 0), // X controller. Tune these values for your robot. Leaving them 0
                                                       // will only use feedforwards.
                         new PIDController(1.9, 0, 0), // Y controller (usually the same values as X controller)
-                        turningPID, // Rotation controller. Tune these values for your robot. Leaving them 0 will
+                        new PIDController(-0.3, 0.00, 0), // Rotation controller. Tune these values for your robot. Leaving them 0 will
                                     // only use feedforwards.
                         this::setModuleState, // Module states consumer
                         false, // Should the path be automatically mirrored depending on alliance color.

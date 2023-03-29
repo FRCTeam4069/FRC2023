@@ -21,7 +21,7 @@ public class AutonSelect extends SubsystemBase {
         autonRoutine.addOption("BLUE_LONG", 3);
         autonRoutine.addOption("BLUE_SHORT", 4);
         autonRoutine.addOption("CUBE_L3", 5);
-        autonRoutine.addOption("OVERSHOOT_RAMP", 7);
+        autonRoutine.addOption("TEST", 7);
         autonRoutine.setDefaultOption("DO NOTHING", 6);
 
         auton.add("Autonomous", autonRoutine).withWidget(BuiltInWidgets.kComboBoxChooser).withPosition(0, 0).withSize(5,
