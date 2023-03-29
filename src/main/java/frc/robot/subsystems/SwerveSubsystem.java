@@ -83,6 +83,7 @@ public class SwerveSubsystem extends SubsystemBase {
     public static final Gyro gyro = new Gyro(deviceIDs.PIGEON_ID);
     public final SwerveDriveOdometry odometry = new SwerveDriveOdometry(kinematics.m_kinematics, getRotation2d(),
             getModulePositions());
+            
 
     public SwerveModulePosition[] getModulePositions() {
         return new SwerveModulePosition[] {
@@ -93,17 +94,18 @@ public class SwerveSubsystem extends SubsystemBase {
         };
     }
 
-    public SwerveModuleState[] angleModules(double degree) {
-        return new SwerveModuleState[] {
-                new SwerveModuleState(0, Rotation2d.fromDegrees(degree)),
-                new SwerveModuleState(0, Rotation2d.fromDegrees(degree)),
-                new SwerveModuleState(0, Rotation2d.fromDegrees(degree)),
-                new SwerveModuleState(0, Rotation2d.fromDegrees(degree)) };
+    public SwerveModuleState[] angleModules(double degree){
+        return new SwerveModuleState[]{
+            new SwerveModuleState(0, Rotation2d.fromDegrees(degree)),
+            new SwerveModuleState(0, Rotation2d.fromDegrees(degree)),
+            new SwerveModuleState(0, Rotation2d.fromDegrees(degree)),
+            new SwerveModuleState(0, Rotation2d.fromDegrees(degree))};
 
     }
 
+
     public void resetGyro() {
-        // gyro.setYaw(0);
+        //gyro.setYaw(0);
         gyro.setYaw(0);
     }
 
@@ -123,6 +125,7 @@ public class SwerveSubsystem extends SubsystemBase {
         return Rotation2d.fromDegrees(gyro.getHeading());
     }
 
+
     public Pose2d getPose() {
         return odometry.getPoseMeters();
     }
@@ -136,6 +139,7 @@ public class SwerveSubsystem extends SubsystemBase {
                 BRSwerveModule.getPosition(),
         }, newPose2d);
 
+        
     }
 
     public void stopModules() {
@@ -151,10 +155,10 @@ public class SwerveSubsystem extends SubsystemBase {
 
     public void setModuleState(SwerveModuleState[] ModuleStates) {
         SwerveDriveKinematics.desaturateWheelSpeeds(ModuleStates, ModuleConstants.MAX_VELOCITY_METERS_PER_SECOND);
-        FLSwerveModule.setDesiredState(SwerveModuleState.optimize(ModuleStates[0], FLSwerveModule.getState().angle));
-        FRSwerveModule.setDesiredState(SwerveModuleState.optimize(ModuleStates[1], FRSwerveModule.getState().angle));
-        BLSwerveModule.setDesiredState(SwerveModuleState.optimize(ModuleStates[2], BLSwerveModule.getState().angle));
-        BRSwerveModule.setDesiredState(SwerveModuleState.optimize(ModuleStates[3], BRSwerveModule.getState().angle));
+        FLSwerveModule.setDesiredState(ModuleStates[0]);
+        FRSwerveModule.setDesiredState(ModuleStates[1]);
+        BLSwerveModule.setDesiredState(ModuleStates[2]);
+        BRSwerveModule.setDesiredState(ModuleStates[3]);
 
     }
 
@@ -165,9 +169,10 @@ public class SwerveSubsystem extends SubsystemBase {
     public double getSide() {
         if (Math.abs(odometry.getPoseMeters().getRotation().getDegrees()) > 90) {
             return -1;
-        } else
-            return 1;
+        }else return 1;
     }
+   
+
 
     @Override
     public void periodic() {

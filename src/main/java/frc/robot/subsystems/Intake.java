@@ -116,12 +116,15 @@ public class Intake extends SubsystemBase {
 
     // +iv is up in negitive Side (arm)
     // -iv is up in positive Side (arm)
+    
 
-    public void isConeInRange() {
+    public boolean isConeInRange() {
         if (PhotoElectric.getVoltage() < 0.26) {
             coneInRange = true;
+            return true;
         } else {
             coneInRange = false;
+            return false;
         }
 
         // if ((_coneInRange != coneInRange) && (coneInRange == true)) {
@@ -137,7 +140,6 @@ public class Intake extends SubsystemBase {
         // } else {
         //     RobotContainer.Controller2.setRumble(RumbleType.kBothRumble, 0);
         // }
-        _coneInRange = coneInRange;
 
     }
 
@@ -215,5 +217,7 @@ public class Intake extends SubsystemBase {
             States.currIntakeState = intakeState.OPEN;
         }
     }
+
+
 
 }

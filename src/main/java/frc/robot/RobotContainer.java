@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj2.command.button.POVButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 import frc.robot.subsystems.SwerveSubsystem;
+import frc.robot.Auto.Commands.ControllerAndMisc.rumbleBothControllers;
 import frc.robot.Auto.Commands.armCommands.DefaultArmCommand;
 import frc.robot.Auto.Commands.armCommands.ArmRoutines.HighPoseS1;
 import frc.robot.Auto.Commands.armCommands.ArmRoutines.HighPoseS2;
@@ -61,8 +62,6 @@ public class RobotContainer {
     public static final Debugger db = new Debugger();
     private static final PathPlannerTrajectory pathGroup = PathPlanner.loadPath("Two Items", new PathConstraints(4, 3));
     public static HashMap<String, Command> eventMap = new HashMap<>();
-
-    public static BooleanSupplier yPressed;
 
     public double pressed = 0;
     public IO.state state = IO.state.START;
@@ -147,6 +146,9 @@ public class RobotContainer {
         new POVButton(Controller2, 270).whileTrue(new autoWristParallel());
         new POVButton(Controller2, 90).onTrue(new wristToPosition(-70, 10, 0.5, 1));
         new POVButton(Controller2, 180).whileTrue(new intakeToPose(12.5, 0.1, 1, .6));
+
+
+        new Trigger( ()-> intake.coneInRange ).onTrue(new rumbleBothControllers(0.8, 1));
     }
 
 
