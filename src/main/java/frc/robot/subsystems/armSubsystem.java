@@ -27,9 +27,9 @@ public class armSubsystem extends SubsystemBase {
     public double extendPose = 0, articulatePose = 0, changingArticulateLimits = 130, switcher = 0;
     public int articulateLimit = 130;
     public boolean moveToPoseMode = true;
-    public PIDController armController = new PIDController(armConstants.armKP, armConstants.armKI, armConstants.armKD);
+    public PIDController armController = new PIDController( 0.015,0.01,0);
     public Timer stuckTimer = new Timer();
-    public ArmFeedforward armFF = new ArmFeedforward(0.001, 0.54, 3.55, 0.03);
+    public ArmFeedforward armFF = new ArmFeedforward(0.001, 0.25, 3, 0.03);
 
     public armSubsystem() {
         enableLimit = true;
@@ -79,7 +79,6 @@ public class armSubsystem extends SubsystemBase {
     @Override
     public void periodic() {
         // Update global variables
-        updatePID();
         armConstants.armPose = getArticulateDegrees();
         armConstants.extendPose = getExtendedPose();
         armConstants.side = getSide();
@@ -188,8 +187,8 @@ public class armSubsystem extends SubsystemBase {
             MathUtil.clamp(speed, -0.1, 0.1);
         }
 
-        ArticulateR.set(armFF.calculate(Units.degreesToRadians(getArticulateDegrees() + 90), speed));
-        ArticulateL.set(armFF.calculate(Units.degreesToRadians(getArticulateDegrees() + 90), speed));
+        ArticulateR.set(armFF.calculate((Units.degreesToRadians(getArticulateDegrees() + 90)), speed));
+        ArticulateL.set(armFF.calculate((Units.degreesToRadians(getArticulateDegrees() + 90)), speed));
 
         if ((-intakeConstants.wristPose * getSide() < 0)) {
             articulateLimit = 130;
@@ -323,20 +322,6 @@ public class armSubsystem extends SubsystemBase {
             _isStuck = isStuck;
         }
 
-    }
-
-    public void updatePID() {
-        double gravGain = (Math.cos(Math.abs(Units.degreesToRadians(getArticulateDegrees())))) * 0.01;
-        double extendPgain = Math.pow(getExtendedPose() / 24, 2) * 0.06;
-        double extendIgain = Math.pow(getExtendedPose() / 24, 2) * 0.01;
-        if (Math.abs(articulatePose) > Math.abs(getArticulateDegrees())) {
-            armController.setPID(0.017, 0.001, 0.001);
-            SmartDashboard.putString("PID", "going Down");
-        } else {
-            SmartDashboard.putString("PID", "going Up");
-            armController.setPID(0.02 + gravGain + extendPgain,
-                    0.001 + extendIgain, 0);
-        }
     }
 
     public void printArmNumbers() {
