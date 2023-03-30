@@ -19,7 +19,7 @@ public class extendToPose extends CommandBase {
     public void execute() {
         // arm.setExtendPose(MathUtil.clamp(targetPose, 0, 130));
         arm.extendToPose(targetPose, 1);
-        SmartDashboard.putNumber("Extend Error", targetPose - arm.ExtendedPose());
+        SmartDashboard.putNumber("Extend Error", targetPose - arm.getExtendedPose());
     }
 
     @Override

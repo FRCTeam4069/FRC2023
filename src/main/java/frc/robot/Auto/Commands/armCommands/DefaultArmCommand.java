@@ -23,11 +23,11 @@ public class DefaultArmCommand extends CommandBase {
         // 32 for p1
         // 120 for p2
         arm.manualExtend(MathUtil.applyDeadband(-extendSpeed.get(), 0.08));
-        // arm.setExtendPose(arm.extendPose+
-        // MathUtil.applyDeadband(-extendSpeed.get()*1.1, 0.05));
-        arm.setArmPose(arm.articulatePose + MathUtil.applyDeadband(side.get() * articulateSpeed.get() * 3, 0.08));
-        //arm.manualArticulate(MathUtil.applyDeadband(articulateSpeed.get(), 0.08));
+
+        arm.setArmPose(arm.articulatePose + (side.get() * MathUtil.applyDeadband(articulateSpeed.get(), 0.08) * 3));
+        //arm.setArmPose(arm.articulatePose + MathUtil.applyDeadband(side.get() * articulateSpeed.get() * 3, 0.08));
     }
+
 
 
     @Override

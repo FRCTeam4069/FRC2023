@@ -1,14 +1,14 @@
-package frc.robot.Auto.Commands.intakeCommands;
+package frc.robot.Auto.Commands.intakeAndWristCommands;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.RobotContainer;
-import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.wristSubsystem;
 
 public class wristToPosition extends CommandBase {
-    private static final Intake intake = RobotContainer.intake;
+    private static final wristSubsystem wrist = RobotContainer.wrist;
     private final double threshold, targetPose, thresholdTime, timeOut;
     private final Timer timeOutTimer = new Timer(), thresholdTimer = new Timer();
 
@@ -17,31 +17,24 @@ public class wristToPosition extends CommandBase {
         this.threshold = threshold;
         this.thresholdTime = thresholdTime;
         this.targetPose = MathUtil.clamp(targetPose, -100, 100);
-        addRequirements(RobotContainer.intake);
+        addRequirements(RobotContainer.wrist);
     }
 
     @Override
-    public void initialize(){
+    public void initialize() {
         timeOutTimer.restart();
     }
 
     @Override
     public void execute() {
         
-        SmartDashboard.putNumber("Wrist (Side)", intake.side);
-        SmartDashboard.putNumber("Wrist (Target)", targetPose);
-        SmartDashboard.putNumber("Wrist (power)", (targetPose * intake.side - intake.getWristAngle()) * (0.01));
-        SmartDashboard.putNumber("Threshold Time", thresholdTimer.get());
-        SmartDashboard.putNumber("Timout Time", timeOutTimer.get());
-        SmartDashboard.putBoolean("Is finished", thresholdTimer.hasElapsed(thresholdTime) || timeOutTimer.hasElapsed(timeOut));
-
-        if (Math.abs(targetPose - intake.getWristAngle()) > 10) {
-            intake.setWrist((targetPose * intake.side - intake.getWristAngle()) * (0.019));
+        if (Math.abs(targetPose - wrist.getWristAngle()) > 10) {
+            wrist.setWrist((targetPose * wrist.side - wrist.getWristAngle()) * (0.019));
         } else {
-            intake.setWrist((targetPose * intake.side - intake.getWristAngle()) * (0.01));
+            wrist.setWrist((targetPose * wrist.side - wrist.getWristAngle()) * (0.01));
         }
 
-        if (Math.abs(targetPose - intake.getWristAngle()) < threshold) {
+        if (Math.abs(targetPose - wrist.getWristAngle()) < threshold) {
             thresholdTimer.start();
         } else {
             thresholdTimer.reset();

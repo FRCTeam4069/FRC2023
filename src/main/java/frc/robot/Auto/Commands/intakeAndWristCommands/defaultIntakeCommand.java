@@ -1,32 +1,22 @@
-package frc.robot.Auto.Commands.intakeCommands;
+package frc.robot.Auto.Commands.intakeAndWristCommands;
+
 
 import java.util.function.Supplier;
 
+import edu.wpi.first.networktables.BooleanEntry;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.RobotContainer;
 import frc.robot.Constants.armAndIntakeConstants.armConstants;
 import frc.robot.subsystems.Intake;
 
-public class DefaultIntakeCommand extends CommandBase {
+public class defaultIntakeCommand extends CommandBase {
 
     private final Intake intake = RobotContainer.intake;
     private final Supplier<Boolean> intakeOpen, intakeClose;
-    private final Supplier<Double> wristUp, wristDown;
     public double intakeSpeed, wristPose;
     private Supplier<Integer> POV;
 
-    /**
-     * 
-     * @param intake
-     * @param UP
-     * @param DOWN
-     * @param OPEN
-     * @param CLOSE
-     */
-    public DefaultIntakeCommand(Supplier<Double> UP, Supplier<Double> DOWN, Supplier<Boolean> OPEN,
-            Supplier<Boolean> CLOSE, Supplier<Integer> POV) {
-        this.wristUp = UP;
-        this.wristDown = DOWN;
+    public defaultIntakeCommand(Supplier<Boolean> OPEN,Supplier<Boolean> CLOSE, Supplier<Integer> POV) {
         this.intakeOpen = OPEN;
         this.intakeClose = CLOSE;
         this.POV = POV;
@@ -35,8 +25,6 @@ public class DefaultIntakeCommand extends CommandBase {
 
     @Override
     public void execute() {
-
-        intake.setWrist((wristUp.get() - wristDown.get()) * armConstants.side);
 
         if (intakeOpen.get() && intakeClose.get()) {
             intakeSpeed = 0;
@@ -47,23 +35,30 @@ public class DefaultIntakeCommand extends CommandBase {
         } else {
             intakeSpeed = 0;
         }
-        intake.setIntake(intakeSpeed);
+
+        intake.set(intakeSpeed);
 
         if (POV.get() == 0) {
+            //when dpad up, rollers outtake
             intake.intakeM2.set(-0.5);
         } else if (POV.get() == 180) {
+            //when dpad down, rollers intake
             intake.intakeM2.set(0.7);
-        } else if(intakeClose.get()) {
+        } else if (intakeClose.get()) {
+            //when intake close, rollers intake
             intake.intakeM2.set(0.5);
-        }else intake.intakeM2.set(0);
+        } else
+            intake.intakeM2.set(0);
+
 
     }
+
 
     @Override
     public void end(boolean interrupted) {
-        intake.setIntake(0);
-        intake.setWrist(0);
+        intake.set(0);
     }
+
 
     @Override
     public boolean isFinished() {

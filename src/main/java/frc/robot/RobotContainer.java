@@ -28,11 +28,12 @@ import frc.robot.Auto.Commands.armCommands.ArmRoutines.MidPoseS2;
 import frc.robot.Auto.Commands.armCommands.ArmRoutines.scoreThenHome;
 import frc.robot.Auto.Commands.drivebaseCommands.defaultDriveCommand;
 import frc.robot.Auto.Commands.drivebaseCommands.AutoCommands.followTrajectoryCommand;
-import frc.robot.Auto.Commands.intakeCommands.DefaultIntakeCommand;
-import frc.robot.Auto.Commands.intakeCommands.timeBasedIntake;
-import frc.robot.Auto.Commands.intakeCommands.autoWristParallel;
-import frc.robot.Auto.Commands.intakeCommands.intakeToPose;
-import frc.robot.Auto.Commands.intakeCommands.wristToPosition;
+import frc.robot.Auto.Commands.intakeAndWristCommands.autoWristParallel;
+import frc.robot.Auto.Commands.intakeAndWristCommands.defaultIntakeCommand;
+import frc.robot.Auto.Commands.intakeAndWristCommands.defaultWristCommand;
+import frc.robot.Auto.Commands.intakeAndWristCommands.intakeToPose;
+import frc.robot.Auto.Commands.intakeAndWristCommands.timeBasedIntake;
+import frc.robot.Auto.Commands.intakeAndWristCommands.wristToPosition;
 import frc.robot.Auto.routines.BLUE_LONG;
 import frc.robot.Auto.routines.BLUE_SHORT;
 import frc.robot.Auto.routines.MiddlePathL3CUBUE;
@@ -48,6 +49,7 @@ import frc.robot.subsystems.armSubsystem;
 import frc.robot.subsystems.AutonSelect;
 import frc.robot.subsystems.Debugger;
 import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.wristSubsystem;
 import frc.robot.subsystems.LimeLight;
 
 public class RobotContainer {
@@ -56,6 +58,7 @@ public class RobotContainer {
     public static final armSubsystem arm = new armSubsystem();
     public static final Intake intake = new Intake();
     public static final LimeLight limelight = new LimeLight();
+    public static final wristSubsystem wrist = new wristSubsystem();
 
     public static final Middle_Path_0cones testRoutine = new Middle_Path_0cones();
     public static final AutonSelect autoSelecter = new AutonSelect();
@@ -96,11 +99,6 @@ public class RobotContainer {
     public final static XboxController Controller2 = new XboxController(1);
 
     public RobotContainer() {
-
-        eventMap.put("CloseIntake", new timeBasedIntake(0.5, .25));
-        eventMap.put("CUBE_L3", new placeCubeL3());
-        eventMap.put("ARM_DOWN", new HomePose());
-
         swerveSubsystem.setDefaultCommand(new defaultDriveCommand(
                 swerveSubsystem,
                 () -> Controller1.getLeftX(),
@@ -115,12 +113,14 @@ public class RobotContainer {
                 () -> Controller2.getLeftY(),
                 () -> swerveSubsystem.getSide()));
 
-        intake.setDefaultCommand(new DefaultIntakeCommand(
-                () -> Controller2.getRightTriggerAxis(),
-                () -> Controller2.getLeftTriggerAxis(),
+        intake.setDefaultCommand(new defaultIntakeCommand(
                 () -> Controller2.getLeftBumper(),
                 () -> Controller2.getRightBumper(),
                 () -> Controller2.getPOV()));
+
+        wrist.setDefaultCommand(new defaultWristCommand(
+            () -> Controller2.getRightTriggerAxis(), 
+            () -> Controller2.getLeftTriggerAxis()));
 
         // intake.setDefaultCommand(new autoWristPose());
 
@@ -131,8 +131,6 @@ public class RobotContainer {
 
     private void configureButtonBindings() {
         new Trigger(Controller1::getAButton).whileTrue(swerveSubsystem.resetGyroCommmand());
-        // new Trigger(Controller2::getStartButton).whileTrue(arm.runOnce(() ->
-        // arm.setZero()));
         new Trigger(Controller2::getLeftStickButton).whileTrue(arm.flaseLimit());
         new Trigger(Controller2::getRightStickButton).whileTrue(arm.trueLimit());
         if (IO.LastState == IO.state.HIGH || IO.LastState == IO.state.MID) {
@@ -146,9 +144,8 @@ public class RobotContainer {
         new POVButton(Controller2, 270).whileTrue(new autoWristParallel());
         new POVButton(Controller2, 90).onTrue(new wristToPosition(-70, 10, 0.5, 1));
         new POVButton(Controller2, 180).whileTrue(new intakeToPose(12.5, 0.1, 1, .6));
-
-
-        new Trigger( ()-> intake.coneInRange ).onTrue(new rumbleBothControllers(0.8, 1));
+        new Trigger( ()-> intake.coneInRange ).onFalse(new rumbleBothControllers(0.8, 1));
+        
     }
 
 

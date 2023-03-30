@@ -1,4 +1,4 @@
-package frc.robot.Auto.Commands.intakeCommands;
+package frc.robot.Auto.Commands.intakeAndWristCommands;
 
 
 import edu.wpi.first.wpilibj.Timer;
@@ -16,18 +16,18 @@ public class OpenIntake extends CommandBase {
    
     @Override
     public void execute(){
-        intake.intakeToPose(15);
+        intake.ToPose(15);
         timer.start();
     }
     @Override
     public void end(boolean interrupted){
         intake.intakeM2.set(0);
-        intake.setIntake(0);
+        intake.set(0);
 
     }
     @Override
     public boolean isFinished(){
-        return intake.getIntakePose() > 14;
+        return intake.getPose() > 14;
     }
 
 }

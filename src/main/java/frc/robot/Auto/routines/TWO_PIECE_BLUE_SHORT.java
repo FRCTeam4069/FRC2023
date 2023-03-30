@@ -11,8 +11,8 @@ import frc.robot.RobotContainer;
 import frc.robot.Auto.Commands.armCommands.armToPose;
 import frc.robot.Auto.Commands.armCommands.extendToPose;
 import frc.robot.Auto.Commands.armCommands.ArmRoutines.HomePose;
-import frc.robot.Auto.Commands.intakeCommands.OpenIntake;
-import frc.robot.Auto.Commands.intakeCommands.wristToPosition;
+import frc.robot.Auto.Commands.intakeAndWristCommands.OpenIntake;
+import frc.robot.Auto.Commands.intakeAndWristCommands.wristToPosition;
 import frc.robot.subsystems.SwerveSubsystem;
 
 public class TWO_PIECE_BLUE_SHORT extends SequentialCommandGroup {

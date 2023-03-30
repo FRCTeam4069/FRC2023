@@ -141,8 +141,6 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during operator control. */
   @Override
   public void teleopPeriodic() {
-    // RobotContainer.Controller2.setRumble(RumbleType.kBothRumble, 1);
-    // RobotContainer.Controller1.setRumble(RumbleType.kBothRumble, 1);
   }
 
   @Override
@@ -159,9 +157,6 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during test mode. */
   @Override
   public void testPeriodic() {
-    
-
-    //led.testLights(1435);
   }
 
   @Override

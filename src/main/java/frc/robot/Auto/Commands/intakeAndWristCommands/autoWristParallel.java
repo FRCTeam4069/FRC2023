@@ -1,10 +1,11 @@
-package frc.robot.Auto.Commands.intakeCommands;
+package frc.robot.Auto.Commands.intakeAndWristCommands;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.wristSubsystem;
 
 public class autoWristParallel extends CommandBase {
-    private static final Intake intake = RobotContainer.intake;
+    private static final wristSubsystem intake = RobotContainer.wrist;
     private double error;
     public autoWristParallel() {
         addRequirements(RobotContainer.intake);
@@ -14,9 +15,9 @@ public class autoWristParallel extends CommandBase {
         //error = (-3.36 - 0.853 * Math.abs(intake.armAngle) + (0.0103 * Math.pow(Math.abs(intake.armAngle), 2)) - intake.getWristAngle());
         error = (-intake.parallelAngle) - intake.getWristAngle();
         if (Math.abs(error) > 10) {
-            intake.setWrist( error * (0.015));
+            intake.setWrist( error * (0.01));
         } else {
-            intake.setWrist( error * (0.09));
+            intake.setWrist( error * (0.02));
         }
 
 

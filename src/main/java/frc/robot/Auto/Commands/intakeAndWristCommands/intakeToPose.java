@@ -1,4 +1,4 @@
-package frc.robot.Auto.Commands.intakeCommands;
+package frc.robot.Auto.Commands.intakeAndWristCommands;
 
 
 import edu.wpi.first.wpilibj.Timer;
@@ -29,7 +29,7 @@ public class intakeToPose extends CommandBase {
 
     @Override
     public void execute(){
-        intake.intakeToPose(target);
+        intake.ToPose(target);
         intake.intakeM2.set(RollerSpeeds);
         timer.start();
     }
@@ -37,11 +37,11 @@ public class intakeToPose extends CommandBase {
     @Override
     public void end(boolean interrupted){
         intake.intakeM2.set(0);
-        intake.setIntake(0);
+        intake.set(0);
     }
     @Override
     public boolean isFinished(){
-        return Math.abs(intake.getIntakePose() - target) < threshold || timer.hasElapsed(timeout);
+        return Math.abs(intake.getPose() - target) < threshold || timer.hasElapsed(timeout);
     }
 
 }

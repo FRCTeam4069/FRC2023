@@ -1,20 +1,20 @@
-package frc.robot.Auto.Commands.intakeCommands;
+package frc.robot.Auto.Commands.intakeAndWristCommands;
 
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Robot;
 import frc.robot.RobotContainer;
-import frc.robot.Auto.Commands.Command;
 import frc.robot.subsystems.Intake;
 
 public class timeBasedIntake extends CommandBase {
     private final Intake intake = RobotContainer.intake;
-    private final double power, time;
+    private final double power, time, rollerPower;
     private final Timer timer = new Timer();
 
-    public timeBasedIntake(double power, double time) {
+    public timeBasedIntake(double power, double rollerPower, double time) {
         this.power = power;
         this.time = time;
+        this.rollerPower = rollerPower;
         addRequirements(RobotContainer.intake);
     }
 
@@ -27,7 +27,8 @@ public class timeBasedIntake extends CommandBase {
     @Override
     public void execute() {
         timer.start();
-        intake.setIntake(power);
+        intake.set(power);
+        intake.intakeM2.set(power);
 
     }
 
@@ -38,6 +39,7 @@ public class timeBasedIntake extends CommandBase {
 
     @Override
     public void end(boolean interrupted) {
-
+        intake.set(0);
+        intake.intakeM2.set(0);
     }
 }
