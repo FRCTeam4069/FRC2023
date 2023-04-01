@@ -26,12 +26,13 @@ import java.util.function.Supplier;
 /** Custom PathPlanner version of SwerveControllerCommand */
 public class followTrajectoryCommand extends CommandBase {
   private final Timer timer = new Timer();
+  private final Timer timer2 = new Timer();
   private static final SwerveSubsystem swerve = RobotContainer.swerveSubsystem;
   private final PathPlannerTrajectory trajectory;
   private final Supplier<Pose2d> poseSupplier = swerve::getPose;
   private final SwerveDriveKinematics kinematics = drivebaseConstants.kinematics.m_kinematics;
-  private final CustomFollower controller = new CustomFollower(new PIDController(1.9, 0, 0),
-      new PIDController(1.9, 0, 0), new PIDController(5, 0, 0));;
+  private final CustomFollower controller = new CustomFollower(new PIDController(1.8, 0.00, 0.4),
+      new PIDController(1.8, 0.00, 0.4), new PIDController(5, 0, 0));;
   private final Consumer<SwerveModuleState[]> outputModuleStates = swerve::setModuleState;
   private final Consumer<ChassisSpeeds> outputChassisSpeeds = swerve::setChassisSpeeds;
   private final boolean useKinematics = false;
@@ -112,6 +113,8 @@ public class followTrajectoryCommand extends CommandBase {
     timer.reset();
     timer.start();
 
+    controller.setTolerance(new Pose2d(new Translation2d( 0.04, 0.04), Rotation2d.fromDegrees(1) ));
+
     PathPlannerServer.sendActivePath(transformedTrajectory.getStates());
   }
 
@@ -172,7 +175,8 @@ public class followTrajectoryCommand extends CommandBase {
 
   @Override
   public boolean isFinished() {
-    return this.timer.hasElapsed(transformedTrajectory.getTotalTimeSeconds());
+    return atReferenceTimed(0.5) || this.timer.hasElapsed(transformedTrajectory.getTotalTimeSeconds()+5);
+
   }
 
   private static void defaultLogError(Translation2d translationError, Rotation2d rotationError) {
@@ -209,6 +213,16 @@ public class followTrajectoryCommand extends CommandBase {
     followTrajectoryCommand.logTargetPose = logTargetPose;
     followTrajectoryCommand.logSetpoint = logSetpoint;
     followTrajectoryCommand.logError = logError;
+  }
+
+  public boolean atReferenceTimed(double time){
+    if(controller.atReference()){
+      timer2.start();
+    }else{
+      timer2.reset();
+      timer2.stop();
+    }
+    return timer2.hasElapsed(time);
   }
 
 }

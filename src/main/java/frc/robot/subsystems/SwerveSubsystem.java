@@ -18,6 +18,7 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.RobotContainer;
 import frc.robot.Constants.IO;
 import frc.robot.Constants.drivebaseConstants;
 import frc.robot.Constants.drivebaseConstants.ModuleConstants;
@@ -188,28 +189,7 @@ public class SwerveSubsystem extends SubsystemBase {
                 FRSwerveModule.getPosition(),
                 BLSwerveModule.getPosition(),
                 BRSwerveModule.getPosition() });
-        if (IO.PrintSwerveData) {
-
-        }
-
-        /*
-         * SmartDashboard.putNumber("Gyro", convertGyroValues(gyro.getHeading()));
-         * SmartDashboard.putNumber("side", getSide());
-         * SmartDashboard.putNumber("FR Pose", FRSwerveModule.getDrivePosition());
-         * SmartDashboard.putNumber("FL Pose", FLSwerveModule.getDrivePosition());
-         * SmartDashboard.putNumber("BR Pose", BRSwerveModule.getDrivePosition());
-         * SmartDashboard.putNumber("BL Pose", BLSwerveModule.getDrivePosition());
-         * 
-         * SmartDashboard.putNumber("FR Wheel Spins",
-         * FRSwerveModule.getDrivePosition());
-         * SmartDashboard.putNumber("FL Wheel Spins",
-         * FLSwerveModule.getDrivePosition());
-         * SmartDashboard.putNumber("BR Wheel Spins",
-         * BRSwerveModule.getDrivePosition());
-         * SmartDashboard.putNumber("BL Wheel Spins",
-         * BLSwerveModule.getDrivePosition());
-         */
-
+                
     }
 
     public TalonFX getFRDriveMotor() {

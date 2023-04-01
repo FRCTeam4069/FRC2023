@@ -7,7 +7,6 @@ import com.revrobotics.CANSparkMax.SoftLimitDirection;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.Timer;
@@ -27,9 +26,8 @@ public class armSubsystem extends SubsystemBase {
     public double extendPose = 0, articulatePose = 0, changingArticulateLimits = 130, switcher = 0;
     public int articulateLimit = 130;
     public boolean moveToPoseMode = true;
-    public PIDController armController = new PIDController( 0.015,0.01,0);
+    public PIDController armController = new PIDController(armConstants.armKP, armConstants.armKI, armConstants.armKD);
     public Timer stuckTimer = new Timer();
-    public ArmFeedforward armFF = new ArmFeedforward(0.001, 0.25, 3, 0.03);
 
     public armSubsystem() {
         enableLimit = true;
@@ -79,6 +77,7 @@ public class armSubsystem extends SubsystemBase {
     @Override
     public void periodic() {
         // Update global variables
+        updatePID();
         armConstants.armPose = getArticulateDegrees();
         armConstants.extendPose = getExtendedPose();
         armConstants.side = getSide();
@@ -154,17 +153,15 @@ public class armSubsystem extends SubsystemBase {
     }
 
     private boolean moveToPose(double pose) {
-      
+        armController.setSetpoint(pose);
         // double speed = MathUtil.clamp(
-        //         (armController.calculate(getArticulateDegrees())
-        //                 + (getExtendedPose() * getSide() * armConstants.GravGain)),
-        //         -1, 1);
-        // manualArticulate(speed);
-
+        // ((pose - getArticulateDegrees()) * armConstants.armKP
+        // + (getExtendedPose() * getSide() * armConstants.GravGain)),
+        // -1, 1);
         double speed = MathUtil.clamp(
-            armController.calculate(getArticulateDegrees(), pose),
-            -1, 1);
-        
+                (armController.calculate(getArticulateDegrees())
+                        + (getExtendedPose() * getSide() * armConstants.GravGain)),
+                -1, 1);
         manualArticulate(speed);
 
         return true;
@@ -187,8 +184,8 @@ public class armSubsystem extends SubsystemBase {
             MathUtil.clamp(speed, -0.1, 0.1);
         }
 
-        ArticulateR.set(armFF.calculate((Units.degreesToRadians(getArticulateDegrees() + 90)), speed));
-        ArticulateL.set(armFF.calculate((Units.degreesToRadians(getArticulateDegrees() + 90)), speed));
+        ArticulateR.set(speed);
+        ArticulateL.set(speed);
 
         if ((-intakeConstants.wristPose * getSide() < 0)) {
             articulateLimit = 130;
@@ -322,6 +319,20 @@ public class armSubsystem extends SubsystemBase {
             _isStuck = isStuck;
         }
 
+    }
+
+    public void updatePID() {
+        double gravGain = (Math.cos(Math.abs(Units.degreesToRadians(getArticulateDegrees())))) * 0.01;
+        double extendPgain = Math.pow(getExtendedPose() / 24, 2) * 0.05;
+        double extendIgain = Math.pow(getExtendedPose() / 24, 2) * 0.0;
+        if (Math.abs(articulatePose) > Math.abs(getArticulateDegrees())) {
+            armController.setPID(0.015, 0.001, 0.001);
+            SmartDashboard.putString("PID", "going Down");
+        } else {
+            SmartDashboard.putString("PID", "going Up");
+            armController.setPID(0.016 + gravGain + extendPgain,
+                    0.001 + extendIgain, 0.001);
+        }
     }
 
     public void printArmNumbers() {

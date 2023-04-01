@@ -19,8 +19,8 @@ public class drivebaseConstants {
 
     public static final class kinematics{
 
-        public static final double DRIVETRAIN_TRACKWIDTH_METERS = Units.inchesToMeters(9.375*2); 
-        public static final double DRIVETRAIN_WHEELBASE_METERS = Units.inchesToMeters(9.375*2); 
+        public static final double DRIVETRAIN_TRACKWIDTH_METERS = 0.525;//Units.inchesToMeters(9.375*2); // .525m
+        public static final double DRIVETRAIN_WHEELBASE_METERS = 0.525;// Units.inchesToMeters(9.375*2); 
 
         public static final SwerveDriveKinematics m_kinematics = new SwerveDriveKinematics(
             // Front left
@@ -37,7 +37,7 @@ public class drivebaseConstants {
     public static final class ModuleConstants{
     public static final double MAX_VELOCITY_METERS_PER_SECOND = (6380.0 / 60.0) * SdsModuleConfigurations.MK4_L2.getDriveReduction() * SdsModuleConfigurations.MK4_L2.getWheelDiameter() * Math.PI;
 
-    public static final double kWheelDiameterMeters = Units.inchesToMeters(4);
+    public static final double kWheelDiameterMeters = Units.inchesToMeters(3.85);
     public static final double kDriveMotorGearRatio = SdsModuleConfigurations.MK4I_L2.getDriveReduction() ;
     public static final double kTurningMotorGearRatio = SdsModuleConfigurations.MK4I_L2.getSteerReduction();
     public static final double kDriveEncoderRot2Meter = kDriveMotorGearRatio * Math.PI * kWheelDiameterMeters;

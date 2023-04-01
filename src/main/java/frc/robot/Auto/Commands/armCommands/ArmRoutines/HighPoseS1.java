@@ -12,7 +12,7 @@ public class HighPoseS1 extends SequentialCommandGroup {
     public HighPoseS1() {
         addCommands(new setLastState(state.HIGH));
         addCommands(
-                new fieldRelativeArmToPose(-60, 60)
+                new fieldRelativeArmToPose(-55, 60)
                         .andThen(new wristToPosition(90, 5, 0.25, .5))
                         .andThen(new extendToPose(23.5, 0.5))
                         .andThen(new wristToPosition(0, 5, 0.5, 1))

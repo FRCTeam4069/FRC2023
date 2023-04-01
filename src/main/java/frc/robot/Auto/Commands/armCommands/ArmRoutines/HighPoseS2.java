@@ -15,7 +15,7 @@ public class HighPoseS2 extends SequentialCommandGroup {
                 new armToPose(70, true, 5)
                         .andThen(new wristToPosition(0, 5, 0.25, 0.5))
                         .andThen(new OpenIntake())
-                        .andThen(new armToPose(55, true, 5))
+                        .andThen(new armToPose(60, true, 5))
                         .andThen(new HomePose())
                         );
 

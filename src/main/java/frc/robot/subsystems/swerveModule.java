@@ -19,6 +19,7 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants.drivebaseConstants;
 import frc.robot.Constants.drivebaseConstants.CharacterizationData;
 import frc.robot.Constants.drivebaseConstants.ModuleConstants;
 
@@ -64,7 +65,7 @@ public class swerveModule extends SubsystemBase {
    }
 
    public double getDrivePosition() {
-      return (driveMotor.getSelectedSensorPosition() / (2048 * 6.75)) * Math.PI * Units.inchesToMeters(4);
+      return (driveMotor.getSelectedSensorPosition() / (2048 * 6.75)) * Math.PI * drivebaseConstants.ModuleConstants.kWheelDiameterMeters;
    }
 
    public double getTurnignPosition() {
@@ -72,7 +73,7 @@ public class swerveModule extends SubsystemBase {
    }
 
    public double getDriveVelocity() {
-      return (driveMotor.getSelectedSensorVelocity() / (2048 * 6.75)) * 10 * Math.PI * Units.inchesToMeters(4);
+      return (driveMotor.getSelectedSensorVelocity() / (2048 * 6.75)) * 10 * Math.PI * drivebaseConstants.ModuleConstants.kWheelDiameterMeters;
    }
 
    public double getTurningVelocity() {

@@ -26,6 +26,7 @@ public class DefaultArmCommand extends CommandBase {
 
         arm.setArmPose(arm.articulatePose + (side.get() * MathUtil.applyDeadband(articulateSpeed.get(), 0.08) * 3));
         //arm.setArmPose(arm.articulatePose + MathUtil.applyDeadband(side.get() * articulateSpeed.get() * 3, 0.08));
+        //arm.manualArticulate(MathUtil.applyDeadband(articulateSpeed.get(), 0.08));
     }
 
 

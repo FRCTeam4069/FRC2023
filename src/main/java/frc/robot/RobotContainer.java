@@ -1,7 +1,7 @@
 package frc.robot;
 
+import java.lang.ModuleLayer.Controller;
 import java.util.HashMap;
-import java.util.function.BooleanSupplier;
 import com.ctre.phoenix.music.Orchestra;
 import com.pathplanner.lib.PathConstraints;
 import com.pathplanner.lib.PathPlanner;
@@ -25,45 +25,46 @@ import frc.robot.Auto.Commands.armCommands.ArmRoutines.HomePose;
 import frc.robot.Auto.Commands.armCommands.ArmRoutines.HumanPlayerPose;
 import frc.robot.Auto.Commands.armCommands.ArmRoutines.MidPoseS1;
 import frc.robot.Auto.Commands.armCommands.ArmRoutines.MidPoseS2;
+import frc.robot.Auto.Commands.armCommands.ArmRoutines.ShootCubeL3;
 import frc.robot.Auto.Commands.armCommands.ArmRoutines.scoreThenHome;
+import frc.robot.Auto.Commands.drivebaseCommands.autoAlign;
 import frc.robot.Auto.Commands.drivebaseCommands.defaultDriveCommand;
 import frc.robot.Auto.Commands.drivebaseCommands.AutoCommands.followTrajectoryCommand;
 import frc.robot.Auto.Commands.intakeAndWristCommands.autoWristParallel;
 import frc.robot.Auto.Commands.intakeAndWristCommands.defaultIntakeCommand;
 import frc.robot.Auto.Commands.intakeAndWristCommands.defaultWristCommand;
 import frc.robot.Auto.Commands.intakeAndWristCommands.intakeToPose;
-import frc.robot.Auto.Commands.intakeAndWristCommands.timeBasedIntake;
 import frc.robot.Auto.Commands.intakeAndWristCommands.wristToPosition;
 import frc.robot.Auto.routines.BLUE_LONG;
 import frc.robot.Auto.routines.BLUE_SHORT;
+import frc.robot.Auto.routines.FirstRoutine;
 import frc.robot.Auto.routines.MiddlePathL3CUBUE;
 import frc.robot.Auto.routines.Middle_Path_0cones;
 import frc.robot.Auto.routines.RED_LONG;
 import frc.robot.Auto.routines.RED_SHORT;
-import frc.robot.Auto.routines.TestPathPlannerPath;
-import frc.robot.Auto.routines.TwoThings;
-import frc.robot.Auto.routines.placeCubeL3;
 import frc.robot.Constants.IO;
 import frc.robot.Constants.drivebaseConstants;
 import frc.robot.subsystems.armSubsystem;
+import frc.robot.subsystems.limeLight;
 import frc.robot.subsystems.AutonSelect;
 import frc.robot.subsystems.Debugger;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.wristSubsystem;
-import frc.robot.subsystems.LimeLight;
+import frc.robot.subsystems.LimeLight1;
 
 public class RobotContainer {
 
     public static final SwerveSubsystem swerveSubsystem = new SwerveSubsystem(-90);
     public static final armSubsystem arm = new armSubsystem();
     public static final Intake intake = new Intake();
-    public static final LimeLight limelight = new LimeLight();
+    //public static final LimeLight1 limelight = new LimeLight1();
+    public static final limeLight frontLimeLight = new limeLight("Front Camera","http://10.40.69.39:5800","limelight-fcam");
+    public static final limeLight backLimeLight = new limeLight("Back Camera","http://10.40.69.70:5801","limelight-bcam");
     public static final wristSubsystem wrist = new wristSubsystem();
 
     public static final Middle_Path_0cones testRoutine = new Middle_Path_0cones();
     public static final AutonSelect autoSelecter = new AutonSelect();
     public static final Debugger db = new Debugger();
-    private static final PathPlannerTrajectory pathGroup = PathPlanner.loadPath("Two Items", new PathConstraints(4, 3));
     public static HashMap<String, Command> eventMap = new HashMap<>();
 
     public double pressed = 0;
@@ -145,7 +146,7 @@ public class RobotContainer {
         new POVButton(Controller2, 90).onTrue(new wristToPosition(-70, 10, 0.5, 1));
         new POVButton(Controller2, 180).whileTrue(new intakeToPose(12.5, 0.1, 1, .6));
         new Trigger( ()-> intake.coneInRange ).onFalse(new rumbleBothControllers(0.8, 1));
-        
+        new Trigger(Controller1::getXButton).onTrue(new autoAlign(1));
     }
 
 
@@ -165,11 +166,12 @@ public class RobotContainer {
         case 4:
         return new BLUE_SHORT();
         case 5:
-        return new placeCubeL3();
+        return new ShootCubeL3();
         case 6:
         return new InstantCommand();
         case 7:
-        return new followTrajectoryCommand(PathPlanner.loadPath("Two Items", new PathConstraints(2, 2)), true);
+        return new FirstRoutine();
+        //return new followTrajectoryCommand(PathPlanner.loadPath("TEST", new PathConstraints(2, 2)), true);
         default:
         SmartDashboard.putString("Auto Selected:", "INVALID");
         return new InstantCommand();

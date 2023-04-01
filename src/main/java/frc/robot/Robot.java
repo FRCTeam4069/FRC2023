@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import edu.wpi.first.net.PortForwarder;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -46,6 +47,11 @@ public class Robot extends TimedRobot {
     // Instantiate our RobotContainer. This will perform all our button bindings,
     // and put our
     // autonomous chooser on the dashboard.
+
+    for (int port = 5800; port <= 5805; port++) {
+      PortForwarder.add(port, "limelight.local", port);
+  }
+
     m_robotContainer = new RobotContainer();
 
     Music_Chooser.setDefaultOption("Pirates Of The Caribbean", PotC);
