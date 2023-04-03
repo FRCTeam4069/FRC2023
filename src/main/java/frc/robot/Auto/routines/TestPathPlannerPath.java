@@ -15,16 +15,16 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.RobotContainer;
-import frc.robot.Auto.Commands.armCommands.ArmRoutines.HomePose;
+import frc.robot.Auto.Commands.Presets.HomePose;
 import frc.robot.Auto.Commands.intakeAndWristCommands.timeBasedIntake;
-import frc.robot.subsystems.SwerveSubsystem;
+import frc.robot.subsystems.swerveSubsystem;
 
 public class TestPathPlannerPath extends SequentialCommandGroup {
     // /private final PathPlannerTrajectory pathGroup = PathPlanner.loadPath("ONE",
     // new PathConstraints(2, 2));
     private final PathPlannerTrajectory Path1, Path2, Path3, Path4, Path5;
 
-    private static final SwerveSubsystem swerve = RobotContainer.swerveSubsystem;
+    private static final swerveSubsystem swerve = RobotContainer.swerveSubsystem;
 
 
     public TestPathPlannerPath() {

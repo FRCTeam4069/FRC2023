@@ -1,4 +1,4 @@
-package frc.robot.Auto.Commands.armCommands.ArmRoutines;
+package frc.robot.Auto.Commands.Presets;
 
 import com.pathplanner.lib.PathConstraints;
 import com.pathplanner.lib.PathPlanner;
@@ -19,8 +19,8 @@ public class ShootCubeL3 extends SequentialCommandGroup {
         new wristToPosition(-80, 2, 0.25, 0.5))
         .andThen(new timeBasedIntake(0,-0.4,0.5))
         .andThen(new armToPose(1, false, 10))
-        .andThen( new HomePose())
         );
     }
 
 }
+

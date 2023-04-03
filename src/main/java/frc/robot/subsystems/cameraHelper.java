@@ -15,13 +15,13 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotContainer;
 import frc.robot.Constants.drivebaseConstants;
 
-public class limeLight extends SubsystemBase {
+public class cameraHelper extends SubsystemBase {
     private String name;
     private NetworkTable Cam;
     private NetworkTableEntry ty, tx, ta, tv, pn, led, mode;
     private ShuffleboardTab autoTab = Shuffleboard.getTab("Auto");
 
-    public limeLight(String CameraName, String CameraStreamURL, String networkTableKey) {
+    public cameraHelper(String CameraName, String CameraStreamURL, String networkTableKey) {
         name = CameraName;
 
         Cam = NetworkTableInstance.getDefault().getTable(networkTableKey);

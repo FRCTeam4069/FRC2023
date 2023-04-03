@@ -1,4 +1,4 @@
-package frc.robot.Auto.Commands.armCommands.ArmRoutines;
+package frc.robot.Auto.Commands.Presets;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Auto.Commands.armCommands.extendToPose;
@@ -14,7 +14,7 @@ public class MidPoseS1 extends SequentialCommandGroup {
         addCommands(
         (new fieldRelativeArmToPose(-62, (130-62))
         .andThen(new wristToPosition(120, 5, 0.5, 1)))
-        .andThen(new extendToPose(4, 0.5))
+        .andThen(new extendToPose(2, 0.5))
         .andThen(new wristToPosition(25, 5, 0.25, .5))
         );
         

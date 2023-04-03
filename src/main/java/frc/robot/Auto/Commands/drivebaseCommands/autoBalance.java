@@ -9,8 +9,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.RobotContainer;
 import frc.robot.Constants.drivebaseConstants.kinematics;
-import frc.robot.subsystems.Gyro;
-import frc.robot.subsystems.SwerveSubsystem;
+import frc.robot.subsystems.gyroHelper;
+import frc.robot.subsystems.swerveSubsystem;
 
 /**
  * A command to drive the robot with joystick input (passed in as
@@ -20,8 +20,8 @@ import frc.robot.subsystems.SwerveSubsystem;
  * edu.wpi.first.wpilibj2.command.RunCommand}.
  */
 public class autoBalance extends CommandBase {
-  private final SwerveSubsystem m_drivebase = RobotContainer.swerveSubsystem;
-  private final Gyro Gyro = RobotContainer.swerveSubsystem.getGyro();
+  private final swerveSubsystem m_drivebase = RobotContainer.swerveSubsystem;
+  private final gyroHelper Gyro = RobotContainer.swerveSubsystem.getGyro();
   private final double initSpeed;
   public double thetaSpeed, xspeed, balancedtime, currpitch;
   public final Double Timeout; 

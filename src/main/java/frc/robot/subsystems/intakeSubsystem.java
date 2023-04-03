@@ -15,7 +15,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.armAndIntakeConstants.armConstants;
 import frc.robot.Constants.armAndIntakeConstants.intakeConstants;
 
-public class Intake extends SubsystemBase {
+public class intakeSubsystem extends SubsystemBase {
     public CANSparkMax intake, intakeM1, intakeM2;
     private RelativeEncoder intakeEncoder;
     public DigitalInput NeoSideLimit, Limit;
@@ -25,7 +25,7 @@ public class Intake extends SubsystemBase {
     public ShuffleboardTab tab = Shuffleboard.getTab("Intake");
     public Timer itsRUMBLEtime = new Timer();
 
-    public Intake() {
+    public intakeSubsystem() {
         hasCone = tab.add("Intake has Somethig", coneInRange).getEntry();
 
         intake = new CANSparkMax(intakeConstants.INTAKE_ID, MotorType.kBrushless);

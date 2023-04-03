@@ -7,11 +7,11 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-public class AutonSelect extends SubsystemBase {
+public class AutoSelecter extends SubsystemBase {
     private SendableChooser<Integer> autonRoutine;
     private int selectedRoutine;
 
-    public AutonSelect() {
+    public AutoSelecter() {
         ShuffleboardTab auton = Shuffleboard.getTab("Auto");
         autonRoutine = new SendableChooser<Integer>();
 

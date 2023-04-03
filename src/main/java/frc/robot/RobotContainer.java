@@ -16,17 +16,19 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
-import frc.robot.subsystems.SwerveSubsystem;
+import frc.robot.subsystems.swerveSubsystem;
 import frc.robot.Auto.Commands.ControllerAndMisc.rumbleBothControllers;
+import frc.robot.Auto.Commands.Presets.AUTOgourdCone;
+import frc.robot.Auto.Commands.Presets.HighPoseS1;
+import frc.robot.Auto.Commands.Presets.HighPoseS2;
+import frc.robot.Auto.Commands.Presets.HomePose;
+import frc.robot.Auto.Commands.Presets.HumanPlayerCONE;
+import frc.robot.Auto.Commands.Presets.HumanPlayerCUBE;
+import frc.robot.Auto.Commands.Presets.MidPoseS1;
+import frc.robot.Auto.Commands.Presets.MidPoseS2;
+import frc.robot.Auto.Commands.Presets.ShootCubeL3;
+import frc.robot.Auto.Commands.Presets.scoreThenHome;
 import frc.robot.Auto.Commands.armCommands.DefaultArmCommand;
-import frc.robot.Auto.Commands.armCommands.ArmRoutines.HighPoseS1;
-import frc.robot.Auto.Commands.armCommands.ArmRoutines.HighPoseS2;
-import frc.robot.Auto.Commands.armCommands.ArmRoutines.HomePose;
-import frc.robot.Auto.Commands.armCommands.ArmRoutines.HumanPlayerPose;
-import frc.robot.Auto.Commands.armCommands.ArmRoutines.MidPoseS1;
-import frc.robot.Auto.Commands.armCommands.ArmRoutines.MidPoseS2;
-import frc.robot.Auto.Commands.armCommands.ArmRoutines.ShootCubeL3;
-import frc.robot.Auto.Commands.armCommands.ArmRoutines.scoreThenHome;
 import frc.robot.Auto.Commands.drivebaseCommands.autoAlign;
 import frc.robot.Auto.Commands.drivebaseCommands.defaultDriveCommand;
 import frc.robot.Auto.Commands.drivebaseCommands.AutoCommands.followTrajectoryCommand;
@@ -45,26 +47,23 @@ import frc.robot.Auto.routines.RED_SHORT;
 import frc.robot.Constants.IO;
 import frc.robot.Constants.drivebaseConstants;
 import frc.robot.subsystems.armSubsystem;
-import frc.robot.subsystems.limeLight;
-import frc.robot.subsystems.AutonSelect;
-import frc.robot.subsystems.Debugger;
-import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.cameraHelper;
+import frc.robot.subsystems.AutoSelecter;
+import frc.robot.subsystems.intakeSubsystem;
 import frc.robot.subsystems.wristSubsystem;
-import frc.robot.subsystems.LimeLight1;
 
 public class RobotContainer {
 
-    public static final SwerveSubsystem swerveSubsystem = new SwerveSubsystem(-90);
+    public static final swerveSubsystem swerveSubsystem = new swerveSubsystem(-90);
     public static final armSubsystem arm = new armSubsystem();
-    public static final Intake intake = new Intake();
+    public static final intakeSubsystem intake = new intakeSubsystem();
     //public static final LimeLight1 limelight = new LimeLight1();
-    public static final limeLight frontLimeLight = new limeLight("Front Camera","http://10.40.69.39:5800","limelight-fcam");
-    public static final limeLight backLimeLight = new limeLight("Back Camera","http://10.40.69.70:5801","limelight-bcam");
+    public static final cameraHelper frontLimeLight = new cameraHelper("Front Camera","http://10.40.69.39:5800","limelight-fcam");
+    public static final cameraHelper backLimeLight = new cameraHelper("Back Camera","http://10.40.69.70:5801","limelight-bcam");
     public static final wristSubsystem wrist = new wristSubsystem();
 
     public static final Middle_Path_0cones testRoutine = new Middle_Path_0cones();
-    public static final AutonSelect autoSelecter = new AutonSelect();
-    public static final Debugger db = new Debugger();
+    public static final AutoSelecter autoSelecter = new AutoSelecter();
     public static HashMap<String, Command> eventMap = new HashMap<>();
 
     public double pressed = 0;
@@ -140,13 +139,16 @@ public class RobotContainer {
             new Trigger(Controller2::getAButton).onTrue(new HomePose());
         }
         new Trigger(Controller2::getYButton).onTrue(new HighPoseS1()).onFalse(new HighPoseS2());
-        new Trigger(Controller2::getBButton).onTrue(new HumanPlayerPose());
+        new Trigger(Controller2::getBButton).onTrue(new HumanPlayerCONE());
+        new Trigger(Controller2::getBackButton).onTrue(new HumanPlayerCUBE());
         new Trigger(Controller2::getXButton).onTrue(new MidPoseS1()).onFalse(new MidPoseS2());
         new POVButton(Controller2, 270).whileTrue(new autoWristParallel());
         new POVButton(Controller2, 90).onTrue(new wristToPosition(-70, 10, 0.5, 1));
         new POVButton(Controller2, 180).whileTrue(new intakeToPose(12.5, 0.1, 1, .6));
-        new Trigger( ()-> intake.coneInRange ).onFalse(new rumbleBothControllers(0.8, 1));
-        new Trigger(Controller1::getXButton).onTrue(new autoAlign(1));
+        new Trigger(Controller1::getXButton).onTrue(new AUTOgourdCone());
+        //new Trigger( ()-> intake.coneInRange ).onFalse(new rumbleBothControllers(0.8, 1));
+        
+
     }
 
 

@@ -17,17 +17,16 @@ import frc.robot.Robot;
 import frc.robot.RobotContainer;
 import frc.robot.Constants.IO;
 import frc.robot.Constants.drivebaseConstants.kinematics;
-import frc.robot.subsystems.LimeLight1;
-import frc.robot.subsystems.SwerveSubsystem;
-import frc.robot.subsystems.limeLight;
+import frc.robot.subsystems.swerveSubsystem;
+import frc.robot.subsystems.cameraHelper;
 
 public class autoAlign extends CommandBase {
     private final Timer timer = new Timer();
     private final double timeToAlign;
-    private final SwerveSubsystem swerveSubsystem = RobotContainer.swerveSubsystem;
-    private final limeLight f_LimeLight = RobotContainer.frontLimeLight;
-    private final limeLight b_LimeLight = RobotContainer.backLimeLight;
-    private limeLight cameraToUse;
+    private final swerveSubsystem swerveSubsystem = RobotContainer.swerveSubsystem;
+    private final cameraHelper f_LimeLight = RobotContainer.frontLimeLight;
+    private final cameraHelper b_LimeLight = RobotContainer.backLimeLight;
+    private cameraHelper cameraToUse;
 
     private PIDController turninPID = new PIDController(0.07, 0, 0);
 

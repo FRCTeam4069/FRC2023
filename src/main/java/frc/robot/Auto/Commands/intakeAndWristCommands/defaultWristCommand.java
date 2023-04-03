@@ -30,18 +30,7 @@ public class defaultWristCommand extends CommandBase {
     @Override
     public void execute() {
         power = (wristUp.get() - wristDown.get()) * armConstants.side;
-
-        if(power == 0){
-            if(_hold != hold){
-                targetPose = wrist.getWristAngle();
-                hold = true;
-                _hold = hold;
-            }
-
-        }else{
-            hold = false;
             wrist.setWrist(power);
-        }
 
 
     }

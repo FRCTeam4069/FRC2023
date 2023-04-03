@@ -1,7 +1,7 @@
 package frc.robot.Auto.Commands.intakeAndWristCommands;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.RobotContainer;
-import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.intakeSubsystem;
 import frc.robot.subsystems.wristSubsystem;
 
 public class autoWristParallel extends CommandBase {

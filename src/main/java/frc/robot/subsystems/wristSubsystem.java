@@ -50,6 +50,7 @@ public class wristSubsystem extends SubsystemBase {
         intakeConstants.wristPose = getWristAngle();
         side = armConstants.side;
         armAngle = armConstants.armPose;
+        SmartDashboard.putNumber("Wrist angle", getWristAngle());
 
 
         if (enableLimit != _enableLimit) {

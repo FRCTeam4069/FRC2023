@@ -6,10 +6,10 @@ import com.ctre.phoenix.sensors.Pigeon2Configuration;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-public class Gyro extends SubsystemBase {
+public class gyroHelper extends SubsystemBase {
 
     public Pigeon2 gyro;
-    public Gyro(int id) {
+    public gyroHelper(int id) {
         gyro = new Pigeon2(id);
 
     }

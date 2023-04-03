@@ -18,6 +18,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.drivebaseConstants;
 import frc.robot.Constants.drivebaseConstants.CharacterizationData;
@@ -58,6 +59,7 @@ public class swerveModule extends SubsystemBase {
       tCanCoder.configSensorDirection(absoluteEncoderReversed);
       tCanCoder.configAbsoluteSensorRange(AbsoluteSensorRange.Unsigned_0_to_360, absoluteEncoderID);
       turnMotor.setInverted(turnMotorReversed);
+      tCanCoder.configMagnetOffset(absoluteEncoderOffsetRad);
 
       tPidController = new PIDController(ModuleConstants.kPTurning, 0, 0);
       tPidController.enableContinuousInput(-Math.PI, Math.PI);
@@ -69,7 +71,7 @@ public class swerveModule extends SubsystemBase {
    }
 
    public double getTurnignPosition() {
-      return Math.toRadians(tCanCoder.getAbsolutePosition()) - (absoluteEncoderOffsetRad);
+      return Math.toRadians(tCanCoder.getAbsolutePosition());
    }
 
    public double getDriveVelocity() {
@@ -127,5 +129,13 @@ public class swerveModule extends SubsystemBase {
 
    public TalonFX getDriveMotor() {
       return driveMotor;
+   }
+   public double getTurningAngle(){
+      return tCanCoder.getAbsolutePosition();
+  }
+
+
+   public void printNumbers(){
+      SmartDashboard.putNumber("Turning Angle", tCanCoder.getAbsolutePosition());
    }
 }

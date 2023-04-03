@@ -15,14 +15,14 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.RobotContainer;
-import frc.robot.Auto.Commands.armCommands.ArmRoutines.HomePose;
+import frc.robot.Auto.Commands.Presets.HomePose;
 import frc.robot.Auto.Commands.intakeAndWristCommands.timeBasedIntake;
-import frc.robot.subsystems.SwerveSubsystem;
+import frc.robot.subsystems.swerveSubsystem;
 
 public class BLUE_LONG extends SequentialCommandGroup {
     private final PathPlannerTrajectory pathGroup = PathPlanner.loadPath("BLUE_LONG",
             new PathConstraints(2, 2));
-    private static final SwerveSubsystem swerve = RobotContainer.swerveSubsystem;
+    private static final swerveSubsystem swerve = RobotContainer.swerveSubsystem;
     private HashMap<String, Command> eventMap = new HashMap<>();
 
     public BLUE_LONG() {

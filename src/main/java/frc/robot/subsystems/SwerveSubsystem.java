@@ -25,9 +25,9 @@ import frc.robot.Constants.drivebaseConstants.ModuleConstants;
 import frc.robot.Constants.drivebaseConstants.deviceIDs;
 import frc.robot.Constants.drivebaseConstants.kinematics;
 
-public class SwerveSubsystem extends SubsystemBase {
+public class swerveSubsystem extends SubsystemBase {
     public final double heading;
-    public SwerveSubsystem(double heading) {
+    public swerveSubsystem(double heading) {
 
         new Thread(() -> {
             try {
@@ -81,7 +81,7 @@ public class SwerveSubsystem extends SubsystemBase {
 
     );
 
-    public static final Gyro gyro = new Gyro(deviceIDs.PIGEON_ID);
+    public static final gyroHelper gyro = new gyroHelper(deviceIDs.PIGEON_ID);
     public final SwerveDriveOdometry odometry = new SwerveDriveOdometry(kinematics.m_kinematics, getRotation2d(),
             getModulePositions());
             
@@ -110,7 +110,7 @@ public class SwerveSubsystem extends SubsystemBase {
         gyro.setYaw(0);
     }
 
-    public Gyro getGyro() {
+    public gyroHelper getGyro() {
         return gyro;
     }
 
@@ -154,6 +154,7 @@ public class SwerveSubsystem extends SubsystemBase {
         return this.runOnce(() -> resetGyro());
     }
 
+
     public void setModuleState(SwerveModuleState[] ModuleStates) {
         SwerveDriveKinematics.desaturateWheelSpeeds(ModuleStates, ModuleConstants.MAX_VELOCITY_METERS_PER_SECOND);
         FLSwerveModule.setDesiredState(ModuleStates[0]);
@@ -189,8 +190,7 @@ public class SwerveSubsystem extends SubsystemBase {
                 FRSwerveModule.getPosition(),
                 BLSwerveModule.getPosition(),
                 BRSwerveModule.getPosition() });
-                
-    }
+            }
 
     public TalonFX getFRDriveMotor() {
         return FRSwerveModule.getDriveMotor();

@@ -17,7 +17,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.*;
 import frc.robot.RobotContainer;
 import frc.robot.Constants.drivebaseConstants;
-import frc.robot.subsystems.SwerveSubsystem;
+import frc.robot.subsystems.swerveSubsystem;
 
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
@@ -27,7 +27,7 @@ import java.util.function.Supplier;
 public class followTrajectoryCommand extends CommandBase {
   private final Timer timer = new Timer();
   private final Timer timer2 = new Timer();
-  private static final SwerveSubsystem swerve = RobotContainer.swerveSubsystem;
+  private static final swerveSubsystem swerve = RobotContainer.swerveSubsystem;
   private final PathPlannerTrajectory trajectory;
   private final Supplier<Pose2d> poseSupplier = swerve::getPose;
   private final SwerveDriveKinematics kinematics = drivebaseConstants.kinematics.m_kinematics;
