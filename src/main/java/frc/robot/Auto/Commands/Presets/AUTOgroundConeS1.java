@@ -7,12 +7,12 @@ import frc.robot.Auto.Commands.armCommands.extendToPose;
 import frc.robot.Auto.Commands.armCommands.fieldRelativeArmToPose;
 import frc.robot.Auto.Commands.intakeAndWristCommands.wristToPosition;
 
-public class AUTOgourdCone extends SequentialCommandGroup {
-    public AUTOgourdCone(){
+public class AUTOgroundConeS1 extends SequentialCommandGroup {
+    public AUTOgroundConeS1(){
         
         addCommands(
             new extendToPose(0, 0.5)
-            .andThen(new fieldRelativeArmToPose(100, 5)
+            .andThen(new fieldRelativeArmToPose(85, 5)
             .alongWith(new wristToPosition(-50, 10, 0.5, 1)))
             .andThen(new extendToPose(0, 1))
 

@@ -18,7 +18,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 import frc.robot.subsystems.swerveSubsystem;
 import frc.robot.Auto.Commands.ControllerAndMisc.rumbleBothControllers;
-import frc.robot.Auto.Commands.Presets.AUTOgourdCone;
+import frc.robot.Auto.Commands.Presets.AUTOgroundConeS1;
 import frc.robot.Auto.Commands.Presets.HighPoseS1;
 import frc.robot.Auto.Commands.Presets.HighPoseS2;
 import frc.robot.Auto.Commands.Presets.HomePose;
@@ -30,6 +30,7 @@ import frc.robot.Auto.Commands.Presets.ShootCubeL3;
 import frc.robot.Auto.Commands.Presets.scoreThenHome;
 import frc.robot.Auto.Commands.armCommands.DefaultArmCommand;
 import frc.robot.Auto.Commands.drivebaseCommands.autoAlign;
+import frc.robot.Auto.Commands.drivebaseCommands.coneAlign;
 import frc.robot.Auto.Commands.drivebaseCommands.defaultDriveCommand;
 import frc.robot.Auto.Commands.drivebaseCommands.AutoCommands.followTrajectoryCommand;
 import frc.robot.Auto.Commands.intakeAndWristCommands.autoWristParallel;
@@ -145,7 +146,7 @@ public class RobotContainer {
         new POVButton(Controller2, 270).whileTrue(new autoWristParallel());
         new POVButton(Controller2, 90).onTrue(new wristToPosition(-70, 10, 0.5, 1));
         new POVButton(Controller2, 180).whileTrue(new intakeToPose(12.5, 0.1, 1, .6));
-        new Trigger(Controller1::getXButton).onTrue(new AUTOgourdCone());
+        new Trigger(Controller1::getXButton).whileTrue(new coneAlign(5));
         //new Trigger( ()-> intake.coneInRange ).onFalse(new rumbleBothControllers(0.8, 1));
         
 

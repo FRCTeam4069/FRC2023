@@ -43,15 +43,15 @@ public class coneAlign extends CommandBase {
         b_LimeLight.setMode(0);
         f_LimeLight.setLED(3);
         b_LimeLight.setLED(3);
-        b_LimeLight.setPipeline(0);
-        f_LimeLight.setPipeline(0);
+        b_LimeLight.setPipeline(2);
+        f_LimeLight.setPipeline(2);
         ChassisSpeeds chassisSpeeds;
         SmartDashboard.putNumber("Camera To Use", cameraToUse.tv());
         turninPID.setSetpoint(turnToClosest());
         if (cameraToUse.tv() == 1 && turnedTo(turnToClosest())) {
             chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(
                     0,
-                    dynamicSpeedY(1),
+                    -dynamicSpeedY(-0.5),
                     MathUtil.applyDeadband(
                             -turninPID.calculate(swerveSubsystem.odometry.getPoseMeters().getRotation().getDegrees()),
                             0.1), // * IO.maxTurnSpeed,
@@ -89,7 +89,7 @@ public class coneAlign extends CommandBase {
     }
 
     public void updateUsedCamera() {
-        if (swerveSubsystem.getSide() == 1) {
+        if (swerveSubsystem.getSide() == 0) {
             cameraToUse = b_LimeLight;
         } else {
             cameraToUse = f_LimeLight;
@@ -108,7 +108,7 @@ public class coneAlign extends CommandBase {
         double error = ((target) - cameraToUse.ty());
         double deadband;
         boolean atPOse = false;
-        if (Math.abs(error) > 0.1) {
+        if (Math.abs(error) < 0.1) {
             deadband = 0.2;
         } else {
             deadband = 0.05;

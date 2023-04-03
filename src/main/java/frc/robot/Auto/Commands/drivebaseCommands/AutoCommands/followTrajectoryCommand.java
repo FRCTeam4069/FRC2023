@@ -175,7 +175,7 @@ public class followTrajectoryCommand extends CommandBase {
 
   @Override
   public boolean isFinished() {
-    return atReferenceTimed(0.5) || this.timer.hasElapsed(transformedTrajectory.getTotalTimeSeconds()+5);
+    return atReferenceTimed(0.2) || this.timer.hasElapsed(transformedTrajectory.getTotalTimeSeconds()+3);
 
   }
 
