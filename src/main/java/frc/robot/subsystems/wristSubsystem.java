@@ -15,12 +15,11 @@ import frc.robot.Constants.armAndIntakeConstants.intakeConstants;
 public class wristSubsystem extends SubsystemBase {
     public CANSparkMax  wrist;
     private RelativeEncoder wristEncoder;
-    public double side, wristTarget, low, gravGain, armAngle, parallelAngle;
+    public double side, wristTarget, low, gravGain, armAngle, parallelAngle, holdPose = 0;
     public boolean enableLimit = true, _enableLimit = false;
 
     public wristSubsystem() {
         wrist = new CANSparkMax(intakeConstants.WRIST_ID, MotorType.kBrushless);
-
         wrist.setSmartCurrentLimit(40);
         wrist.setInverted(false);
         wrist.setOpenLoopRampRate(0);
@@ -42,11 +41,12 @@ public class wristSubsystem extends SubsystemBase {
         setWristPose(40);
 
         // setIntakePose(0);
-
+        setHoldPose(getWristAngle());
     }
 
     @Override
     public void periodic() {
+        
         intakeConstants.wristPose = getWristAngle();
         side = armConstants.side;
         armAngle = armConstants.armPose;
@@ -67,6 +67,7 @@ public class wristSubsystem extends SubsystemBase {
     public double getWristAngle() {
         return (getWristPose() * 2 / 80 * 120);
     }
+    
 
     public void setWrist(double speed) {
         wrist.set(speed);
@@ -85,6 +86,10 @@ public class wristSubsystem extends SubsystemBase {
     }
     public CommandBase enableLimit(boolean onORoff) {
         return this.runOnce(() -> enableLimit = onORoff);
+    }
+
+    public void setHoldPose(double holdPose){
+        this.holdPose = holdPose;
     }
 
 }
