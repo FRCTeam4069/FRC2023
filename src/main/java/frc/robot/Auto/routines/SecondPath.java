@@ -27,7 +27,7 @@ public class SecondPath extends SequentialCommandGroup{
             new HomePose()));
 
         addCommands(new 
-        followTrajectoryCommand(PathPlanner.loadPath("RS_C1", 
+        followTrajectoryCommand(PathPlanner.loadPath("to_C1", 
         new PathConstraints(2, 2)), false)
         .alongWith(new wristToPosition(100, 2, 1, 1))
         );
