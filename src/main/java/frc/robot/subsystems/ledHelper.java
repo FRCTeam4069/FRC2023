@@ -1,63 +1,83 @@
 package frc.robot.subsystems;
 
-/*
-import edu.wpi.first.wpilibj.AddressableLED;
-import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import edu.wpi.first.wpilibj.PWM;
-import edu.wpi.first.wpilibj.motorcontrol.PWMMotorController;
-import edu.wpi.first.wpilibj.motorcontrol.PWMSparkMax;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
-import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.util.Color;
+import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-public class LEDController {
-    PWMSparkMax blinkinController;
+public class ledHelper extends SubsystemBase {
 
-    public LEDController(){
-        blinkinController = new PWMSparkMax(0);
-    }
+   private PWM blinkin;
+   public Colours defColor = Colours.YELLOW;
 
-    public void getValuesFromDS(){
-        blinkinController.set(0);
-    }
+   public ledHelper(int PWMport) {
+      blinkin = new PWM(PWMport);
+   }
 
-    public void changeLEDPattern(patternOptions options, boolean blueAlliance, boolean disabled){
-        double pwmvalue = translateColourToNumbers(options, blueAlliance, disabled);
-        
-    }
+   public void ChangePWM(Colours colours) {
+      blinkin.setRaw(TranslateColour(colours));
+   }
 
-    public enum patternOptions{
-        YELLOW,
-        PURPLE,
-        RED,
-        GREEN,
-        BLUE,
-    }
+   private int TranslateColour(Colours colour) {
+      if (colour == Colours.RED)
+         return red;
+      if (colour == Colours.BLUE)
+         return blue;
+      if (colour == Colours.STARTUPPATTERN)
+         return StartUpPatern;
+      if (colour == Colours.YELLOW)
+         return yellow;
+      if (colour == Colours.PURPLE)
+         return purple;
+      if (colour == Colours.GREEN)
+         return green;
+      if (colour == Colours.PURPLEFLASHING)
+         return FlashingPrple;
+      if (colour == Colours.BlueFlashing)
+         return FlashingBlue;
+      if (colour == Colours.ERROR_YELLOw)
+         return ErrorYellow;
+      if (colour == Colours.GREEN_WHITE_PATTERN)
+         return greenAndWhitePattern;
+      if (colour == Colours.ERROR_RED)
+         return ErroRed;
+      if (colour == Colours.COOL_PATTERN)
+         return CoolPatern;
+      else
+         return 0;
+   }
 
-    private double translateColourToNumbers(patternOptions option, boolean blueAlliance, boolean disabled){
-        double PWMValue = 0;
+   private final int red = 1300;
+   private final int blue = 800;
+   private final int StartUpPatern = 33600;
+   private final int yellow = 9700;
+   private final int purple = 21600;
+   private final int green = 42350;
+   private final int FlashingPrple = 35350;
+   private final int FlashingBlue = 5050;
+   private final int ErrorYellow = 17350;
+   private final int greenAndWhitePattern = 17200;
+   private final int ErroRed = 46000;
+   private final int CoolPatern = 53950;
 
-        if(option == patternOptions.YELLOW){
-            PWMValue = 0;
-        }
-        else if(option == patternOptions.BLUE || (blueAlliance && disabled)){
-            PWMValue = 1000;
-        }
-        else if(option == patternOptions.RED || (!blueAlliance && disabled)){
-            PWMValue = 0;
-        }
-        else if(option == patternOptions.GREEN){
-            PWMValue = 0;
-        }
-        else if(option == patternOptions.PURPLE){
-            PWMValue = 0;
-        }
+   public enum Colours {
+      RED,
+      BLUE,
+      STARTUPPATTERN,
+      YELLOW,
+      PURPLE,
+      GREEN,
+      PURPLEFLASHING,
+      BlueFlashing,
+      ERROR_YELLOw,
+      ERROR_RED,
+      GREEN_WHITE_PATTERN,
+      COOL_PATTERN
+   }
 
-        return PWMValue;
-    }
+   public CommandBase setDefaultColor(Colours color){
+      return this.runOnce(() -> defColor = color);
 
-    public void testLights(int value){
-    }
+   }
 
 }
-*/

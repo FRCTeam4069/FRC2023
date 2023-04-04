@@ -4,6 +4,7 @@ import java.util.function.Supplier;
 
 import javax.swing.GroupLayout;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.RobotContainer;
 import frc.robot.Constants.armAndIntakeConstants.armConstants;
@@ -30,8 +31,23 @@ public class defaultWristCommand extends CommandBase {
     @Override
     public void execute() {
         power = (wristUp.get() - wristDown.get()) * armConstants.side;
-            wrist.setWrist(power);
 
+        if (MathUtil.applyDeadband(Math.abs(power), 0.08) > 0) {
+            wrist.setWrist(power);
+            hold = false;
+        } else {
+            if (_hold != hold) {
+                wrist.setHoldPose(wrist.getWristAngle());
+                hold = true;
+                _hold = hold;
+            }
+
+            if (Math.abs(wrist.holdPose - wrist.getWristAngle()) > 10) {
+                wrist.setWrist((wrist.holdPose - wrist.getWristAngle()) * (0.019));
+            } else {
+                wrist.setWrist((wrist.holdPose - wrist.getWristAngle()) * (0.01));
+            }
+        }
 
     }
 

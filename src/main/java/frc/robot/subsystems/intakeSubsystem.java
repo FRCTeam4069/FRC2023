@@ -1,5 +1,7 @@
 package frc.robot.subsystems;
 
+import javax.swing.text.StyleContext.SmallAttributeSet;
+
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMax.SoftLimitDirection;
@@ -10,6 +12,7 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.armAndIntakeConstants.armConstants;
@@ -21,7 +24,7 @@ public class intakeSubsystem extends SubsystemBase {
     public DigitalInput NeoSideLimit, Limit;
     public edu.wpi.first.wpilibj.AnalogInput PhotoElectric;
     public GenericEntry hasCone;
-    public boolean enableLimit = true, _enableLimit = false, coneInRange, _coneInRange = false;
+    public boolean enableLimit = true, _enableLimit = false, coneInRange = false, _coneInRange = false;
     public ShuffleboardTab tab = Shuffleboard.getTab("Intake");
     public Timer itsRUMBLEtime = new Timer();
 
@@ -61,10 +64,12 @@ public class intakeSubsystem extends SubsystemBase {
             _enableLimit = enableLimit;
         }
         hasCone.setBoolean(coneInRange);
+
+        SmartDashboard.putNumber("PhotoElec", PhotoElectric.getVoltage());
     }
 
     public boolean isConeInRange() {
-        if (PhotoElectric.getVoltage() < 0.26) {
+        if (PhotoElectric.getVoltage() >= 0.27) {
             coneInRange = true;
             return true;
         } else {

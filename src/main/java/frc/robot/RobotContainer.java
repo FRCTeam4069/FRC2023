@@ -1,11 +1,7 @@
 package frc.robot;
 
-import java.lang.ModuleLayer.Controller;
 import java.util.HashMap;
 import com.ctre.phoenix.music.Orchestra;
-import com.pathplanner.lib.PathConstraints;
-import com.pathplanner.lib.PathPlanner;
-import com.pathplanner.lib.PathPlannerTrajectory;
 import com.pathplanner.lib.auto.PIDConstants;
 import com.pathplanner.lib.auto.SwerveAutoBuilder;
 
@@ -17,8 +13,8 @@ import edu.wpi.first.wpilibj2.command.button.POVButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 import frc.robot.subsystems.swerveSubsystem;
-import frc.robot.Auto.Commands.ControllerAndMisc.rumbleBothControllers;
 import frc.robot.Auto.Commands.Presets.AUTOgourdCone;
+import frc.robot.subsystems.ledHelper;
 import frc.robot.Auto.Commands.Presets.HighPoseS1;
 import frc.robot.Auto.Commands.Presets.HighPoseS2;
 import frc.robot.Auto.Commands.Presets.HomePose;
@@ -27,11 +23,10 @@ import frc.robot.Auto.Commands.Presets.HumanPlayerCUBE;
 import frc.robot.Auto.Commands.Presets.MidPoseS1;
 import frc.robot.Auto.Commands.Presets.MidPoseS2;
 import frc.robot.Auto.Commands.Presets.ShootCubeL3;
+import frc.robot.Auto.Commands.Presets.ledCommand;
 import frc.robot.Auto.Commands.Presets.scoreThenHome;
 import frc.robot.Auto.Commands.armCommands.DefaultArmCommand;
-import frc.robot.Auto.Commands.drivebaseCommands.autoAlign;
 import frc.robot.Auto.Commands.drivebaseCommands.defaultDriveCommand;
-import frc.robot.Auto.Commands.drivebaseCommands.AutoCommands.followTrajectoryCommand;
 import frc.robot.Auto.Commands.intakeAndWristCommands.autoWristParallel;
 import frc.robot.Auto.Commands.intakeAndWristCommands.defaultIntakeCommand;
 import frc.robot.Auto.Commands.intakeAndWristCommands.defaultWristCommand;
@@ -51,12 +46,14 @@ import frc.robot.subsystems.cameraHelper;
 import frc.robot.subsystems.AutoSelecter;
 import frc.robot.subsystems.intakeSubsystem;
 import frc.robot.subsystems.wristSubsystem;
+import frc.robot.subsystems.ledHelper.Colours;
 
 public class RobotContainer {
 
     public static final swerveSubsystem swerveSubsystem = new swerveSubsystem(-90);
     public static final armSubsystem arm = new armSubsystem();
     public static final intakeSubsystem intake = new intakeSubsystem();
+    public static final ledHelper leds = new ledHelper(9);
     //public static final LimeLight1 limelight = new LimeLight1();
     public static final cameraHelper frontLimeLight = new cameraHelper("Front Camera","http://10.40.69.39:5800","limelight-fcam");
     public static final cameraHelper backLimeLight = new cameraHelper("Back Camera","http://10.40.69.70:5801","limelight-bcam");
@@ -124,6 +121,10 @@ public class RobotContainer {
 
         // intake.setDefaultCommand(new autoWristPose());
 
+        leds.setDefaultCommand(new ledCommand(
+            () -> intake.coneInRange,
+            () -> Controller1.getYButton()
+        ));
 
         configureButtonBindings();
 
@@ -145,9 +146,10 @@ public class RobotContainer {
         new POVButton(Controller2, 270).whileTrue(new autoWristParallel());
         new POVButton(Controller2, 90).onTrue(new wristToPosition(-70, 10, 0.5, 1));
         new POVButton(Controller2, 180).whileTrue(new intakeToPose(12.5, 0.1, 1, .6));
-        new Trigger(Controller1::getXButton).onTrue(new AUTOgourdCone());
         //new Trigger( ()-> intake.coneInRange ).onFalse(new rumbleBothControllers(0.8, 1));
         
+        new Trigger(Controller1::getXButton).onTrue(leds.setDefaultColor(Colours.BLUE));
+        new Trigger(Controller1::getBButton).onTrue(leds.setDefaultColor(Colours.ERROR_YELLOw));
 
     }
 
