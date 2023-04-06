@@ -12,7 +12,7 @@ public class AUTOgroundConeS2 extends SequentialCommandGroup {
         
         addCommands(
             new fieldRelativeArmToPose(110, 5)
-            .alongWith(new wristToPosition(-35, 10, 0.5, 1))
+            .alongWith(new wristToPosition(-30, 10, 0.5, 1))
 
 
         );

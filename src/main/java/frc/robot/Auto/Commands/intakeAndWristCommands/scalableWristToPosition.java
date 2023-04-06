@@ -24,6 +24,7 @@ public class scalableWristToPosition extends CommandBase {
     @Override
     public void initialize() {
         timeOutTimer.restart();
+        wrist.setHoldPose(targetPose * wrist.side);
     }
 
     @Override

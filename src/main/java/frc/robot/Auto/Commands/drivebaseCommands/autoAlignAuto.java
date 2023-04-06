@@ -12,7 +12,7 @@ import frc.robot.Constants.drivebaseConstants.kinematics;
 import frc.robot.subsystems.swerveSubsystem;
 import frc.robot.subsystems.cameraHelper;
 
-public class autoAlign extends CommandBase {
+public class autoAlignAuto extends CommandBase {
     private final Timer timer = new Timer();
     private final double timeToAlign;
     private final swerveSubsystem swerveSubsystem = RobotContainer.swerveSubsystem;
@@ -22,7 +22,7 @@ public class autoAlign extends CommandBase {
 
     private PIDController turninPID = new PIDController(0.1, 0, 0);
 
-    public autoAlign(double timeToAlign) {
+    public autoAlignAuto(double timeToAlign) {
 
         turninPID.enableContinuousInput(-180, 180);
         this.timeToAlign = timeToAlign;
@@ -105,7 +105,7 @@ public class autoAlign extends CommandBase {
     }
 
     public double dynamicSpeedY() {
-        double error = ((-2.5) - cameraToUse.ty());
+        double error = ((-1) - cameraToUse.ty());
         double deadband;
         boolean atPOse = false;
         if (Math.abs(error) > 0.1) {

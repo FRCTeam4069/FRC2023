@@ -2,6 +2,7 @@ package frc.robot.Auto.routines;
 
 import com.pathplanner.lib.PathConstraints;
 import com.pathplanner.lib.PathPlanner;
+import com.pathplanner.lib.PathPlannerTrajectory;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
@@ -23,21 +24,23 @@ import frc.robot.Auto.Commands.intakeAndWristCommands.scalableWristToPosition;
 import frc.robot.Auto.Commands.intakeAndWristCommands.wristToPosition;
 
 public class FirstRoutine extends SequentialCommandGroup {
+        public PathPlannerTrajectory path0 = PathPlanner.loadPath("BLUE SHORT",
+        new PathConstraints(5, 4));
+        public PathPlannerTrajectory path1 = PathPlanner.loadPath("RS_C1",
+        new PathConstraints(5, 4));
 
     public FirstRoutine() {
         addCommands(
                 new ShootCubeL3());
-        addCommands(new followTrajectoryCommand(PathPlanner.loadPath("BLUE SHORT",
-                new PathConstraints(4, 3)), true)
+        addCommands(new followTrajectoryCommand(path0, true)
                 .alongWith(new AUTOgroundConeS1().alongWith(new OpenIntake()))
-                .andThen(new coneAlign(0.5)));
+                .andThen(new coneAlign(1)));
 
         addCommands(new AUTOgroundConeS2()
                 .andThen(new intakeToPose(1, .5, 0.5, 0))
                 .andThen(new HomePose()));
 
-        addCommands(new followTrajectoryCommand(PathPlanner.loadPath("RS_C1",
-                new PathConstraints(4, 3)), false)
+        addCommands(new followTrajectoryCommand(path1, false)
                 .alongWith(new wristToPosition(100, 2, 1, 1)));
 
         // auto alignment and placing sequence

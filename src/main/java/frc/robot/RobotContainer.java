@@ -13,7 +13,6 @@ import edu.wpi.first.wpilibj2.command.button.POVButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 import frc.robot.subsystems.swerveSubsystem;
-import frc.robot.Auto.Commands.Presets.AUTOgourdCone;
 import frc.robot.subsystems.ledHelper;
 import frc.robot.Auto.Commands.Presets.HighPoseS1;
 import frc.robot.Auto.Commands.Presets.HighPoseS2;
@@ -39,6 +38,7 @@ import frc.robot.Auto.routines.MiddlePathL3CUBUE;
 import frc.robot.Auto.routines.Middle_Path_0cones;
 import frc.robot.Auto.routines.RED_LONG;
 import frc.robot.Auto.routines.RED_SHORT;
+import frc.robot.Auto.routines.SecondPath;
 import frc.robot.Constants.IO;
 import frc.robot.Constants.drivebaseConstants;
 import frc.robot.subsystems.armSubsystem;
@@ -174,7 +174,7 @@ public class RobotContainer {
         case 6:
         return new InstantCommand();
         case 7:
-        return new FirstRoutine();
+        return new SecondPath();
         //return new followTrajectoryCommand(PathPlanner.loadPath("TEST", new PathConstraints(2, 2)), true);
         default:
         SmartDashboard.putString("Auto Selected:", "INVALID");

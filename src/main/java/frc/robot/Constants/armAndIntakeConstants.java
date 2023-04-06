@@ -100,7 +100,7 @@ public class armAndIntakeConstants{
         public static final int WRIST_ID = 12;
         public static final double wristkP = 0.015;
         public static double wristPose;
-        public static final double intakekP = 0.3;
+        public static final double intakekP = 0.5;
         public static double intakePose;
 
         /*
