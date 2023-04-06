@@ -1,11 +1,10 @@
-package frc.robot.Auto.routines;
+package frc.robot.Auto.Commands.Presets;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Auto.Commands.armCommands.extendToPose;
 import frc.robot.Auto.Commands.intakeAndWristCommands.OpenIntake;
 import frc.robot.Auto.Commands.intakeAndWristCommands.wristToPosition;
 import frc.robot.Auto.Commands.ControllerAndMisc.setLastState;
-import frc.robot.Auto.Commands.Presets.HomePose;
 import frc.robot.Auto.Commands.armCommands.armToPose;
 import frc.robot.Constants.IO.state;
 
