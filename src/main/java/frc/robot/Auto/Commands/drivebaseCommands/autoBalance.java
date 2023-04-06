@@ -22,21 +22,19 @@ import frc.robot.subsystems.swerveSubsystem;
 public class autoBalance extends CommandBase {
   private final swerveSubsystem m_drivebase = RobotContainer.swerveSubsystem;
   private final gyroHelper Gyro = RobotContainer.swerveSubsystem.getGyro();
-  private final double initSpeed;
   public double thetaSpeed, xspeed, balancedtime, currpitch;
   public final Double Timeout; 
   public boolean balanced, pitchChange;
   private final boolean reversed;
-  public PIDController PIDcontrol = new PIDController(0.03, 0.0001, 0);
+  public PIDController PIDcontrol = new PIDController(0.025, 0.0001, 0);
   public Timer timer = new Timer(), timeOutTimer = new Timer();
   /**
    * 
    * @param Timeout Seconds until command times out.
    */
-  public autoBalance(double Timeout, boolean reversed, double initSpeed) {
+  public autoBalance(double Timeout, boolean reversed) {
     this.Timeout = Timeout;
     this.reversed = reversed;
-    this.initSpeed = initSpeed;
     addRequirements(RobotContainer.swerveSubsystem); // adds a requirement - if its not met then it will throw an error
   }
 
@@ -66,7 +64,7 @@ public class autoBalance extends CommandBase {
     }
     if (!balanced && pitchChange) {
       xspeed = MathUtil.clamp(PIDcontrol.calculate(-(Gyro.getPitch() - currpitch)), -0.25, 0.25);
-      if(xspeed * (reversed ? -1 : 1) < 0){ PIDcontrol.setP(0.017);}
+      if((xspeed * (reversed ? -1 : 1)) < 0){ PIDcontrol.setP(0.017);}
       m_drivebase.setModuleState(kinematics.m_kinematics.toSwerveModuleStates(new ChassisSpeeds(xspeed, 0, 0)));
       if (Math.abs(currpitch - Gyro.getPitch()) < 6) {
         timer.start();

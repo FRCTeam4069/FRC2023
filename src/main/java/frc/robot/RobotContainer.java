@@ -23,6 +23,7 @@ import frc.robot.Auto.Commands.Presets.MidPoseS1;
 import frc.robot.Auto.Commands.Presets.MidPoseS2;
 import frc.robot.Auto.Commands.Presets.ShootCubeL3;
 import frc.robot.Auto.Commands.Presets.ledCommand;
+import frc.robot.Auto.Commands.Presets.placeCubeL3;
 import frc.robot.Auto.Commands.Presets.scoreThenHome;
 import frc.robot.Auto.Commands.armCommands.DefaultArmCommand;
 import frc.robot.Auto.Commands.drivebaseCommands.defaultDriveCommand;
@@ -31,14 +32,14 @@ import frc.robot.Auto.Commands.intakeAndWristCommands.defaultIntakeCommand;
 import frc.robot.Auto.Commands.intakeAndWristCommands.defaultWristCommand;
 import frc.robot.Auto.Commands.intakeAndWristCommands.intakeToPose;
 import frc.robot.Auto.Commands.intakeAndWristCommands.wristToPosition;
-import frc.robot.Auto.routines.BLUE_LONG;
-import frc.robot.Auto.routines.BLUE_SHORT;
 import frc.robot.Auto.routines.FirstRoutine;
-import frc.robot.Auto.routines.MiddlePathL3CUBUE;
-import frc.robot.Auto.routines.Middle_Path_0cones;
-import frc.robot.Auto.routines.RED_LONG;
-import frc.robot.Auto.routines.RED_SHORT;
 import frc.robot.Auto.routines.SecondPath;
+import frc.robot.Auto.routines.RoutinesV2.L_Middle_OneAndHalf;
+import frc.robot.Auto.routines.RoutinesV2.Middle_One;
+import frc.robot.Auto.routines.RoutinesV2.Middle_OneAndTaxi;
+import frc.robot.Auto.routines.RoutinesV2.R_Middle_OneAndHalf;
+import frc.robot.Auto.routines.RoutinesV2.Blue.Longside_Two;
+import frc.robot.Auto.routines.RoutinesV2.Red.Longside_One;
 import frc.robot.Constants.IO;
 import frc.robot.Constants.drivebaseConstants;
 import frc.robot.subsystems.armSubsystem;
@@ -59,7 +60,6 @@ public class RobotContainer {
     public static final cameraHelper backLimeLight = new cameraHelper("Back Camera","http://10.40.69.70:5801","limelight-bcam");
     public static final wristSubsystem wrist = new wristSubsystem();
 
-    public static final Middle_Path_0cones testRoutine = new Middle_Path_0cones();
     public static final AutoSelecter autoSelecter = new AutoSelecter();
     public static HashMap<String, Command> eventMap = new HashMap<>();
 
@@ -160,22 +160,33 @@ public class RobotContainer {
         int autoIndex = autoSelecter.getSelected();
         switch (autoIndex) {
         case 0:
-        return new MiddlePathL3CUBUE();
-        case 1:
-        return new RED_LONG();
-        case 2:
-        return new RED_SHORT();
-        case 3:
-        return new BLUE_LONG();
-        case 4:
-        return new BLUE_SHORT();
-        case 5:
-        return new ShootCubeL3();
-        case 6:
         return new InstantCommand();
+        case 1:
+        return new Middle_One();
+        case 2:
+        return new frc.robot.Auto.routines.RoutinesV2.Red.Longside_Two();
+        case 3:
+        return new frc.robot.Auto.routines.RoutinesV2.Red.Shortside_Two();
+        case 4:
+        return new frc.robot.Auto.routines.RoutinesV2.Red.Longside_One();
+        case 5:
+        return new frc.robot.Auto.routines.RoutinesV2.Red.Shortside_One();
+        case 6:
+        return new frc.robot.Auto.routines.RoutinesV2.Blue.Longside_Two();
         case 7:
-        return new SecondPath();
-        //return new followTrajectoryCommand(PathPlanner.loadPath("TEST", new PathConstraints(2, 2)), true);
+        return new frc.robot.Auto.routines.RoutinesV2.Blue.Shortside_Two();
+        case 8:
+        return new frc.robot.Auto.routines.RoutinesV2.Blue.Longside_One();
+        case 9:
+        return new frc.robot.Auto.routines.RoutinesV2.Blue.Shortside_One();
+        case 10:
+        return new placeCubeL3();
+        case 11:
+        return new R_Middle_OneAndHalf();
+        case 12:
+        return new L_Middle_OneAndHalf();
+        case 13:
+        return new Middle_OneAndTaxi();
         default:
         SmartDashboard.putString("Auto Selected:", "INVALID");
         return new InstantCommand();

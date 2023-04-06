@@ -8,8 +8,6 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Auto.Commands.Presets.AUTOgroundConeS1;
 import frc.robot.Auto.Commands.Presets.AUTOgroundConeS2;
-import frc.robot.Auto.Commands.Presets.HighPoseS1;
-import frc.robot.Auto.Commands.Presets.HighPoseS2;
 import frc.robot.Auto.Commands.Presets.HomePose;
 import frc.robot.Auto.Commands.Presets.ShootCubeL3;
 import frc.robot.Auto.Commands.armCommands.armToPose;
